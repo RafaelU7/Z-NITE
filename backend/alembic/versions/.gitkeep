@@ -1,0 +1,2 @@
+# Migrations geradas pelo Alembic.
+# Execute: alembic revision --autogenerate -m "descricao"

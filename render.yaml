@@ -1,0 +1,141 @@
+# ==============================================================================
+# Render Infrastructure as Code — Zênite PDV Staging
+#
+# Serviços definidos:
+#   zenite-pdv-api      → Web Service   (FastAPI)          free tier c/ spin-down
+#   zenite-pdv-worker   → Background Worker (ARQ fiscal)   ⚠️ exige plano pago
+#   zenite-pdv-redis    → Redis gerenciado                 free tier 25MB/30d
+#
+# Banco de dados: Neon (externo) — NÃO provisionado aqui.
+# Os secrets (DATABASE_URL, SECRET_KEY) devem ser definidos manualmente
+# no dashboard do Render ou via "render env set" (sync: false abaixo).
+#
+# Deploy: configure cada serviço apontando para este repositório no GitHub.
+# Root Directory de ambos API e Worker: backend
+# ==============================================================================
+
+services:
+
+  # ----------------------------------------------------------------------------
+  # Web Service — FastAPI
+  # ----------------------------------------------------------------------------
+  - type: web
+    name: zenite-pdv-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install poetry==1.8.3 && poetry config virtualenvs.create false && poetry install --only main --no-root
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    plan: free
+    envVars:
+      # --- Python version (Render lê PYTHON_VERSION) ---
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+
+      # --- Aplicação ---
+      - key: APP_ENV
+        value: staging
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: INFO
+
+      # --- Banco de dados (Neon) — definido no dashboard ---
+      - key: DATABASE_URL
+        sync: false
+      # Pool reduzido para Neon free (max ~10 conexões simultâneas)
+      - key: DB_POOL_SIZE
+        value: "3"
+      - key: DB_MAX_OVERFLOW
+        value: "5"
+      - key: DB_POOL_TIMEOUT
+        value: "30"
+
+      # --- Segurança (definido no dashboard) ---
+      - key: SECRET_KEY
+        sync: false
+
+      # --- CORS (definido no dashboard após obter URL do frontend Vercel) ---
+      - key: CORS_ORIGINS
+        sync: false
+
+      # --- Redis (referência automática ao serviço redis abaixo) ---
+      - key: REDIS_URL
+        fromService:
+          name: zenite-pdv-redis
+          type: redis
+          property: connectionString
+
+      # --- Fiscal (sem token real em staging → usa MockGateway) ---
+      - key: FISCAL_PROVIDER_DEFAULT
+        value: focus_nfe
+      - key: FOCUS_NFE_TOKEN
+        value: ""
+      - key: FOCUS_NFE_BASE_URL
+        value: https://homologacao.focusnfe.com.br
+      - key: FOCUS_NFE_TIMEOUT
+        value: "30"
+      - key: FISCAL_MAX_TENTATIVAS
+        value: "5"
+
+  # ----------------------------------------------------------------------------
+  # Background Worker — ARQ Fiscal
+  # ⚠️  Background Workers NÃO estão disponíveis no plano free do Render.
+  #     Para ativar este serviço, configure-o com plano "starter" ($7/mês).
+  #     Em staging free: omita este serviço e valide o worker manualmente.
+  # ----------------------------------------------------------------------------
+  - type: worker
+    name: zenite-pdv-worker
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install poetry==1.8.3 && poetry config virtualenvs.create false && poetry install --only main --no-root
+    startCommand: arq app.workers.fiscal_worker.WorkerSettings
+    plan: starter
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: APP_ENV
+        value: staging
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: INFO
+      # Banco de dados (Neon) — definido no dashboard
+      - key: DATABASE_URL
+        sync: false
+      - key: DB_POOL_SIZE
+        value: "2"
+      - key: DB_MAX_OVERFLOW
+        value: "3"
+      - key: DB_POOL_TIMEOUT
+        value: "30"
+      # Segurança
+      - key: SECRET_KEY
+        sync: false
+      # Redis (referência automática)
+      - key: REDIS_URL
+        fromService:
+          name: zenite-pdv-redis
+          type: redis
+          property: connectionString
+      # Fiscal
+      - key: FISCAL_PROVIDER_DEFAULT
+        value: focus_nfe
+      - key: FOCUS_NFE_TOKEN
+        value: ""
+      - key: FOCUS_NFE_BASE_URL
+        value: https://homologacao.focusnfe.com.br
+      - key: FOCUS_NFE_TIMEOUT
+        value: "30"
+      - key: FISCAL_MAX_TENTATIVAS
+        value: "5"
+
+  # ----------------------------------------------------------------------------
+  # Redis — fila fiscal + blacklist de tokens
+  # Free tier: 25MB RAM, dados expiram a cada 30 dias (recrie manualmente)
+  # ----------------------------------------------------------------------------
+  - type: redis
+    name: zenite-pdv-redis
+    plan: free
+    maxmemoryPolicy: noeviction
+    ipAllowList: []

@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Alembic
+alembic/versions/*.pyc
+
+# Secrets
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs
+*.log
+logs/
+
+# Node / Frontend
+node_modules/
+.next/
+dist/
+build/
+.env.local
+.env.staging
+.env.production
+
+# OS
+.DS_Store
+
+# Temporários / CI / testes locais
+.tmp/
+*.tmp
+
+# PostgreSQL data de teste local
+pg-e2e-data/
+
+# Playwright runner local
+playwright-runner/
+Thumbs.db

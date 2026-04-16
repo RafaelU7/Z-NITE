@@ -1,0 +1,16 @@
+# Nixpacks build configuration for Railway
+# Railway auto-detecta Poetry via pyproject.toml — este arquivo apenas
+# torna o Python 3.11 e a estratégia de instalação explícitos.
+
+[phases.setup]
+nixPkgs = ["python311"]
+
+[phases.install]
+cmds = [
+  "pip install poetry==1.8.3",
+  "poetry config virtualenvs.create false",
+  "poetry install --only main --no-root"
+]
+
+[start]
+cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT"
