@@ -2,16 +2,24 @@
 # Render Infrastructure as Code — Zênite PDV Staging
 #
 # Serviços definidos:
-#   zenite-pdv-api      → Web Service   (FastAPI)          free tier c/ spin-down
-#   zenite-pdv-worker   → Background Worker (ARQ fiscal)   ⚠️ exige plano pago
-#   zenite-pdv-redis    → Redis gerenciado                 free tier 25MB/30d
+#   zenite-pdv-api    → Web Service   (FastAPI)   free tier c/ spin-down
+#   zenite-pdv-redis  → Redis gerenciado           free tier 25MB/30d
 #
 # Banco de dados: Neon (externo) — NÃO provisionado aqui.
-# Os secrets (DATABASE_URL, SECRET_KEY) devem ser definidos manualmente
-# no dashboard do Render ou via "render env set" (sync: false abaixo).
+#
+# Worker fiscal (ARQ): rodando LOCALMENTE em modo staging.
+#   → Background Worker do Render exige plano pago (Starter $7/mês)
+#   → Para rodar o worker local apontando para staging:
+#       cd backend
+#       # Copie backend/.env.staging.example → backend/.env.staging e preencha
+#       # Depois:
+#       arq app.workers.fiscal_worker.WorkerSettings
+#
+# Os secrets (DATABASE_URL, SECRET_KEY, CORS_ORIGINS) devem ser definidos
+# manualmente no dashboard do Render (sync: false abaixo).
 #
 # Deploy: configure cada serviço apontando para este repositório no GitHub.
-# Root Directory de ambos API e Worker: backend
+# Root Directory da API: backend
 # ==============================================================================
 
 services:
@@ -66,61 +74,7 @@ services:
           type: redis
           property: connectionString
 
-      # --- Fiscal (sem token real em staging → usa MockGateway) ---
-      - key: FISCAL_PROVIDER_DEFAULT
-        value: focus_nfe
-      - key: FOCUS_NFE_TOKEN
-        value: ""
-      - key: FOCUS_NFE_BASE_URL
-        value: https://homologacao.focusnfe.com.br
-      - key: FOCUS_NFE_TIMEOUT
-        value: "30"
-      - key: FISCAL_MAX_TENTATIVAS
-        value: "5"
-
-  # ----------------------------------------------------------------------------
-  # Background Worker — ARQ Fiscal
-  # ⚠️  Background Workers NÃO estão disponíveis no plano free do Render.
-  #     Para ativar este serviço, configure-o com plano "starter" ($7/mês).
-  #     Em staging free: omita este serviço e valide o worker manualmente.
-  # ----------------------------------------------------------------------------
-  - type: worker
-    name: zenite-pdv-worker
-    runtime: python
-    rootDir: backend
-    buildCommand: pip install poetry==1.8.3 && poetry config virtualenvs.create false && poetry install --only main --no-root
-    startCommand: arq app.workers.fiscal_worker.WorkerSettings
-    plan: starter
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.11.9"
-      - key: APP_ENV
-        value: staging
-      - key: DEBUG
-        value: "false"
-      - key: LOG_LEVEL
-        value: INFO
-      # Banco de dados (Neon) — definido no dashboard
-      - key: DATABASE_URL
-        sync: false
-      - key: DB_POOL_SIZE
-        value: "2"
-      - key: DB_MAX_OVERFLOW
-        value: "3"
-      - key: DB_POOL_TIMEOUT
-        value: "30"
-      # Segurança
-      - key: SECRET_KEY
-        sync: false
-      # Redis (referência automática)
-      - key: REDIS_URL
-        fromService:
-          name: zenite-pdv-redis
-          type: redis
-          property: connectionString
-      # Fiscal
-      - key: FISCAL_PROVIDER_DEFAULT
-        value: focus_nfe
+      # --- Fiscal (sem token real em staging → usa MockGateway automaticamente) ---
       - key: FOCUS_NFE_TOKEN
         value: ""
       - key: FOCUS_NFE_BASE_URL
