@@ -57,9 +57,10 @@ class Settings(BaseSettings):
     def async_database_url(self) -> str:
         """URL assíncrona para asyncpg (FastAPI). Alembic usa database_url (sync).
 
-        Neon e outros provedores cloud fornecem URLs com ?sslmode=require (padrão
-        psycopg2/libpq). O asyncpg/SQLAlchemy 2.0 exige ?ssl=require no lugar.
-        Esta conversão é segura: em dev local sem sslmode a URL não é alterada.
+        Neon e outros provedores cloud fornecem URLs com ?sslmode=require e
+        opcionalmente &channel_binding=require (parâmetros libpq/psycopg2).
+        O asyncpg/SQLAlchemy 2.0 exige ?ssl=require e não reconhece channel_binding.
+        Esta conversão é segura: em dev local sem esses parâmetros a URL não muda.
         """
         url = self.database_url.replace(
             "postgresql://", "postgresql+asyncpg://", 1
@@ -68,6 +69,9 @@ class Settings(BaseSettings):
         url = url.replace("sslmode=require", "ssl=require")
         url = url.replace("sslmode=prefer", "ssl=prefer")
         url = url.replace("sslmode=disable", "ssl=disable")
+        # Remove channel_binding — parâmetro libpq, não suportado pelo asyncpg
+        import re
+        url = re.sub(r"[&?]channel_binding=[^&]*", "", url)
         return url
 
     @property
