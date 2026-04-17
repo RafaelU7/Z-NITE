@@ -90,6 +90,7 @@ async def refresh_token(
 @router.post(
     "/logout",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None,
     response_class=Response,
     summary="Invalidar tokens (logout)",
 )
