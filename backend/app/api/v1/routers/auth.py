@@ -13,6 +13,7 @@ from __future__ import annotations
 import uuid
 
 from fastapi import APIRouter, Depends, status
+from fastapi.responses import Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.application.auth.dto import (
@@ -89,6 +90,7 @@ async def refresh_token(
 @router.post(
     "/logout",
     status_code=status.HTTP_204_NO_CONTENT,
+    response_class=Response,
     summary="Invalidar tokens (logout)",
 )
 async def logout(
