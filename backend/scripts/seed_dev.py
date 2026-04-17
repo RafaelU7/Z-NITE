@@ -34,8 +34,8 @@ from app.infrastructure.security.password_handler import hash_password, hash_pin
 
 async def seed() -> None:
     settings = get_settings()
-    async_url = settings.database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-    engine = create_async_engine(async_url, echo=False, connect_args={"ssl": False})
+    async_url = settings.async_database_url
+    engine = create_async_engine(async_url, echo=False)
     factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with factory() as session:
