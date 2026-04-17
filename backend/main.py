@@ -56,17 +56,23 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from arq import create_pool
     from arq.connections import RedisSettings
 
-    arq_pool = await create_pool(
-        RedisSettings.from_dsn(settings.redis_url),
-        default_queue_name="arq:zenite_fiscal",
-    )
-    app.state.arq_pool = arq_pool
-    log.info("ARQ pool conectado")
+    arq_pool = None
+    try:
+        arq_pool = await create_pool(
+            RedisSettings.from_dsn(settings.redis_url),
+            default_queue_name="arq:zenite_fiscal",
+        )
+        app.state.arq_pool = arq_pool
+        log.info("ARQ pool conectado")
+    except Exception as exc:  # noqa: BLE001
+        log.warning("ARQ pool indisponível — jobs fiscais desativados: %s", exc)
+        app.state.arq_pool = None
 
     yield
 
-    await arq_pool.close(True)
-    log.info("ARQ pool encerrado")
+    if arq_pool is not None:
+        await arq_pool.close(True)
+        log.info("ARQ pool encerrado")
 
     from app.infrastructure.security.redis_blacklist import close_redis
     await close_redis()
