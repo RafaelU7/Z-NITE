@@ -50,7 +50,8 @@ export function PinLoginForm() {
       // Busca perfil do operador já autenticado.
       const user = await getMe()
       setSession(tokens.access_token, tokens.refresh_token, user, empresaId)
-      navigate('/caixa', { replace: true })
+      const isGerencial = ['gerente', 'admin', 'super_admin'].includes(user.perfil)
+      navigate(isGerencial ? '/gerencial' : '/caixa', { replace: true })
     } catch (err) {
       clearSession()
       setError(err instanceof Error ? err.message : 'Erro ao autenticar.')
