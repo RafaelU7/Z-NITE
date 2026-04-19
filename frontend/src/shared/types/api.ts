@@ -217,6 +217,13 @@ export interface DashboardDTO {
   ticket_medio: string
   por_forma_pagamento: DashboardPagamentoPorForma[]
   sessoes_abertas: number
+  total_semana: string
+  qtd_semana: number
+  total_mes: string
+  qtd_mes: number
+  por_operador: { operador_id: string; nome: string; qtd: number; total: number }[]
+  total_fiscal: string
+  total_gerencial: string
 }
 
 export interface ProdutoGerencialDTO {

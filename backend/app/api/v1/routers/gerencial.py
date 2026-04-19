@@ -16,7 +16,7 @@ Endpoints (todos requerem perfil GERENTE ou superior):
 from __future__ import annotations
 
 import uuid
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 from typing import List, Optional
 from uuid import UUID
@@ -34,6 +34,7 @@ from app.infrastructure.database.models.enums import (
     PerfilUsuario,
     StatusSessaoCaixa,
     StatusVenda,
+    TipoEmissao,
 )
 from app.infrastructure.database.models.produto import Categoria, Produto, UnidadeMedida
 from app.infrastructure.database.models.tributacao import PerfilTributario
@@ -76,11 +77,22 @@ class PagamentoPorFormaDTO(BaseModel):
 
 class DashboardDTO(BaseModel):
     data_referencia: str
+    # Dia
     total_vendas: Decimal
     qtd_vendas: int
     ticket_medio: Decimal
     por_forma_pagamento: List[PagamentoPorFormaDTO]
     sessoes_abertas: int
+    # Semana / Mês
+    total_semana: Decimal
+    qtd_semana: int
+    total_mes: Decimal
+    qtd_mes: int
+    # Por operador (dia)
+    por_operador: List[dict]
+    # Fiscal vs Gerencial (dia)
+    total_fiscal: Decimal
+    total_gerencial: Decimal
 
 
 class ProdutoGerencialDTO(BaseModel):
@@ -284,6 +296,80 @@ async def dashboard(
     )
     sessoes_abertas = int(sessoes_r.scalar() or 0)
 
+    # Semana (últimos 7 dias)
+    week_start = today - timedelta(days=6)
+    sem_r = await session.execute(
+        select(
+            func.count(Venda.id).label("qtd"),
+            func.coalesce(func.sum(Venda.total_liquido), 0).label("total"),
+        ).where(
+            Venda.empresa_id == empresa_id,
+            Venda.status == StatusVenda.CONCLUIDA,
+            cast(Venda.data_venda, Date) >= week_start,
+            cast(Venda.data_venda, Date) <= today,
+        )
+    )
+    sem = sem_r.one()
+
+    # Mês (mês corrente)
+    mes_start = today.replace(day=1)
+    mes_r = await session.execute(
+        select(
+            func.count(Venda.id).label("qtd"),
+            func.coalesce(func.sum(Venda.total_liquido), 0).label("total"),
+        ).where(
+            Venda.empresa_id == empresa_id,
+            Venda.status == StatusVenda.CONCLUIDA,
+            cast(Venda.data_venda, Date) >= mes_start,
+            cast(Venda.data_venda, Date) <= today,
+        )
+    )
+    mes = mes_r.one()
+
+    # Por operador (dia)
+    op_r = await session.execute(
+        select(
+            Usuario.id.label("operador_id"),
+            Usuario.nome.label("operador_nome"),
+            func.count(Venda.id).label("qtd"),
+            func.coalesce(func.sum(Venda.total_liquido), 0).label("total"),
+        )
+        .join(Usuario, Venda.operador_id == Usuario.id)
+        .where(
+            Venda.empresa_id == empresa_id,
+            Venda.status == StatusVenda.CONCLUIDA,
+            cast(Venda.data_venda, Date) == today,
+        )
+        .group_by(Usuario.id, Usuario.nome)
+        .order_by(func.sum(Venda.total_liquido).desc())
+    )
+    por_operador = [
+        {"operador_id": str(row.operador_id), "nome": row.operador_nome,
+         "qtd": int(row.qtd), "total": float(row.total)}
+        for row in op_r.all()
+    ]
+
+    # Fiscal vs Gerencial (dia)
+    emissao_r = await session.execute(
+        select(
+            Venda.tipo_emissao.label("tipo"),
+            func.coalesce(func.sum(Venda.total_liquido), 0).label("total"),
+        )
+        .where(
+            Venda.empresa_id == empresa_id,
+            Venda.status == StatusVenda.CONCLUIDA,
+            cast(Venda.data_venda, Date) == today,
+        )
+        .group_by(Venda.tipo_emissao)
+    )
+    total_fiscal = Decimal("0")
+    total_gerencial = Decimal("0")
+    for row in emissao_r.all():
+        if str(row.tipo) == TipoEmissao.FISCAL:
+            total_fiscal = Decimal(str(row.total))
+        else:
+            total_gerencial = Decimal(str(row.total))
+
     return DashboardDTO(
         data_referencia=today.isoformat(),
         total_vendas=total,
@@ -291,6 +377,13 @@ async def dashboard(
         ticket_medio=ticket.quantize(Decimal("0.01")),
         por_forma_pagamento=por_forma,
         sessoes_abertas=sessoes_abertas,
+        total_semana=Decimal(str(sem.total)),
+        qtd_semana=int(sem.qtd),
+        total_mes=Decimal(str(mes.total)),
+        qtd_mes=int(mes.qtd),
+        por_operador=por_operador,
+        total_fiscal=total_fiscal,
+        total_gerencial=total_gerencial,
     )
 
 
