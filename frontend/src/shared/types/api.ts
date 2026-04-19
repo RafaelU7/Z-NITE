@@ -276,6 +276,13 @@ export interface PerfilTributarioSimpleDTO {
   nome: string
 }
 
+export interface CategoriaDTO {
+  id: string
+  nome: string
+  categoria_pai_id: string | null
+  ativo: boolean
+}
+
 export interface UsuarioListDTO {
   id: string
   nome: string

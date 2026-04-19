@@ -1,5 +1,6 @@
 import api from './client'
 import type {
+  CategoriaDTO,
   DashboardDTO,
   PaginatedProdutos,
   ProdutoGerencialDTO,
@@ -41,6 +42,11 @@ export async function patchProduto(
 
 export async function listUnidades(): Promise<UnidadeDTO[]> {
   const { data } = await api.get<UnidadeDTO[]>('/gerencial/unidades')
+  return data
+}
+
+export async function listCategorias(): Promise<CategoriaDTO[]> {
+  const { data } = await api.get<CategoriaDTO[]>('/gerencial/categorias')
   return data
 }
 

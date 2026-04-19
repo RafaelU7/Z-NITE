@@ -5,9 +5,11 @@ import {
   createProduto,
   patchProduto,
   listUnidades,
+  listCategorias,
   listPerfisTributarios,
 } from '@/services/api/gerencial'
 import type {
+  CategoriaDTO,
   ProdutoGerencialDTO,
   UnidadeDTO,
   PerfilTributarioSimpleDTO,
@@ -27,6 +29,7 @@ const VAZIO_CREATE: ProdutoCreateRequest = {
   preco_venda: 0,
   unidade_id: '',
   perfil_tributario_id: undefined,
+  categoria_id: undefined,
   controla_estoque: true,
   ativo: false,
   destaque_pdv: false,
@@ -43,6 +46,7 @@ export function ProdutosPage() {
 
   const [unidades, setUnidades] = useState<UnidadeDTO[]>([])
   const [perfis, setPerfis] = useState<PerfilTributarioSimpleDTO[]>([])
+  const [categorias, setCategorias] = useState<CategoriaDTO[]>([])
 
   const [showCreate, setShowCreate] = useState(false)
   const [editTarget, setEditTarget] = useState<ProdutoGerencialDTO | null>(null)
@@ -68,6 +72,7 @@ export function ProdutosPage() {
   useEffect(() => {
     listUnidades().then(setUnidades).catch(() => {})
     listPerfisTributarios().then(setPerfis).catch(() => {})
+    listCategorias().then(setCategorias).catch(() => {})
   }, [])
 
   function handleSearch(e: React.FormEvent) {
@@ -289,6 +294,19 @@ export function ProdutosPage() {
                 ))}
               </select>
             </div>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-text-secondary">Categoria</label>
+            <select
+              value={form.categoria_id ?? ''}
+              onChange={(e) => setForm({ ...form, categoria_id: e.target.value || undefined })}
+              className="w-full rounded-lg border border-border bg-bg-base px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none"
+            >
+              <option value="">Sem categoria</option>
+              {categorias.map((c) => (
+                <option key={c.id} value={c.id}>{c.nome}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-text-secondary">Perfil tributário</label>

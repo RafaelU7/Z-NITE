@@ -35,7 +35,7 @@ from app.infrastructure.database.models.enums import (
     StatusSessaoCaixa,
     StatusVenda,
 )
-from app.infrastructure.database.models.produto import Produto, UnidadeMedida
+from app.infrastructure.database.models.produto import Categoria, Produto, UnidadeMedida
 from app.infrastructure.database.models.tributacao import PerfilTributario
 from app.infrastructure.database.models.usuario import Usuario
 from app.infrastructure.database.models.venda import PagamentoVenda, Venda
@@ -142,6 +142,15 @@ class UnidadeDTO(BaseModel):
 class PerfilTributarioSimpleDTO(BaseModel):
     id: UUID
     nome: str
+
+    model_config = {"from_attributes": True}
+
+
+class CategoriaDTO(BaseModel):
+    id: UUID
+    nome: str
+    categoria_pai_id: Optional[UUID] = None
+    ativo: bool
 
     model_config = {"from_attributes": True}
 
@@ -340,6 +349,20 @@ async def create_produto(
 ) -> ProdutoGerencialDTO:
     empresa_id = gerente.empresa_id
 
+    # Anti-duplicidade por EAN
+    if req.codigo_barras_principal:
+        dup_ean = await session.execute(
+            select(Produto).where(
+                Produto.empresa_id == empresa_id,
+                Produto.codigo_barras_principal == req.codigo_barras_principal,
+            )
+        )
+        if dup_ean.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="EAN já cadastrado nesta empresa.",
+            )
+
     # Regra: produto ativo requer perfil tributário
     if req.ativo and not req.perfil_tributario_id:
         raise HTTPException(
@@ -466,6 +489,23 @@ async def list_unidades(
         .order_by(UnidadeMedida.codigo)
     )
     return [UnidadeDTO.model_validate(u) for u in r.scalars().all()]
+
+
+@router.get("/categorias", response_model=List[CategoriaDTO])
+async def list_categorias(
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> List[CategoriaDTO]:
+    empresa_id = gerente.empresa_id
+    r = await session.execute(
+        select(Categoria)
+        .where(
+            Categoria.empresa_id == empresa_id,
+            Categoria.ativo.is_(True),
+        )
+        .order_by(Categoria.nome)
+    )
+    return [CategoriaDTO.model_validate(c) for c in r.scalars().all()]
 
 
 @router.get("/perfis-tributarios", response_model=List[PerfilTributarioSimpleDTO])
