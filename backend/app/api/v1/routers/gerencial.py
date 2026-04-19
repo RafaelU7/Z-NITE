@@ -190,6 +190,22 @@ class SessaoListDTO(BaseModel):
     quantidade_vendas: int
 
 
+class CaixaDTO(BaseModel):
+    id: UUID
+    numero: int
+    descricao: Optional[str] = None
+    numero_serie: Optional[str] = None
+    ativo: bool
+
+    model_config = {"from_attributes": True}
+
+
+class CaixaCreateRequest(BaseModel):
+    numero: int = Field(..., ge=1)
+    descricao: Optional[str] = Field(None, max_length=100)
+    numero_serie: Optional[str] = Field(None, max_length=50)
+
+
 # ---------------------------------------------------------------------------
 # Helpers de hierarquia de perfis
 # ---------------------------------------------------------------------------
@@ -704,3 +720,76 @@ async def list_sessoes(
         )
         for s in sessoes
     ]
+
+
+# ---------------------------------------------------------------------------
+# CAIXAS
+# ---------------------------------------------------------------------------
+
+@router.get("/caixas", response_model=List[CaixaDTO])
+async def list_caixas(
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> List[CaixaDTO]:
+    empresa_id = gerente.empresa_id
+    r = await session.execute(
+        select(Caixa)
+        .where(Caixa.empresa_id == empresa_id)
+        .order_by(Caixa.numero)
+    )
+    return [CaixaDTO.model_validate(c) for c in r.scalars().all()]
+
+
+@router.post("/caixas", response_model=CaixaDTO, status_code=201)
+async def create_caixa(
+    req: CaixaCreateRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> CaixaDTO:
+    empresa_id = gerente.empresa_id
+
+    dup = await session.execute(
+        select(Caixa).where(
+            Caixa.empresa_id == empresa_id,
+            Caixa.numero == req.numero,
+        )
+    )
+    if dup.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Já existe caixa com número {req.numero}.",
+        )
+
+    caixa = Caixa(
+        id=uuid.uuid4(),
+        empresa_id=empresa_id,
+        numero=req.numero,
+        descricao=req.descricao,
+        numero_serie=req.numero_serie,
+        ativo=True,
+    )
+    session.add(caixa)
+    await session.flush()
+    return CaixaDTO.model_validate(caixa)
+
+
+@router.patch("/caixas/{caixa_id}/status", response_model=CaixaDTO)
+async def patch_caixa_status(
+    caixa_id: UUID,
+    ativo: bool = Query(...),
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> CaixaDTO:
+    empresa_id = gerente.empresa_id
+    r = await session.execute(
+        select(Caixa).where(
+            Caixa.id == caixa_id,
+            Caixa.empresa_id == empresa_id,
+        )
+    )
+    caixa = r.scalar_one_or_none()
+    if not caixa:
+        raise HTTPException(status_code=404, detail="Caixa não encontrado.")
+    caixa.ativo = ativo
+    await session.flush()
+    return CaixaDTO.model_validate(caixa)

@@ -315,3 +315,17 @@ export interface SessaoListDTO {
   total_liquido: string
   quantidade_vendas: number
 }
+
+export interface CaixaDTO {
+  id: string
+  numero: number
+  descricao: string | null
+  numero_serie: string | null
+  ativo: boolean
+}
+
+export interface CaixaCreateRequest {
+  numero: number
+  descricao?: string
+  numero_serie?: string
+}

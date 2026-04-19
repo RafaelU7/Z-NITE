@@ -7,6 +7,7 @@ import { GerencialLayout } from '@/features/gerencial/pages/GerencialLayout'
 import { DashboardPage } from '@/features/gerencial/pages/DashboardPage'
 import { ProdutosPage } from '@/features/gerencial/pages/ProdutosPage'
 import { UsuariosPage } from '@/features/gerencial/pages/UsuariosPage'
+import { CaixasPage } from '@/features/gerencial/pages/CaixasPage'
 import { SessoesPage } from '@/features/gerencial/pages/SessoesPage'
 import { RequireAuth, RequireCaixa, RequireGerente } from '@/shared/ui/Guards'
 
@@ -57,6 +58,7 @@ export default function App() {
             <Route index element={<DashboardPage />} />
             <Route path="produtos" element={<ProdutosPage />} />
             <Route path="usuarios" element={<UsuariosPage />} />
+            <Route path="caixas" element={<CaixasPage />} />
             <Route path="sessoes" element={<SessoesPage />} />
           </Route>
 

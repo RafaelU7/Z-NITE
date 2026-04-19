@@ -8,7 +8,8 @@ const NAV = [
   { to: '/gerencial', label: 'Dashboard', icon: <LayoutDashboard size={16} />, end: true },
   { to: '/gerencial/produtos', label: 'Produtos', icon: <Package size={16} /> },
   { to: '/gerencial/usuarios', label: 'Usuários', icon: <Users size={16} /> },
-  { to: '/gerencial/sessoes', label: 'Sessões', icon: <CreditCard size={16} /> },
+  { to: '/gerencial/caixas', label: 'Caixas', icon: <CreditCard size={16} /> },
+  { to: '/gerencial/sessoes', label: 'Sessões', icon: <Store size={16} /> },
 ]
 
 export function GerencialLayout() {

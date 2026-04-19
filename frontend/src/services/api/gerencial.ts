@@ -1,5 +1,7 @@
 import api from './client'
 import type {
+  CaixaDTO,
+  CaixaCreateRequest,
   CategoriaDTO,
   DashboardDTO,
   PaginatedProdutos,
@@ -75,6 +77,23 @@ export async function patchUsuarioStatus(id: string, ativo: boolean): Promise<Us
 export async function listSessoes(limit?: number): Promise<SessaoListDTO[]> {
   const { data } = await api.get<SessaoListDTO[]>('/gerencial/sessoes', {
     params: limit ? { limit } : undefined,
+  })
+  return data
+}
+
+export async function listCaixas(): Promise<CaixaDTO[]> {
+  const { data } = await api.get<CaixaDTO[]>('/gerencial/caixas')
+  return data
+}
+
+export async function createCaixa(req: CaixaCreateRequest): Promise<CaixaDTO> {
+  const { data } = await api.post<CaixaDTO>('/gerencial/caixas', req)
+  return data
+}
+
+export async function patchCaixaStatus(id: string, ativo: boolean): Promise<CaixaDTO> {
+  const { data } = await api.patch<CaixaDTO>(`/gerencial/caixas/${id}/status`, null, {
+    params: { ativo },
   })
   return data
 }
