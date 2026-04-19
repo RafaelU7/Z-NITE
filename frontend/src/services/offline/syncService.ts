@@ -53,11 +53,11 @@ export interface SyncResultado {
 }
 
 const FORMA_PAGAMENTO_SYNC_MAP: Record<FormaPagamento, string> = {
-  DINHEIRO: '01',
-  PIX: '17',
-  CARTAO_DEBITO: '04',
-  CARTAO_CREDITO: '03',
-  OUTROS: '99',
+  '01': '01',
+  '03': '03',
+  '04': '04',
+  '17': '17',
+  '99': '99',
 }
 
 // ---------------------------------------------------------------------------

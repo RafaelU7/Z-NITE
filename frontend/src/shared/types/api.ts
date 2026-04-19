@@ -85,11 +85,11 @@ export interface ProdutoDTO {
 // --- Venda ---
 
 export type FormaPagamento =
-  | 'DINHEIRO'
-  | 'PIX'
-  | 'CARTAO_DEBITO'
-  | 'CARTAO_CREDITO'
-  | 'OUTROS'
+  | '01'
+  | '03'
+  | '04'
+  | '17'
+  | '99'
 
 export type TipoEmissao = 'FISCAL' | 'GERENCIAL'
 
@@ -199,4 +199,112 @@ export interface DocumentoFiscalDTO {
 export interface ApiErrorDetail {
   detail: string
   code?: string
+}
+
+// --- Gerencial ---
+
+export interface DashboardPagamentoPorForma {
+  forma: string
+  label: string
+  total: string
+  qtd: number
+}
+
+export interface DashboardDTO {
+  data_referencia: string
+  total_vendas: string
+  qtd_vendas: number
+  ticket_medio: string
+  por_forma_pagamento: DashboardPagamentoPorForma[]
+  sessoes_abertas: number
+}
+
+export interface ProdutoGerencialDTO {
+  id: string
+  sku: string | null
+  codigo_barras_principal: string | null
+  descricao: string
+  descricao_pdv: string | null
+  preco_venda: string
+  unidade_id: string
+  unidade_codigo: string | null
+  perfil_tributario_id: string | null
+  categoria_id: string | null
+  controla_estoque: boolean
+  ativo: boolean
+  destaque_pdv: boolean
+}
+
+export interface PaginatedProdutos {
+  items: ProdutoGerencialDTO[]
+  total: number
+  page: number
+  per_page: number
+}
+
+export interface ProdutoCreateRequest {
+  descricao: string
+  descricao_pdv?: string
+  codigo_barras_principal?: string
+  sku?: string
+  preco_venda: number
+  unidade_id: string
+  perfil_tributario_id?: string
+  categoria_id?: string
+  controla_estoque?: boolean
+  ativo?: boolean
+  destaque_pdv?: boolean
+}
+
+export interface ProdutoPatchRequest {
+  descricao?: string
+  descricao_pdv?: string
+  preco_venda?: number
+  ativo?: boolean
+  destaque_pdv?: boolean
+  perfil_tributario_id?: string
+}
+
+export interface UnidadeDTO {
+  id: string
+  codigo: string
+  descricao: string
+}
+
+export interface PerfilTributarioSimpleDTO {
+  id: string
+  nome: string
+}
+
+export interface UsuarioListDTO {
+  id: string
+  nome: string
+  email: string
+  perfil: string
+  codigo_operador: string | null
+  ativo: boolean
+  ultimo_acesso: string | null
+}
+
+export interface UsuarioCreateRequest {
+  nome: string
+  email: string
+  senha: string
+  perfil?: string
+  codigo_operador?: string
+  pin?: string
+}
+
+export interface SessaoListDTO {
+  id: string
+  caixa_id: string
+  caixa_descricao: string | null
+  caixa_numero: number
+  operador_id: string
+  operador_nome: string
+  status: string
+  data_abertura: string
+  data_fechamento: string | null
+  total_liquido: string
+  quantidade_vendas: number
 }

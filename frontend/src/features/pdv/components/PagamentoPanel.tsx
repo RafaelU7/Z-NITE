@@ -26,31 +26,31 @@ interface FormaInfo {
 
 const FORMAS: FormaInfo[] = [
   {
-    key: 'DINHEIRO',
+    key: '01',
     label: 'Dinheiro',
     icon: <Banknote size={18} />,
     color: 'border-success/40 bg-success/10 hover:bg-success/20 text-success-text',
   },
   {
-    key: 'PIX',
+    key: '17',
     label: 'Pix',
     icon: <QrCode size={18} />,
     color: 'border-info/40 bg-info/10 hover:bg-info/20 text-info-text',
   },
   {
-    key: 'CARTAO_DEBITO',
+    key: '04',
     label: 'Débito',
     icon: <CreditCard size={18} />,
     color: 'border-accent/40 bg-accent/10 hover:bg-accent/20 text-accent-hover',
   },
   {
-    key: 'CARTAO_CREDITO',
+    key: '03',
     label: 'Crédito',
     icon: <CreditCard size={18} />,
     color: 'border-warning/40 bg-warning/10 hover:bg-warning/20 text-warning-text',
   },
   {
-    key: 'OUTROS',
+    key: '99',
     label: 'Outros',
     icon: <MoreHorizontal size={18} />,
     color: 'border-border bg-bg-surface-3 hover:bg-bg-surface-2 text-text-secondary',
@@ -288,11 +288,11 @@ export function PagamentoPanel({
 
 function labelForma(forma: string): string {
   const map: Record<string, string> = {
-    DINHEIRO: 'Dinheiro',
-    PIX: 'Pix',
-    CARTAO_DEBITO: 'Cartão Débito',
-    CARTAO_CREDITO: 'Cartão Crédito',
-    OUTROS: 'Outros',
+    '01': 'Dinheiro',
+    '03': 'Cartão Crédito',
+    '04': 'Cartão Débito',
+    '17': 'Pix',
+    '99': 'Outros',
   }
   return map[forma] ?? forma
 }

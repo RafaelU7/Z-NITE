@@ -3,7 +3,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { CaixaPage } from '@/features/caixa/pages/CaixaPage'
 import { PDVPage } from '@/features/pdv/pages/PDVPage'
-import { RequireAuth, RequireCaixa } from '@/shared/ui/Guards'
+import { GerencialLayout } from '@/features/gerencial/pages/GerencialLayout'
+import { DashboardPage } from '@/features/gerencial/pages/DashboardPage'
+import { ProdutosPage } from '@/features/gerencial/pages/ProdutosPage'
+import { UsuariosPage } from '@/features/gerencial/pages/UsuariosPage'
+import { SessoesPage } from '@/features/gerencial/pages/SessoesPage'
+import { RequireAuth, RequireCaixa, RequireGerente } from '@/shared/ui/Guards'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,6 +42,23 @@ export default function App() {
               </RequireAuth>
             }
           />
+
+          {/* Retaguarda gerencial */}
+          <Route
+            path="/gerencial"
+            element={
+              <RequireAuth>
+                <RequireGerente>
+                  <GerencialLayout />
+                </RequireGerente>
+              </RequireAuth>
+            }
+          >
+            <Route index element={<DashboardPage />} />
+            <Route path="produtos" element={<ProdutosPage />} />
+            <Route path="usuarios" element={<UsuariosPage />} />
+            <Route path="sessoes" element={<SessoesPage />} />
+          </Route>
 
           {/* Redirect raiz → login ou pdv */}
           <Route path="/" element={<Navigate to="/login" replace />} />
