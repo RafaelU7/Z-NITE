@@ -7,7 +7,7 @@ FecharSessaoUseCase   — POST /v1/caixa/sessoes/{sessao_id}/fechar
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from uuid import UUID
 
@@ -77,7 +77,17 @@ class AbrirSessaoUseCase:
 
         sessao_existente = await self._repo.get_sessao_ativa(request.caixa_id, empresa_id)
         if sessao_existente:
-            raise ConflictError("Caixa já possui uma sessão aberta.")
+            data_abertura = sessao_existente.data_abertura
+            if data_abertura.tzinfo is None:
+                data_abertura = data_abertura.replace(tzinfo=timezone.utc)
+            if data_abertura.date() < date.today():
+                # Sessão de dia anterior — fecha automaticamente
+                sessao_existente.status = StatusSessaoCaixa.FECHADA
+                sessao_existente.data_fechamento = datetime.now(timezone.utc)
+                sessao_existente.observacao_fechamento = "Sessão fechada automaticamente — início de novo dia."
+                await self._repo.save(sessao_existente)
+            else:
+                raise ConflictError("Caixa já possui uma sessão aberta.")
 
         sessao = SessaoCaixa(
             empresa_id=empresa_id,
@@ -111,6 +121,16 @@ class GetSessaoAtivaUseCase:
         sessao = await self._repo.get_sessao_ativa(caixa_id, empresa_id)
         if not sessao:
             raise NotFoundError("Nenhuma sessão aberta para este caixa.")
+        # Fecha automaticamente sess\u00f5es de dias anteriores
+        data_abertura = sessao.data_abertura
+        if data_abertura.tzinfo is None:
+            data_abertura = data_abertura.replace(tzinfo=timezone.utc)
+        if data_abertura.date() < date.today():
+            sessao.status = StatusSessaoCaixa.FECHADA
+            sessao.data_fechamento = datetime.now(timezone.utc)
+            sessao.observacao_fechamento = "Sess\u00e3o fechada automaticamente \u2014 in\u00edcio de novo dia."
+            await self._repo.save(sessao)
+            raise NotFoundError("Nenhuma sess\u00e3o aberta para este caixa.")
         return _to_dto(sessao)
 
 

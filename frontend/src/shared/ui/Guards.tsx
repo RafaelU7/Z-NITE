@@ -20,7 +20,7 @@ const PERFIS_GERENCIAIS = ['gerente', 'admin', 'super_admin']
 export function RequireGerente({ children }: { children: ReactNode }) {
   const user = useAuthStore((s) => s.user)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated())
-  if (!isAuthenticated) return <Navigate to="/gerencial/login" replace />
+  if (!isAuthenticated) return <Navigate to="/login" replace />
   if (!PERFIS_GERENCIAIS.includes(user!.perfil)) return <Navigate to="/pdv" replace />
   return <>{children}</>
 }
