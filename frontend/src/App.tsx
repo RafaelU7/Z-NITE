@@ -23,6 +23,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          {/* Login dedicado para retaguarda — mesma tela, URL separada */}
+          <Route path="/gerencial/login" element={<LoginPage />} />
 
           <Route
             path="/caixa"
@@ -48,11 +50,9 @@ export default function App() {
           <Route
             path="/gerencial"
             element={
-              <RequireAuth>
-                <RequireGerente>
-                  <GerencialLayout />
-                </RequireGerente>
-              </RequireAuth>
+              <RequireGerente>
+                <GerencialLayout />
+              </RequireGerente>
             }
           >
             <Route index element={<DashboardPage />} />
