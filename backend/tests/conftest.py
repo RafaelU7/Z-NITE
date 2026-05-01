@@ -320,7 +320,25 @@ async def seed_data(db_session: AsyncSession) -> dict[str, Any]:
         ativo=True,
         destaque_pdv=False,
     )
-    db_session.add_all([produto, produto_inativo, produto_sem_fiscal_valido])
+    produto_sem_estoque = Produto(
+        empresa_id=empresa.id,
+        sku="REF-004",
+        codigo_barras_principal="7891234567893",
+        descricao="Produto Sem Estoque",
+        descricao_pdv="SEM ESTOQUE",
+        marca="Zênite",
+        categoria_id=categoria.id,
+        unidade_id=unidade.id,
+        pesavel=False,
+        preco_venda=Decimal("8.00"),
+        custo_medio=Decimal("3.00"),
+        estoque_minimo=Decimal("1.000"),
+        controla_estoque=True,
+        perfil_tributario_id=perfil_tributario.id,
+        ativo=True,
+        destaque_pdv=False,
+    )
+    db_session.add_all([produto, produto_inativo, produto_sem_fiscal_valido, produto_sem_estoque])
     await db_session.flush()
 
     local_estoque = LocalEstoque(
@@ -378,8 +396,10 @@ async def seed_data(db_session: AsyncSession) -> dict[str, Any]:
         "caixa_id": caixa.id,
         "produto_id": produto.id,
         "produto_ean": produto.codigo_barras_principal,
+        "produto_inativo_id": produto_inativo.id,
         "produto_inativo_ean": produto_inativo.codigo_barras_principal,
         "produto_sem_fiscal_valido_id": produto_sem_fiscal_valido.id,
+        "produto_sem_estoque_id": produto_sem_estoque.id,
         "local_estoque_id": local_estoque.id,
     }
 

@@ -10,20 +10,21 @@ import { useNavigate } from 'react-router-dom'
 import type { SessaoCaixaDTO } from '@/shared/types/api'
 
 const CAIXA_ID_DEFAULT = import.meta.env.VITE_CAIXA_ID ?? ''
+const TEM_CAIXA_ID_CONFIGURADO = CAIXA_ID_DEFAULT.trim().length > 0
 
 export function CaixaPage() {
   const { user, clearSession } = useAuthStore()
   const { sessaoCaixa, setSessaoCaixa } = usePDVStore()
   const navigate = useNavigate()
   const [sessaoAberta, setSessaoAberta] = useState<SessaoCaixaDTO | null>(sessaoCaixa)
-  const [loadingSessao, setLoadingSessao] = useState(!!CAIXA_ID_DEFAULT && !sessaoCaixa)
+  const [loadingSessao, setLoadingSessao] = useState(TEM_CAIXA_ID_CONFIGURADO && !sessaoCaixa)
   const [erroSessao, setErroSessao] = useState('')
 
   useEffect(() => {
     let cancelled = false
 
     async function loadSessaoAtiva() {
-      if (!CAIXA_ID_DEFAULT || sessaoCaixa) {
+      if (!TEM_CAIXA_ID_CONFIGURADO || sessaoCaixa) {
         setLoadingSessao(false)
         return
       }
@@ -127,6 +128,11 @@ export function CaixaPage() {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
+              {!TEM_CAIXA_ID_CONFIGURADO && (
+                <div className="rounded-lg border border-warning/30 bg-warning/10 px-3 py-2.5 text-sm text-warning-text">
+                  Caixa padrão não configurado. Informe o ID do caixa manualmente para abrir ou retomar uma sessão.
+                </div>
+              )}
               {erroSessao && (
                 <div className="rounded-lg border border-danger/30 bg-danger/10 px-3 py-2.5 text-sm text-danger-text">
                   {erroSessao}

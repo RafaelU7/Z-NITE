@@ -214,6 +214,8 @@ class AdicionarItemUseCase:
         )
         if not produto:
             raise NotFoundError("Produto não encontrado.")
+        if not produto.ativo:
+            raise BusinessRuleError("Produto inativo e indisponível para venda.")
         if produto.perfil_tributario is None or not produto.perfil_tributario.ativo:
             raise BusinessRuleError(
                 "Produto sem perfil tributário válido para venda."

@@ -94,16 +94,20 @@ class EstoqueRepository(BaseRepository[Estoque]):
     ) -> Optional[Estoque]:
         """
         Reduz o saldo do local principal com SELECT FOR UPDATE.
-        Retorna o Estoque atualizado, ou None se não existir registro.
+        Retorna o Estoque atualizado.
         Levanta BusinessRuleError se o saldo ficaria negativo e permite_negativo=False.
         """
         local_id = await self._find_local_principal_id(produto_id, empresa_id)
         if not local_id:
-            return None
+            raise BusinessRuleError(
+                "Produto sem local de estoque principal configurado para venda."
+            )
 
         estoque = await self._get_for_update(produto_id, local_id)
         if not estoque:
-            return None
+            raise BusinessRuleError(
+                "Produto sem registro de estoque no local principal."
+            )
 
         novo_saldo = float(estoque.saldo_atual) - quantidade
         if novo_saldo < 0 and not estoque.permite_negativo:

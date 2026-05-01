@@ -278,6 +278,26 @@ async def test_registrar_pagamento_e_impedir_finalizacao_com_pagamento_insuficie
     assert finalize.status_code == 422
 
 
+async def test_impedir_finalizacao_sem_pagamento(
+    client: AsyncClient,
+    seed_data: dict[str, Any],
+) -> None:
+    token = await _login_pin(client, seed_data)
+    sessao = await _abrir_sessao(client, seed_data, token)
+    venda = await _iniciar_venda(client, token, sessao["id"])
+
+    add_item = await _adicionar_item(client, token, venda["id"], str(seed_data["produto_id"]), quantidade="1.000")
+    assert add_item.status_code == 201
+
+    finalize = await client.post(
+        f"/v1/vendas/{venda['id']}/finalizar",
+        headers=_auth_headers(token),
+    )
+
+    assert finalize.status_code == 422
+    assert "Pagamento insuficiente" in finalize.json()["detail"]
+
+
 async def test_fluxo_completo_finaliza_cria_documento_e_fecha_caixa_com_totais_corretos(
     client: AsyncClient,
     seed_data: dict[str, Any],
@@ -406,6 +426,16 @@ async def test_bordas_produto_inativo_e_sem_tributacao_valida(
     )
     assert produto_inativo.status_code == 404
 
+    inativo_por_id = await _adicionar_item(
+        client,
+        token,
+        venda["id"],
+        str(seed_data["produto_inativo_id"]),
+        quantidade="1.000",
+    )
+    assert inativo_por_id.status_code == 422
+    assert "Produto inativo" in inativo_por_id.json()["detail"]
+
     sem_fiscal = await _adicionar_item(
         client,
         token,
@@ -449,6 +479,26 @@ async def test_bordas_estoque_insuficiente_venda_item_e_sessao_inexistentes(
     assert venda_inexistente.status_code == 404
     assert item_inexistente.status_code == 404
     assert sessao_inexistente.status_code == 404
+
+
+async def test_bloqueia_venda_quando_produto_nao_tem_registro_de_estoque(
+    client: AsyncClient,
+    seed_data: dict[str, Any],
+) -> None:
+    token = await _login_pin(client, seed_data)
+    sessao = await _abrir_sessao(client, seed_data, token)
+    venda = await _iniciar_venda(client, token, sessao["id"])
+
+    response = await _adicionar_item(
+        client,
+        token,
+        venda["id"],
+        str(seed_data["produto_sem_estoque_id"]),
+        quantidade="1.000",
+    )
+
+    assert response.status_code == 422
+    assert "registro de estoque" in response.json()["detail"]
 
 
 async def test_token_invalido_retorna_401(client: AsyncClient, seed_data: dict[str, Any]) -> None:
