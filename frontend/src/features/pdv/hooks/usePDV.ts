@@ -301,7 +301,10 @@ export function usePDV() {
         } else {
           flash('success', `Venda #${vendaFinal.numero_venda_local} finalizada com sucesso!`, 4000)
         }
-        await novaVenda({ silent: true })
+        // Não chama novaVenda aqui — o useEffect em PDVPage detecta vendaAtual===null
+        // e aciona ensureVendaAberta (que tem o guard vendaBootstrapPromise). Chamar
+        // novaVenda diretamente aqui criava uma race condition: dois POST /v1/vendas/
+        // simultâneos (um por aqui, outro pelo useEffect), causando o erro CORS intermitente.
       } else {
         // Offline: persiste localmente com status pendente_sync
         const vendaFinal = await finalizarVendaOffline(vendaAtual.id, modoFinal)
@@ -322,7 +325,7 @@ export function usePDV() {
             5000,
           )
         }
-        await novaVenda({ silent: true })
+        // Idem: deixa o useEffect/ensureVendaAberta criar a próxima venda
       }
     } catch (err) {
       flash('error', err instanceof Error ? err.message : 'Erro ao finalizar venda.')
@@ -330,7 +333,7 @@ export function usePDV() {
       setScannerPodeFocar(true)
       setLoadingAcao(false)
     }
-  }, [flash, isOffline, modoEmissaoSelecionado, novaVenda, setModoEmissaoSelecionado, setPainelPagamentoAberto, setPendentesSync, setScannerPodeFocar, setVendaAtual, setVendaFinalizada, vendaAtual])
+  }, [flash, isOffline, modoEmissaoSelecionado, setModoEmissaoSelecionado, setPainelPagamentoAberto, setPendentesSync, setScannerPodeFocar, setVendaAtual, setVendaFinalizada, vendaAtual])
 
   return {
     ensureVendaAberta,
