@@ -3,11 +3,12 @@
 # torna o Python 3.11 e a estratégia de instalação explícitos.
 
 [phases.setup]
-nixPkgs = ["python311"]
+nixPkgs = ["python311Full"]
 
 [phases.install]
 cmds = [
-  "pip install poetry==1.8.3",
+  "python -m pip install --upgrade pip",
+  "python -m pip install poetry==1.8.3",
   "poetry config virtualenvs.create false",
   "poetry install --only main --no-root"
 ]
