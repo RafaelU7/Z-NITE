@@ -30,7 +30,7 @@ function AppRoutes() {
 
   useEffect(() => {
     getSetupStatus()
-      .then((s) => setNecessitaSetup(s.necessita_setup))
+      .then((s) => setNecessitaSetup(s.setup_required))
       .catch(() => {/* se falhar, assume que não precisa de setup */})
       .finally(() => setSetupVerificado(true))
   }, [])

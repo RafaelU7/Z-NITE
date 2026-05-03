@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Optional
 
-from sqlalchemy import CHAR, Boolean, Integer, String, UniqueConstraint
+from sqlalchemy import CHAR, Boolean, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base, TimestampMixin, UUIDPrimaryKeyMixin
@@ -26,17 +26,18 @@ from .enums import AmbienteFiscal, RegimeTributario
 class Empresa(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "empresas"
     __table_args__ = (
-        UniqueConstraint("cnpj", name="uq_empresas_cnpj"),
+        # Partial unique index on cnpj (only when NOT NULL) is created via migration.
+        # See: alembic/versions/20260503_0758_a57f116b294b_setup_cnpj_optional.py
         {"comment": "Configuração central da empresa e parâmetros fiscais"},
     )
 
     # Identificação
     razao_social: Mapped[str] = mapped_column(String(150), nullable=False)
     nome_fantasia: Mapped[Optional[str]] = mapped_column(String(150))
-    cnpj: Mapped[str] = mapped_column(
+    cnpj: Mapped[Optional[str]] = mapped_column(
         String(14),
-        nullable=False,
-        comment="Apenas dígitos, sem formatação",
+        nullable=True,
+        comment="Apenas dígitos, sem formatação. Nullable: pequenos mercados podem não ter CNPJ formal.",
     )
     inscricao_estadual: Mapped[Optional[str]] = mapped_column(String(20))
     inscricao_municipal: Mapped[Optional[str]] = mapped_column(String(20))

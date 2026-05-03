@@ -1,17 +1,24 @@
-"""
+﻿"""
 Router de Setup Inicial — /v1/setup/...
 
 Endpoints públicos (sem autenticação) para primeiro acesso:
-  GET  /setup/status        — verifica se empresa já existe
-  POST /setup/inicializar   — cria empresa + gerente + operador + caixa inicial
+  GET  /setup/status   — verifica se empresa já existe
+  POST /setup/empresa  — cria empresa + gerente + caixa inicial
+
+Regras:
+  - setup_required = true quando nenhuma empresa estiver cadastrada
+  - POST /setup/empresa só pode ser chamado uma vez; retorna 409 se já existe empresa
+  - Email do gerente é opcional; se vazio, gera e-mail sintético @op.zenite.local
+  - razao_social é opcional; se vazio, usa nome_fantasia como razao_social
+  - cnpj é opcional (mercados informais podem não ter CNPJ)
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
+import uuid
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,10 +29,9 @@ from app.infrastructure.database.models.enums import (
     AmbienteFiscal,
     PerfilUsuario,
     RegimeTributario,
-    StatusSessaoCaixa,
 )
 from app.infrastructure.database.models.usuario import Usuario
-from app.infrastructure.security.password_handler import hash_password, hash_pin
+from app.infrastructure.security.password_handler import hash_pin
 
 router = APIRouter(prefix="/setup", tags=["Setup Inicial"])
 
@@ -36,42 +42,48 @@ router = APIRouter(prefix="/setup", tags=["Setup Inicial"])
 
 
 class SetupStatusDTO(BaseModel):
-    necessita_setup: bool
+    setup_required: bool
 
 
 class SetupEmpresaInput(BaseModel):
-    razao_social: str = Field(..., min_length=2, max_length=150)
-    nome_fantasia: Optional[str] = Field(None, max_length=150)
-    cnpj: str = Field(..., min_length=11, max_length=14, pattern=r"^\d{11,14}$")
-    regime_tributario: RegimeTributario = RegimeTributario.SIMPLES_NACIONAL
+    nome_fantasia: str = Field(..., min_length=2, max_length=150)
+    razao_social: Optional[str] = Field(None, max_length=150)
+    cnpj: Optional[str] = Field(None, max_length=14)
+    telefone: Optional[str] = Field(None, max_length=15)
+    logo_url: Optional[str] = Field(None, max_length=500)
+
+    @field_validator("cnpj", mode="before")
+    @classmethod
+    def clean_cnpj(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        digits = "".join(c for c in v if c.isdigit())
+        return digits if digits else None
 
 
 class SetupGerenteInput(BaseModel):
     nome: str = Field(..., min_length=2, max_length=150)
-    email: EmailStr
-    senha: str = Field(..., min_length=6, max_length=200)
+    email: Optional[EmailStr] = None
     codigo_operador: str = Field(..., min_length=1, max_length=20)
     pin: str = Field(..., min_length=4, max_length=6)
 
+    @field_validator("pin")
+    @classmethod
+    def pin_digits(cls, v: str) -> str:
+        if not v.isdigit():
+            raise ValueError("PIN deve conter apenas dígitos")
+        return v
 
-class SetupOperadorInput(BaseModel):
-    nome: str = Field(..., min_length=2, max_length=150)
-    email: EmailStr
-    codigo_operador: str = Field(..., min_length=1, max_length=20)
-    pin: str = Field(..., min_length=4, max_length=6)
 
-
-class SetupInicializarRequest(BaseModel):
+class SetupEmpresaRequest(BaseModel):
     empresa: SetupEmpresaInput
     gerente: SetupGerenteInput
-    operador: SetupOperadorInput
-    caixa_descricao: str = Field("Caixa Principal", max_length=100)
+    caixa_descricao: str = Field("Caixa 01 - Principal", max_length=100)
 
 
-class SetupInicializarResponse(BaseModel):
+class SetupEmpresaResponse(BaseModel):
     empresa_id: str
     gerente_id: str
-    operador_id: str
     caixa_id: str
     mensagem: str
 
@@ -91,20 +103,20 @@ async def get_setup_status(
 ) -> SetupStatusDTO:
     result = await session.execute(select(func.count()).select_from(Empresa))
     count = result.scalar() or 0
-    return SetupStatusDTO(necessita_setup=count == 0)
+    return SetupStatusDTO(setup_required=count == 0)
 
 
 @router.post(
-    "/inicializar",
-    response_model=SetupInicializarResponse,
-    status_code=201,
-    summary="Cria empresa, gerente, operador e caixa inicial",
+    "/empresa",
+    response_model=SetupEmpresaResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Cria empresa, gerente e caixa inicial (apenas no primeiro acesso)",
 )
-async def inicializar_sistema(
-    request: SetupInicializarRequest,
+async def setup_empresa(
+    request: SetupEmpresaRequest,
     session: AsyncSession = Depends(get_async_session),
-) -> SetupInicializarResponse:
-    # Garante idempotência — só roda se não existe empresa
+) -> SetupEmpresaResponse:
+    # Idempotência: só roda se nenhuma empresa existe
     result = await session.execute(select(func.count()).select_from(Empresa))
     count = result.scalar() or 0
     if count > 0:
@@ -113,46 +125,35 @@ async def inicializar_sistema(
             detail="Sistema já foi inicializado. Use o painel gerencial para alterações.",
         )
 
-    cnpj_limpo = request.empresa.cnpj.replace(".", "").replace("/", "").replace("-", "")
-
     # 1. Empresa
+    razao = (request.empresa.razao_social or request.empresa.nome_fantasia).strip()
     empresa = Empresa(
-        razao_social=request.empresa.razao_social,
-        nome_fantasia=request.empresa.nome_fantasia,
-        cnpj=cnpj_limpo,
-        regime_tributario=request.empresa.regime_tributario,
+        nome_fantasia=request.empresa.nome_fantasia.strip(),
+        razao_social=razao,
+        cnpj=request.empresa.cnpj,
+        telefone=request.empresa.telefone,
+        regime_tributario=RegimeTributario.SIMPLES_NACIONAL,
         ambiente_fiscal=AmbienteFiscal.HOMOLOGACAO,
+        ativo=True,
     )
     session.add(empresa)
-    await session.flush()  # gera empresa.id
+    await session.flush()  # garante empresa.id
 
     # 2. Gerente
+    email_gerente: str = request.gerente.email or f"{uuid.uuid4().hex[:12]}@op.zenite.local"
     gerente = Usuario(
         empresa_id=empresa.id,
-        nome=request.gerente.nome,
-        email=request.gerente.email,
-        senha_hash=hash_password(request.gerente.senha),
+        nome=request.gerente.nome.strip(),
+        email=email_gerente,
+        senha_hash=hash_pin(request.gerente.pin),  # pin como senha inicial
         perfil=PerfilUsuario.GERENTE,
-        codigo_operador=request.gerente.codigo_operador,
+        codigo_operador=request.gerente.codigo_operador.strip(),
         pin_hash=hash_pin(request.gerente.pin),
         ativo=True,
     )
     session.add(gerente)
 
-    # 3. Operador
-    operador = Usuario(
-        empresa_id=empresa.id,
-        nome=request.operador.nome,
-        email=request.operador.email,
-        senha_hash=hash_password(request.operador.pin),  # usa pin como senha inicial
-        perfil=PerfilUsuario.OPERADOR_CAIXA,
-        codigo_operador=request.operador.codigo_operador,
-        pin_hash=hash_pin(request.operador.pin),
-        ativo=True,
-    )
-    session.add(operador)
-
-    # 4. Caixa
+    # 3. Caixa padrão
     caixa = Caixa(
         empresa_id=empresa.id,
         numero=1,
@@ -164,13 +165,11 @@ async def inicializar_sistema(
     await session.commit()
     await session.refresh(empresa)
     await session.refresh(gerente)
-    await session.refresh(operador)
     await session.refresh(caixa)
 
-    return SetupInicializarResponse(
+    return SetupEmpresaResponse(
         empresa_id=str(empresa.id),
         gerente_id=str(gerente.id),
-        operador_id=str(operador.id),
         caixa_id=str(caixa.id),
-        mensagem="Sistema inicializado com sucesso.",
+        mensagem=f"Bem-vindo ao Zênite PDV! {empresa.nome_fantasia} configurado com sucesso.",
     )

@@ -5,36 +5,29 @@ const _apiBase = import.meta.env.VITE_API_BASE_URL
   : '/v1'
 
 export interface SetupStatusDTO {
-  necessita_setup: boolean
+  setup_required: boolean
 }
 
-export interface SetupInicializarRequest {
+export interface SetupEmpresaRequest {
   empresa: {
-    razao_social: string
-    nome_fantasia?: string
-    cnpj: string
-    regime_tributario: 'SN' | 'SNE' | 'LP' | 'LR'
+    nome_fantasia: string
+    razao_social?: string
+    cnpj?: string
+    telefone?: string
+    logo_url?: string
   }
   gerente: {
     nome: string
-    email: string
-    senha: string
-    codigo_operador: string
-    pin: string
-  }
-  operador: {
-    nome: string
-    email: string
+    email?: string
     codigo_operador: string
     pin: string
   }
   caixa_descricao: string
 }
 
-export interface SetupInicializarResponse {
+export interface SetupEmpresaResponse {
   empresa_id: string
   gerente_id: string
-  operador_id: string
   caixa_id: string
   mensagem: string
 }
@@ -44,9 +37,9 @@ export async function getSetupStatus(): Promise<SetupStatusDTO> {
   return r.data
 }
 
-export async function inicializarSistema(
-  data: SetupInicializarRequest,
-): Promise<SetupInicializarResponse> {
-  const r = await axios.post<SetupInicializarResponse>(`${_apiBase}/setup/inicializar`, data)
+export async function setupEmpresa(
+  data: SetupEmpresaRequest,
+): Promise<SetupEmpresaResponse> {
+  const r = await axios.post<SetupEmpresaResponse>(`${_apiBase}/setup/empresa`, data)
   return r.data
 }
