@@ -30,8 +30,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app.core.database import get_async_session
-from app.core.dependencies import require_perfil
+from app.core.dependencies import get_current_user, require_perfil
 from app.infrastructure.database.models.caixa import Caixa, SessaoCaixa
+from app.infrastructure.database.models.empresa import Empresa
 from app.infrastructure.database.models.enums import (
     PerfilUsuario,
     StatusSessaoCaixa,
@@ -252,6 +253,46 @@ class CaixaCreateRequest(BaseModel):
     numero: int = Field(..., ge=1)
     descricao: Optional[str] = Field(None, max_length=100)
     numero_serie: Optional[str] = Field(None, max_length=50)
+
+
+# ---------------------------------------------------------------------------
+# DTOs de empresa pública
+# ---------------------------------------------------------------------------
+
+class EmpresaPublicaDTO(BaseModel):
+    id: UUID
+    razao_social: str
+    nome_fantasia: Optional[str] = None
+    cnpj: str
+
+    model_config = {"from_attributes": True}
+
+
+# ---------------------------------------------------------------------------
+# EMPRESA
+# ---------------------------------------------------------------------------
+
+@router.get("/empresa", response_model=EmpresaPublicaDTO)
+async def get_empresa(
+    current_user: Usuario = Depends(get_current_user),
+    session: AsyncSession = Depends(get_async_session),
+) -> EmpresaPublicaDTO:
+    """Retorna os dados públicos da empresa do usuário autenticado."""
+    result = await session.execute(
+        select(Empresa).where(Empresa.id == current_user.empresa_id)
+    )
+    empresa = result.scalar_one_or_none()
+    if empresa is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Empresa não encontrada.",
+        )
+    return EmpresaPublicaDTO(
+        id=empresa.id,
+        razao_social=empresa.razao_social,
+        nome_fantasia=empresa.nome_fantasia,
+        cnpj=empresa.cnpj,
+    )
 
 
 # ---------------------------------------------------------------------------

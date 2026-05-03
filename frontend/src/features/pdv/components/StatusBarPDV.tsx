@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react'
 import { Monitor, User, Clock, Wifi, WifiOff, Receipt, FileText } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useNavigate } from 'react-router-dom'
+import { useEmpresaNome } from '@/hooks/useEmpresaNome'
 import type { SessaoCaixaDTO, TipoEmissao, VendaDTO } from '@/shared/types/api'
 import clsx from 'clsx'
-
-const EMPRESA_NOME = import.meta.env.VITE_EMPRESA_NOME ?? 'Meu Mercado'
 
 interface StatusBarPDVProps {
   sessao: SessaoCaixaDTO | null
@@ -17,6 +16,7 @@ interface StatusBarPDVProps {
 export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) {
   const { user } = useAuthStore()
   const navigate = useNavigate()
+  const empresaNome = useEmpresaNome()
   const [hora, setHora] = useState(currentTime())
   const [online, setOnline] = useState(navigator.onLine)
 
@@ -40,7 +40,7 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
     <div className="flex items-center gap-4 border-b border-border bg-bg-surface px-4 py-2 text-xs">
       {/* Branding */}
       <div className="flex flex-col leading-tight min-w-0">
-        <span className="font-bold tracking-tight text-text-primary text-sm">{EMPRESA_NOME}</span>
+        <span className="font-bold tracking-tight text-text-primary text-sm">{empresaNome}</span>
         <span className="text-[10px] text-text-muted uppercase tracking-wide">Zênite PDV</span>
       </div>
 

@@ -6,6 +6,7 @@ import { Input } from '@/shared/ui/Input'
 import { useAuthStore } from '@/store/authStore'
 import { pinLogin } from '@/services/api/auth'
 import { getMe } from '@/services/api/auth'
+import { getEmpresa } from '@/services/api/gerencial'
 import { setClientEmpresaId, setClientToken } from '@/services/api/client'
 
 // ID da empresa — em produção viria de config/env ou seleção inicial
@@ -22,6 +23,7 @@ export function PinLoginForm() {
   const codigoRef = useRef<HTMLInputElement>(null)
   const pinRef = useRef<HTMLInputElement>(null)
   const setSession = useAuthStore((s) => s.setSession)
+  const setEmpresaNome = useAuthStore((s) => s.setEmpresaNome)
   const clearSession = useAuthStore((s) => s.clearSession)
 
   useEffect(() => {
@@ -50,6 +52,10 @@ export function PinLoginForm() {
       // Busca perfil do operador já autenticado.
       const user = await getMe()
       setSession(tokens.access_token, tokens.refresh_token, user, empresaId)
+
+      // Busca nome da empresa (best-effort — silencia erros)
+      getEmpresa().then((e) => setEmpresaNome(e.nome_fantasia ?? e.razao_social)).catch(() => {})
+
       const isGerencial = ['gerente', 'admin', 'super_admin'].includes(user.perfil)
       navigate(isGerencial ? '/gerencial' : '/caixa', { replace: true })
     } catch (err) {

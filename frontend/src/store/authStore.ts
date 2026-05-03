@@ -10,6 +10,7 @@ interface AuthState {
   refreshToken: string | null
   user: UsuarioPublicoDTO | null
   empresaId: string | null
+  empresaNome: string | null
 
   setSession: (
     accessToken: string,
@@ -17,6 +18,7 @@ interface AuthState {
     user: UsuarioPublicoDTO,
     empresaId: string,
   ) => void
+  setEmpresaNome: (nome: string) => void
   clearSession: () => void
   isAuthenticated: () => boolean
 }
@@ -28,6 +30,7 @@ export const useAuthStore = create<AuthState>()(
       refreshToken: null,
       user: null,
       empresaId: null,
+      empresaNome: null,
 
       setSession(accessToken, refreshToken, user, empresaId) {
         // Sincroniza axios client imediatamente
@@ -36,10 +39,14 @@ export const useAuthStore = create<AuthState>()(
         set({ accessToken, refreshToken, user, empresaId })
       },
 
+      setEmpresaNome(nome) {
+        set({ empresaNome: nome })
+      },
+
       clearSession() {
         setClientToken(null)
         setClientEmpresaId(null)
-        set({ accessToken: null, refreshToken: null, user: null, empresaId: null })
+        set({ accessToken: null, refreshToken: null, user: null, empresaId: null, empresaNome: null })
       },
 
       isAuthenticated() {
@@ -55,6 +62,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         empresaId: state.empresaId,
+        empresaNome: state.empresaNome,
         refreshToken: state.refreshToken,
         // accessToken NÃO é persistido — requer re-login após fechar tab
         accessToken: state.accessToken,

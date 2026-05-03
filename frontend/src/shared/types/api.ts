@@ -18,6 +18,13 @@ export interface UsuarioPublicoDTO {
   ativo: boolean
 }
 
+export interface EmpresaPublicaDTO {
+  id: string
+  razao_social: string
+  nome_fantasia: string | null
+  cnpj: string
+}
+
 // --- Caixa ---
 
 export interface AbrirSessaoRequest {

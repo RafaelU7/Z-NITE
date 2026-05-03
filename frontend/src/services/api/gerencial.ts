@@ -4,6 +4,7 @@ import type {
   CaixaCreateRequest,
   CategoriaDTO,
   DashboardDTO,
+  EmpresaPublicaDTO,
   PaginatedProdutos,
   ProdutoGerencialDTO,
   ProdutoCreateRequest,
@@ -28,6 +29,11 @@ import type {
   InventarioResponse,
   PaginatedMovimentacoes,
 } from '@/shared/types/api'
+
+export async function getEmpresa(): Promise<EmpresaPublicaDTO> {
+  const { data } = await api.get<EmpresaPublicaDTO>('/gerencial/empresa')
+  return data
+}
 
 export async function getDashboard(): Promise<DashboardDTO> {
   const { data } = await api.get<DashboardDTO>('/gerencial/dashboard')
