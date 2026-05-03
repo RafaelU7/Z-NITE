@@ -7,6 +7,7 @@ import type { SetupEmpresaRequest } from '@/services/api/setup'
 
 interface Props {
   onConcluido: (empresaId: string) => void
+  preview?: boolean
 }
 
 type Etapa = 'mercado' | 'gerente' | 'sucesso'
@@ -21,14 +22,13 @@ const VAZIO: SetupEmpresaRequest = {
   caixa_descricao: 'Caixa 01 - Principal',
 }
 
-export function SetupWizard({ onConcluido }: Props) {
+export function SetupWizard({ onConcluido, preview = false }: Props) {
   const [etapa, setEtapa] = useState<Etapa>('mercado')
   const [dados, setDados] = useState<SetupEmpresaRequest>(VAZIO)
   const [confirmarPin, setConfirmarPin] = useState('')
   const [mostrarPin, setMostrarPin] = useState(false)
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState('')
-  const [_empresaId, setEmpresaId] = useState('')
 
   function setEmp(field: keyof SetupEmpresaRequest['empresa'], value: string) {
     setDados((d) => ({ ...d, empresa: { ...d.empresa, [field]: value } }))
@@ -54,6 +54,12 @@ export function SetupWizard({ onConcluido }: Props) {
     if (!podeAvancarGerente) return
     setLoading(true)
     try {
+      if (preview) {
+        setEtapa('sucesso')
+        setTimeout(() => onConcluido('preview-mode'), 2500)
+        return
+      }
+
       // Limpa campos opcionais vazios
       const payload: SetupEmpresaRequest = {
         ...dados,
@@ -71,7 +77,6 @@ export function SetupWizard({ onConcluido }: Props) {
         },
       }
       const res = await setupEmpresa(payload)
-      setEmpresaId(res.empresa_id)
       setEtapa('sucesso')
       setTimeout(() => onConcluido(res.empresa_id), 2500)
     } catch (e: unknown) {
@@ -103,6 +108,11 @@ export function SetupWizard({ onConcluido }: Props) {
               <Zap size={28} className="text-accent" fill="currentColor" />
             </div>
           </div>
+          {preview && (
+            <div className="mb-3 inline-flex items-center rounded-full border border-warning/30 bg-warning/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-warning-text">
+              Preview QA
+            </div>
+          )}
           <h1 className="text-2xl font-bold tracking-tight text-text-primary">
             Primeiro acesso
           </h1>
@@ -313,7 +323,9 @@ export function SetupWizard({ onConcluido }: Props) {
         {/* Footer hint */}
         {etapa !== 'sucesso' && (
           <p className="mt-4 text-center text-xs text-text-muted">
-            Essas informações serão usadas na retaguarda, PDV e relatórios.
+            {preview
+              ? 'Modo visual de QA: nenhuma empresa, usuário ou caixa será criado.'
+              : 'Essas informações serão usadas na retaguarda, PDV e relatórios.'}
           </p>
         )}
       </div>

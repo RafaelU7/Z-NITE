@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
@@ -23,6 +23,20 @@ const queryClient = new QueryClient({
     queries: { retry: 1, staleTime: 30_000 },
   },
 })
+
+const appEnv = import.meta.env.VITE_APP_ENV ?? import.meta.env.MODE
+const enableSetupPreview =
+  appEnv !== 'production' || import.meta.env.VITE_ENABLE_SETUP_PREVIEW === 'true'
+
+function SetupPreviewPage() {
+  const navigate = useNavigate()
+
+  if (!enableSetupPreview) {
+    return <Navigate to="/login" replace />
+  }
+
+  return <SetupWizard preview onConcluido={() => navigate('/login', { replace: true })} />
+}
 
 function AppRoutes() {
   const [setupVerificado, setSetupVerificado] = useState(false)
@@ -56,6 +70,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/setup-preview" element={<SetupPreviewPage />} />
 
       <Route
         path="/caixa"
