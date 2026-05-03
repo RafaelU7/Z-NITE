@@ -108,6 +108,19 @@ export function PagamentoPanel({
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Banner de modo ativo — impossível de ignorar */}
+      <div
+        className={clsx(
+          'flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-bold uppercase tracking-wider text-sm',
+          modoEmissaoSelecionado === 'FISCAL'
+            ? 'bg-info/20 border-info/50 text-info-text'
+            : 'bg-warning/20 border-warning/50 text-warning-text',
+        )}
+      >
+        {modoEmissaoSelecionado === 'FISCAL' ? <Receipt size={16} /> : <FileText size={16} />}
+        {modoEmissaoSelecionado === 'FISCAL' ? 'Modo Fiscal — NFC-e' : 'Modo Gerencial — Sem Fiscal'}
+      </div>
+
       <div className="rounded-xl border border-border bg-bg-surface-2 p-3">
         <p className="mb-2 text-xs font-medium uppercase tracking-wider text-text-muted">
           Tipo de Finalização

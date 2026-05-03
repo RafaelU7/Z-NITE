@@ -1,8 +1,14 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Package, Users, CreditCard, LogOut, Store, Zap, Warehouse, BarChart2 } from 'lucide-react'
+import { LayoutDashboard, Package, Users, CreditCard, LogOut, Zap, Warehouse, BarChart2, Store } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { logout } from '@/services/api/auth'
 import clsx from 'clsx'
+
+const EMPRESA_NOME = import.meta.env.VITE_EMPRESA_NOME ?? 'Meu Mercado'
+
+function getInitials(name: string): string {
+  return name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase()
+}
 
 const NAV = [
   { to: '/gerencial', label: 'Dashboard', icon: <LayoutDashboard size={16} />, end: true },
@@ -29,9 +35,14 @@ export function GerencialLayout() {
     <div className="flex h-screen flex-col bg-bg-base">
       {/* Top bar */}
       <header className="flex items-center justify-between border-b border-border bg-bg-surface px-4 py-3">
-        <div className="flex items-center gap-2 text-text-primary">
-          <Store size={18} className="text-accent" />
-          <span className="font-semibold text-sm">Zênite PDV — Retaguarda</span>
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent">
+            {getInitials(EMPRESA_NOME)}
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="font-semibold text-sm text-text-primary">{EMPRESA_NOME}</span>
+            <span className="text-[10px] text-text-muted tracking-wide uppercase">Zênite PDV — Retaguarda</span>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-text-muted">{user?.nome}</span>

@@ -129,7 +129,7 @@ export function PDVPage() {
   return (
     <div className="flex h-screen flex-col bg-bg-base overflow-hidden">
       {/* Barra de status */}
-      <StatusBarPDV sessao={sessaoCaixa} venda={vendaAtual ?? null} />
+      <StatusBarPDV sessao={sessaoCaixa} venda={vendaAtual ?? null} modoEmissao={modoEmissaoSelecionado} />
 
       {/* Banner de modo offline */}
       {isOffline && <OfflineBanner />}

@@ -185,7 +185,7 @@ class UsuarioListDTO(BaseModel):
 
 class UsuarioCreateRequest(BaseModel):
     nome: str = Field(..., min_length=2, max_length=150)
-    email: EmailStr
+    email: Optional[EmailStr] = None
     senha: str = Field(..., min_length=6, max_length=200)
     perfil: PerfilUsuario = PerfilUsuario.OPERADOR_CAIXA
     codigo_operador: Optional[str] = Field(None, max_length=20)
@@ -717,18 +717,19 @@ async def create_usuario(
             detail="Você não pode criar usuário com perfil igual ou superior ao seu.",
         )
 
-    # Email único na empresa
-    dup = await session.execute(
-        select(Usuario).where(
-            Usuario.empresa_id == empresa_id,
-            Usuario.email == req.email,
+    # Email único na empresa (apenas se informado)
+    if req.email:
+        dup = await session.execute(
+            select(Usuario).where(
+                Usuario.empresa_id == empresa_id,
+                Usuario.email == req.email,
+            )
         )
-    )
-    if dup.scalar_one_or_none():
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="E-mail já cadastrado nesta empresa.",
-        )
+        if dup.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="E-mail já cadastrado nesta empresa.",
+            )
 
     # Código de operador único na empresa
     if req.codigo_operador:
@@ -744,11 +745,14 @@ async def create_usuario(
                 detail="Código de operador já utilizado.",
             )
 
+    # Gera email sintético se não fornecido (campo obrigatório no BD)
+    email_final = req.email or f"{uuid.uuid4().hex[:12]}@op.zenite.local"
+
     usuario = Usuario(
         id=uuid.uuid4(),
         empresa_id=empresa_id,
         nome=req.nome,
-        email=req.email,
+        email=email_final,
         senha_hash=hash_password(req.senha),
         perfil=req.perfil,
         codigo_operador=req.codigo_operador,

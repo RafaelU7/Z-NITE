@@ -347,7 +347,7 @@ export interface UsuarioListDTO {
 
 export interface UsuarioCreateRequest {
   nome: string
-  email: string
+  email?: string
   senha: string
   perfil?: string
   codigo_operador?: string

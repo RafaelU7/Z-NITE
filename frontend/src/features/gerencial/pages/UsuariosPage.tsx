@@ -297,11 +297,10 @@ export function UsuariosPage() {
             required
           />
           <Input
-            label="E-mail *"
+            label="E-mail (opcional)"
             type="email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
           />
           <Input
             label="Senha *"
