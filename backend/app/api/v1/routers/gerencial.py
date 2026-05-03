@@ -21,6 +21,8 @@ from decimal import Decimal
 from typing import List, Optional
 from uuid import UUID
 
+import httpx
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import cast, Date, func, select
@@ -35,7 +37,9 @@ from app.infrastructure.database.models.enums import (
     StatusSessaoCaixa,
     StatusVenda,
     TipoEmissao,
+    TipoMovimentacaoEstoque,
 )
+from app.infrastructure.database.models.estoque import Estoque, LocalEstoque, MovimentacaoEstoque
 from app.infrastructure.database.models.produto import Categoria, Produto, UnidadeMedida
 from app.infrastructure.database.models.tributacao import PerfilTributario
 from app.infrastructure.database.models.usuario import Usuario
@@ -886,3 +890,391 @@ async def patch_caixa_status(
     caixa.ativo = ativo
     await session.flush()
     return CaixaDTO.model_validate(caixa)
+
+
+# ---------------------------------------------------------------------------
+# CADASTRO RÁPIDO DE PRODUTO
+# ---------------------------------------------------------------------------
+
+class EANSugestaoExterna(BaseModel):
+    nome: Optional[str] = None
+    marca: Optional[str] = None
+    categoria: Optional[str] = None
+
+
+class EANLookupResult(BaseModel):
+    status: str  # "found_local" | "found_external" | "not_found"
+    produto: Optional[ProdutoGerencialDTO] = None
+    saldo_atual: Optional[float] = None
+    sugestao: Optional[EANSugestaoExterna] = None
+
+
+class CadastroRapidoRequest(BaseModel):
+    ean: Optional[str] = Field(None, max_length=14)
+    descricao: str = Field(..., min_length=2, max_length=200)
+    descricao_pdv: Optional[str] = Field(None, max_length=60)
+    marca: Optional[str] = Field(None, max_length=100)
+    preco_venda: Decimal = Field(..., gt=Decimal("0"))
+    preco_custo: Optional[Decimal] = Field(None, ge=Decimal("0"))
+    estoque_inicial: Decimal = Field(default=Decimal("0"), ge=Decimal("0"))
+    unidade_id: Optional[UUID] = None
+    perfil_tributario_id: Optional[UUID] = None
+
+
+class CadastroRapidoResponse(BaseModel):
+    produto: ProdutoGerencialDTO
+    saldo_atual: float
+    ativo: bool
+    aviso: Optional[str] = None
+
+
+class AjusteEstoqueRequest(BaseModel):
+    quantidade: Decimal
+    motivo: Optional[str] = Field(None, max_length=200)
+
+
+class AjusteEstoqueResponse(BaseModel):
+    produto_id: UUID
+    saldo_anterior: float
+    saldo_atual: float
+    tipo_movimentacao: str
+
+
+@router.get("/produtos/lookup-ean", response_model=EANLookupResult)
+async def lookup_ean(
+    ean: str = Query(..., min_length=1, max_length=14),
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> EANLookupResult:
+    empresa_id = gerente.empresa_id
+
+    # 1. Busca local
+    p_r = await session.execute(
+        select(Produto)
+        .options(joinedload(Produto.unidade))
+        .where(
+            Produto.empresa_id == empresa_id,
+            Produto.codigo_barras_principal == ean,
+        )
+    )
+    produto = p_r.unique().scalar_one_or_none()
+
+    if produto:
+        est_r = await session.execute(
+            select(Estoque)
+            .join(LocalEstoque, LocalEstoque.id == Estoque.local_estoque_id)
+            .where(
+                Estoque.produto_id == produto.id,
+                Estoque.empresa_id == empresa_id,
+                LocalEstoque.principal.is_(True),
+            )
+        )
+        estoque = est_r.scalar_one_or_none()
+        saldo = float(estoque.saldo_atual) if estoque else 0.0
+
+        dto = ProdutoGerencialDTO(
+            id=produto.id,
+            sku=produto.sku,
+            codigo_barras_principal=produto.codigo_barras_principal,
+            descricao=produto.descricao,
+            descricao_pdv=produto.descricao_pdv,
+            preco_venda=Decimal(str(produto.preco_venda)),
+            unidade_id=produto.unidade_id,
+            unidade_codigo=produto.unidade.codigo if produto.unidade else None,
+            perfil_tributario_id=produto.perfil_tributario_id,
+            categoria_id=produto.categoria_id,
+            controla_estoque=produto.controla_estoque,
+            ativo=produto.ativo,
+            destaque_pdv=produto.destaque_pdv,
+        )
+        return EANLookupResult(status="found_local", produto=dto, saldo_atual=saldo)
+
+    # 2. Consulta Open Food Facts (fallback silencioso)
+    sugestao: Optional[EANSugestaoExterna] = None
+    try:
+        async with httpx.AsyncClient(timeout=2.0) as client:
+            resp = await client.get(
+                f"https://world.openfoodfacts.org/api/v0/product/{ean}.json",
+                follow_redirects=True,
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                if data.get("status") == 1:
+                    prod_data = data.get("product", {})
+                    nome = (
+                        prod_data.get("product_name_pt")
+                        or prod_data.get("product_name")
+                        or prod_data.get("abbreviated_product_name")
+                    )
+                    marca_raw = prod_data.get("brands", "") or ""
+                    marca = marca_raw.split(",")[0].strip() or None
+                    categoria: Optional[str] = None
+                    for tag in prod_data.get("categories_tags", []):
+                        if tag.startswith("pt:"):
+                            categoria = tag[3:].replace("-", " ").title()
+                            break
+                    if nome:
+                        sugestao = EANSugestaoExterna(
+                            nome=nome[:200],
+                            marca=marca[:100] if marca else None,
+                            categoria=categoria,
+                        )
+    except Exception:
+        pass  # fallback silencioso — não bloqueia o cadastro
+
+    if sugestao:
+        return EANLookupResult(status="found_external", sugestao=sugestao)
+    return EANLookupResult(status="not_found")
+
+
+@router.post("/produtos/cadastro-rapido", response_model=CadastroRapidoResponse, status_code=201)
+async def cadastro_rapido_produto(
+    req: CadastroRapidoRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> CadastroRapidoResponse:
+    empresa_id = gerente.empresa_id
+
+    # 1. Anti-duplicidade EAN
+    if req.ean:
+        dup_r = await session.execute(
+            select(Produto).where(
+                Produto.empresa_id == empresa_id,
+                Produto.codigo_barras_principal == req.ean,
+            )
+        )
+        if dup_r.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="EAN já cadastrado nesta empresa.",
+            )
+
+    # 2. Local de estoque principal obrigatório
+    local_r = await session.execute(
+        select(LocalEstoque).where(
+            LocalEstoque.empresa_id == empresa_id,
+            LocalEstoque.principal.is_(True),
+            LocalEstoque.ativo.is_(True),
+        )
+    )
+    local = local_r.scalar_one_or_none()
+    if not local:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Local de estoque principal não configurado para esta empresa.",
+        )
+
+    # 3. Unidade de medida — usa req.unidade_id ou busca UN primeiro
+    if req.unidade_id:
+        unid_r = await session.execute(
+            select(UnidadeMedida).where(
+                UnidadeMedida.id == req.unidade_id,
+                UnidadeMedida.empresa_id == empresa_id,
+            )
+        )
+        unidade = unid_r.scalar_one_or_none()
+        if not unidade:
+            raise HTTPException(status_code=404, detail="Unidade de medida não encontrada.")
+    else:
+        unid_r = await session.execute(
+            select(UnidadeMedida)
+            .where(
+                UnidadeMedida.empresa_id == empresa_id,
+                UnidadeMedida.ativo.is_(True),
+            )
+            .order_by(
+                (UnidadeMedida.codigo != "UN"),
+                UnidadeMedida.codigo,
+            )
+            .limit(1)
+        )
+        unidade = unid_r.scalar_one_or_none()
+        if not unidade:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Nenhuma unidade de medida configurada para esta empresa.",
+            )
+
+    # 4. Perfil tributário — usa req ou busca primeiro ativo
+    perfil_id: Optional[uuid.UUID] = req.perfil_tributario_id
+    aviso: Optional[str] = None
+
+    if not perfil_id:
+        perf_r = await session.execute(
+            select(PerfilTributario)
+            .where(
+                PerfilTributario.empresa_id == empresa_id,
+                PerfilTributario.ativo.is_(True),
+            )
+            .limit(1)
+        )
+        perf = perf_r.scalar_one_or_none()
+        if perf:
+            perfil_id = perf.id
+        else:
+            aviso = (
+                "Produto cadastrado como inativo: nenhum perfil tributário configurado. "
+                "Configure o fiscal para ativar o produto."
+            )
+
+    produto_ativo = perfil_id is not None
+
+    # 5. Criar produto
+    produto = Produto(
+        id=uuid.uuid4(),
+        empresa_id=empresa_id,
+        codigo_barras_principal=req.ean if req.ean else None,
+        descricao=req.descricao,
+        descricao_pdv=req.descricao_pdv,
+        marca=req.marca,
+        preco_venda=req.preco_venda,
+        custo_medio=req.preco_custo if req.preco_custo is not None else Decimal("0"),
+        unidade_id=unidade.id,
+        perfil_tributario_id=perfil_id,
+        controla_estoque=True,
+        ativo=produto_ativo,
+        destaque_pdv=False,
+        estoque_minimo=Decimal("0"),
+    )
+    session.add(produto)
+    await session.flush()
+
+    # 6. Criar Estoque no local principal
+    estoque_inicial_val = float(req.estoque_inicial)
+    estoque = Estoque(
+        produto_id=produto.id,
+        local_estoque_id=local.id,
+        empresa_id=empresa_id,
+        saldo_atual=estoque_inicial_val,
+        saldo_reservado=0,
+        permite_negativo=False,
+        versao=1,
+        principal=True,
+    )
+    session.add(estoque)
+    await session.flush()
+
+    # 7. Movimentação inicial se estoque > 0
+    if estoque_inicial_val > 0:
+        mov = MovimentacaoEstoque(
+            empresa_id=empresa_id,
+            produto_id=produto.id,
+            local_estoque_id=local.id,
+            usuario_id=gerente.id,
+            tipo=TipoMovimentacaoEstoque.AJUSTE_POSITIVO,
+            quantidade=estoque_inicial_val,
+            saldo_anterior=0.0,
+            saldo_posterior=estoque_inicial_val,
+            custo_unitario=float(req.preco_custo) if req.preco_custo else None,
+            referencia_tipo="cadastro_rapido",
+            referencia_id=produto.id,
+            motivo="Estoque inicial — Cadastro rápido",
+        )
+        session.add(mov)
+        await session.flush()
+
+    await session.refresh(produto, ["unidade"])
+
+    dto = ProdutoGerencialDTO(
+        id=produto.id,
+        sku=produto.sku,
+        codigo_barras_principal=produto.codigo_barras_principal,
+        descricao=produto.descricao,
+        descricao_pdv=produto.descricao_pdv,
+        preco_venda=Decimal(str(produto.preco_venda)),
+        unidade_id=produto.unidade_id,
+        unidade_codigo=produto.unidade.codigo if produto.unidade else None,
+        perfil_tributario_id=produto.perfil_tributario_id,
+        categoria_id=produto.categoria_id,
+        controla_estoque=produto.controla_estoque,
+        ativo=produto.ativo,
+        destaque_pdv=produto.destaque_pdv,
+    )
+    return CadastroRapidoResponse(
+        produto=dto,
+        saldo_atual=estoque_inicial_val,
+        ativo=produto_ativo,
+        aviso=aviso,
+    )
+
+
+@router.post("/produtos/{produto_id}/ajuste-estoque", response_model=AjusteEstoqueResponse)
+async def ajuste_estoque(
+    produto_id: UUID,
+    req: AjusteEstoqueRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> AjusteEstoqueResponse:
+    empresa_id = gerente.empresa_id
+
+    p_r = await session.execute(
+        select(Produto).where(
+            Produto.id == produto_id,
+            Produto.empresa_id == empresa_id,
+        )
+    )
+    if not p_r.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Produto não encontrado.")
+
+    est_r = await session.execute(
+        select(Estoque)
+        .join(LocalEstoque, LocalEstoque.id == Estoque.local_estoque_id)
+        .where(
+            Estoque.produto_id == produto_id,
+            Estoque.empresa_id == empresa_id,
+            LocalEstoque.principal.is_(True),
+        )
+        .with_for_update()
+    )
+    estoque = est_r.scalar_one_or_none()
+    if not estoque:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Produto sem estoque no local principal.",
+        )
+
+    quantidade = float(req.quantidade)
+    saldo_anterior = float(estoque.saldo_atual)
+    novo_saldo = saldo_anterior + quantidade
+
+    if novo_saldo < 0 and not estoque.permite_negativo:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=(
+                f"Ajuste resultaria em saldo negativo ({novo_saldo:.3f}). "
+                f"Saldo atual: {saldo_anterior:.3f}."
+            ),
+        )
+
+    tipo = (
+        TipoMovimentacaoEstoque.AJUSTE_POSITIVO
+        if quantidade >= 0
+        else TipoMovimentacaoEstoque.AJUSTE_NEGATIVO
+    )
+
+    estoque.saldo_atual = novo_saldo
+    estoque.versao += 1
+
+    mov = MovimentacaoEstoque(
+        empresa_id=empresa_id,
+        produto_id=produto_id,
+        local_estoque_id=estoque.local_estoque_id,
+        usuario_id=gerente.id,
+        tipo=tipo,
+        quantidade=abs(quantidade),
+        saldo_anterior=saldo_anterior,
+        saldo_posterior=novo_saldo,
+        custo_unitario=None,
+        referencia_tipo="ajuste_manual",
+        referencia_id=None,
+        motivo=req.motivo,
+    )
+    session.add(mov)
+    await session.flush()
+
+    return AjusteEstoqueResponse(
+        produto_id=produto_id,
+        saldo_anterior=saldo_anterior,
+        saldo_atual=novo_saldo,
+        tipo_movimentacao=tipo.value,
+    )

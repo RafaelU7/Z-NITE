@@ -201,6 +201,51 @@ export interface ApiErrorDetail {
   code?: string
 }
 
+// --- Cadastro Rápido de Produto ---
+export interface EANSugestaoExterna {
+  nome: string | null
+  marca: string | null
+  categoria: string | null
+}
+
+export interface EANLookupResult {
+  status: 'found_local' | 'found_external' | 'not_found'
+  produto: ProdutoGerencialDTO | null
+  saldo_atual: number | null
+  sugestao: EANSugestaoExterna | null
+}
+
+export interface CadastroRapidoRequest {
+  ean?: string
+  descricao: string
+  descricao_pdv?: string
+  marca?: string
+  preco_venda: number
+  preco_custo?: number
+  estoque_inicial: number
+  unidade_id?: string
+  perfil_tributario_id?: string
+}
+
+export interface CadastroRapidoResponse {
+  produto: ProdutoGerencialDTO
+  saldo_atual: number
+  ativo: boolean
+  aviso: string | null
+}
+
+export interface AjusteEstoqueRequest {
+  quantidade: number
+  motivo?: string
+}
+
+export interface AjusteEstoqueResponse {
+  produto_id: string
+  saldo_anterior: number
+  saldo_atual: number
+  tipo_movimentacao: string
+}
+
 // --- Gerencial ---
 
 export interface DashboardPagamentoPorForma {

@@ -13,6 +13,11 @@ import type {
   UsuarioListDTO,
   UsuarioCreateRequest,
   SessaoListDTO,
+  EANLookupResult,
+  CadastroRapidoRequest,
+  CadastroRapidoResponse,
+  AjusteEstoqueRequest,
+  AjusteEstoqueResponse,
 } from '@/shared/types/api'
 
 export async function getDashboard(): Promise<DashboardDTO> {
@@ -95,5 +100,30 @@ export async function patchCaixaStatus(id: string, ativo: boolean): Promise<Caix
   const { data } = await api.patch<CaixaDTO>(`/gerencial/caixas/${id}/status`, null, {
     params: { ativo },
   })
+  return data
+}
+
+export async function lookupEAN(ean: string): Promise<EANLookupResult> {
+  const { data } = await api.get<EANLookupResult>('/gerencial/produtos/lookup-ean', {
+    params: { ean },
+  })
+  return data
+}
+
+export async function cadastroRapidoProduto(
+  req: CadastroRapidoRequest,
+): Promise<CadastroRapidoResponse> {
+  const { data } = await api.post<CadastroRapidoResponse>('/gerencial/produtos/cadastro-rapido', req)
+  return data
+}
+
+export async function ajusteEstoque(
+  produtoId: string,
+  req: AjusteEstoqueRequest,
+): Promise<AjusteEstoqueResponse> {
+  const { data } = await api.post<AjusteEstoqueResponse>(
+    `/gerencial/produtos/${produtoId}/ajuste-estoque`,
+    req,
+  )
   return data
 }

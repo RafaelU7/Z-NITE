@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Package, Users, CreditCard, LogOut, Store } from 'lucide-react'
+import { LayoutDashboard, Package, Users, CreditCard, LogOut, Store, Zap } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { logout } from '@/services/api/auth'
 import clsx from 'clsx'
@@ -7,6 +7,7 @@ import clsx from 'clsx'
 const NAV = [
   { to: '/gerencial', label: 'Dashboard', icon: <LayoutDashboard size={16} />, end: true },
   { to: '/gerencial/produtos', label: 'Produtos', icon: <Package size={16} /> },
+  { to: '/gerencial/cadastro-rapido', label: 'Cadastro Rápido', icon: <Zap size={16} /> },
   { to: '/gerencial/usuarios', label: 'Usuários', icon: <Users size={16} /> },
   { to: '/gerencial/caixas', label: 'Caixas', icon: <CreditCard size={16} /> },
   { to: '/gerencial/sessoes', label: 'Sessões', icon: <Store size={16} /> },

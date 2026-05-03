@@ -1,0 +1,2234 @@
+[
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Login gerente (email+senha)",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzQ4NGUyYi1iMWE2LTQ0MjctYWY1Zi0wNmQ5Yzg5ZDNjYmUiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoiZ2VyZW50ZSIsIm5vbWUiOiJBZG1pbiBaXHUwMGVhbml0ZSIsImp0aSI6ImZjMmNhMmQwLWUxMzItNDA3Zi04MTUwLWRmNDI4OTFiMGEzOCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3Nzc3NjA1NzMsImV4cCI6MTc3Nzc4OTM3M30.iLJWPoK53AOWrFyUsp519l-mPQ7KV_XhOZjYmGcl8_E",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzQ4NGUyYi1iMWE2LTQ0MjctYWY1Zi0wNmQ5Yzg5ZDNjYmUiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoiZ2VyZW50ZSIsIm5vbWUiOiJBZG1pbiBaXHUwMGVhbml0ZSIsImp0aSI6ImY0ZmNmMGIxLTM0OWQtNDE3YS1iODA3LWZiZjI0ZTZlN2IyMyIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzc3NzYwNTczLCJleHAiOjE3ODAzNTI1NzN9.CVO9svL3C-tl97yXTbiZsL3vrQ1AUX4_TjciYK8m0xg",
+      "token_type": "bearer",
+      "expires_in": 28800
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Login operador (PIN)",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMTg3NGRkNi05ZGFlLTQ2MmUtOTY5NC0yYmNmMWI5YWUxZWYiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoib3BlcmFkb3JfY2FpeGEiLCJub21lIjoiT3BlcmFkb3IgUERWIiwianRpIjoiMzY3ZTk1ZTUtMDI5Zi00Y2E0LWJkMDQtOGY2YmJkYzhhMjZmIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3Nzc2MDU3NCwiZXhwIjoxNzc3Nzg5Mzc0fQ.iwKl5apvPTMC9lMADYxQPs5IClP6h0wHoRWn47W7PKs",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMTg3NGRkNi05ZGFlLTQ2MmUtOTY5NC0yYmNmMWI5YWUxZWYiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoib3BlcmFkb3JfY2FpeGEiLCJub21lIjoiT3BlcmFkb3IgUERWIiwianRpIjoiODgyZWM4ZDktMThhMi00N2YwLWJmOGMtZTBjMDcyMzkzOGM2IiwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3Nzc3NjA1NzQsImV4cCI6MTc4MDM1MjU3NH0.2DjWU3e-VLUxmawa9iAzREwuMwbmxphasPw9c6rx2eM",
+      "token_type": "bearer",
+      "expires_in": 28800
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Login gerente (PIN)",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzQ4NGUyYi1iMWE2LTQ0MjctYWY1Zi0wNmQ5Yzg5ZDNjYmUiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoiZ2VyZW50ZSIsIm5vbWUiOiJBZG1pbiBaXHUwMGVhbml0ZSIsImp0aSI6IjY3Y2ExMmY5LTVlNTUtNGRiOC04NDEwLTQzOTI0ZTQxZmMzMyIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3Nzc3NjA1NzQsImV4cCI6MTc3Nzc4OTM3NH0.6Db8XNGqZ-d2cnJFkyZtCUFRwv2VlkDGXUop9pSjG48",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzQ4NGUyYi1iMWE2LTQ0MjctYWY1Zi0wNmQ5Yzg5ZDNjYmUiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoiZ2VyZW50ZSIsIm5vbWUiOiJBZG1pbiBaXHUwMGVhbml0ZSIsImp0aSI6ImNkYjBkOWI2LTg4NTctNGI2Yi1iZTIzLTNkYmVkYzkxMTA3YyIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzc3NzYwNTc0LCJleHAiOjE3ODAzNTI1NzR9.KUjkcOhkIUkeWpeki3kdlBMlgUyYz1LDEtCpJOShCgs",
+      "token_type": "bearer",
+      "expires_in": 28800
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "GET /me gerente",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+      "nome": "Admin Zênite",
+      "email": "admin@zenite.dev",
+      "perfil": "gerente",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "codigo_operador": "900",
+      "ultimo_acesso": "2026-05-02T22:22:54.704691Z",
+      "ativo": true
+    },
+    "severity": "CRÃTICO",
+    "note": "perfil=gerente"
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Gerente tem perfil >= gerente",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "CRÃTICO",
+    "note": "perfil=gerente"
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "GET /me operador",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "nome": "Operador PDV",
+      "email": "operador@zenite.dev",
+      "perfil": "operador_caixa",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "codigo_operador": "001",
+      "ultimo_acesso": "2026-05-02T22:22:54.346944Z",
+      "ativo": true
+    },
+    "severity": "CRÃTICO",
+    "note": "perfil=operador_caixa"
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Operador tem perfil operador_caixa",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÃ‰DIO",
+    "note": "perfil=operador_caixa"
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "/me sem token â†’ 401/403",
+    "status": 401,
+    "expected": [
+      401,
+      403
+    ],
+    "body": {
+      "detail": "Token de autenticação não fornecido",
+      "code": "AuthenticationError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "/me token invÃ¡lido â†’ 401/403",
+    "status": 401,
+    "expected": [
+      401,
+      403,
+      422
+    ],
+    "body": {
+      "detail": "Token inválido: Invalid header string: 'utf-8' codec can't decode byte 0x9e in position 3: invalid start byte",
+      "code": "InvalidTokenError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Refresh token â†’ novo par",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzQ4NGUyYi1iMWE2LTQ0MjctYWY1Zi0wNmQ5Yzg5ZDNjYmUiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoiZ2VyZW50ZSIsIm5vbWUiOiJBZG1pbiBaXHUwMGVhbml0ZSIsImp0aSI6ImY5ZjQ0YzMyLTFlNjktNDUzOC05YzEzLTA0ZTEwYTA3YjEzMCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3Nzc3NjA1NzYsImV4cCI6MTc3Nzc4OTM3Nn0.eaZXaSaTY5mLgYldINvtZXyeWxfcL5fhb9uOC8vfRpw",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNzQ4NGUyYi1iMWE2LTQ0MjctYWY1Zi0wNmQ5Yzg5ZDNjYmUiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoiZ2VyZW50ZSIsIm5vbWUiOiJBZG1pbiBaXHUwMGVhbml0ZSIsImp0aSI6ImI5NTU2MTJjLTViMWMtNDViZS1iMjQ4LTU1ZjEyOTJjZTZlYiIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzc3NzYwNTc2LCJleHAiOjE3ODAzNTI1NzZ9.0FQAoNRNdfOl120FKozpTwWTTAkTCTeoVNQi_n_Xans",
+      "token_type": "bearer",
+      "expires_in": 28800
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Refresh rotacionado (antigo invÃ¡lido) â†’ 401/403",
+    "status": 401,
+    "expected": [
+      401,
+      403,
+      422
+    ],
+    "body": {
+      "detail": "Refresh token já foi revogado",
+      "code": "TokenRevokedError"
+    },
+    "severity": "BAIXO",
+    "note": "token rotation check"
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Logout operador â†’ 204",
+    "status": 204,
+    "expected": [
+      204
+    ],
+    "body": "",
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Token pÃ³s-logout revogado â†’ 401/403",
+    "status": 401,
+    "expected": [
+      401,
+      403
+    ],
+    "body": {
+      "detail": "Token revogado",
+      "code": "TokenRevokedError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Re-login operador apÃ³s logout",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMTg3NGRkNi05ZGFlLTQ2MmUtOTY5NC0yYmNmMWI5YWUxZWYiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoib3BlcmFkb3JfY2FpeGEiLCJub21lIjoiT3BlcmFkb3IgUERWIiwianRpIjoiNDkwOWVjNzAtM2ZkMi00NjcyLThjNDMtZDM5MGM1ZDIzNGQxIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3Nzc2MDU3NywiZXhwIjoxNzc3Nzg5Mzc3fQ.uW5baYWCbnE8METnieaW5hizR6VHShIO28vwwxZms_8",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiMTg3NGRkNi05ZGFlLTQ2MmUtOTY5NC0yYmNmMWI5YWUxZWYiLCJlbXByZXNhX2lkIjoiY2NlYzVhZTYtMzg1ZS00ZjI2LThiZDktODMwYjhjZTVjM2FiIiwicGVyZmlsIjoib3BlcmFkb3JfY2FpeGEiLCJub21lIjoiT3BlcmFkb3IgUERWIiwianRpIjoiMGJkMzViZGUtYWI4MC00NmNlLTkwMzAtYWJlYWQwZWQ5NmVmIiwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3Nzc3NjA1NzcsImV4cCI6MTc4MDM1MjU3N30.DxEXhJJfRhLAFqlHLAntIwh4vtDqtLZp9oPVkZb-XkI",
+      "token_type": "bearer",
+      "expires_in": 28800
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Login senha errada â†’ 401",
+    "status": 401,
+    "expected": [
+      401,
+      403,
+      422
+    ],
+    "body": {
+      "detail": "Credenciais inválidas",
+      "code": "AuthenticationError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "AUTH",
+    "name": "Login email inexistente â†’ 401/404",
+    "status": 401,
+    "expected": [
+      401,
+      403,
+      404,
+      422
+    ],
+    "body": {
+      "detail": "Credenciais inválidas",
+      "code": "AuthenticationError"
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PERFIL",
+    "name": "Operador â†’ /gerencial/dashboard bloqueado â†’ 403",
+    "status": 403,
+    "expected": [
+      403,
+      401
+    ],
+    "body": {
+      "detail": "Acesso negado. Perfil requerido: gerente",
+      "code": "AuthorizationError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PERFIL",
+    "name": "Gerente â†’ /gerencial/dashboard â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "data_referencia": "2026-05-02",
+      "total_vendas": "35.9600",
+      "qtd_vendas": 4,
+      "ticket_medio": "8.99",
+      "por_forma_pagamento": [
+        {
+          "forma": "01",
+          "label": "Dinheiro",
+          "total": "36.9700",
+          "qtd": 4
+        },
+        {
+          "forma": "17",
+          "label": "Pix",
+          "total": "8.9900",
+          "qtd": 1
+        }
+      ],
+      "sessoes_abertas": 1,
+      "total_semana": "35.9600",
+      "qtd_semana": 4,
+      "total_mes": "35.9600",
+      "qtd_mes": 4,
+      "por_operador": [
+        {
+          "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+          "nome": "Operador PDV",
+          "qtd": 4,
+          "total": 35.96
+        }
+      ],
+      "total_fiscal": "0",
+      "total_gerencial": "17.9800"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PERFIL",
+    "name": "Gerente â†’ /gerencial/produtos â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "items": [
+        {
+          "id": "e1e091e7-3978-4aca-a349-3dfba80ad245",
+          "sku": "AGU-001",
+          "codigo_barras_principal": "7899999000001",
+          "descricao": "Água Mineral 500ml",
+          "descricao_pdv": "AGUA MINERAL 500ml",
+          "preco_venda": "2.5000",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        },
+        {
+          "id": "edfb8122-762a-4e91-b472-2efa2220f4ac",
+          "sku": null,
+          "codigo_barras_principal": "0001777760298",
+          "descricao": "PRODUTO QA 1777760298",
+          "descricao_pdv": null,
+          "preco_venda": "12.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": null,
+          "controla_estoque": false,
+          "ativo": true,
+          "destaque_pdv": false
+        },
+        {
+          "id": "bbb16cc2-54a0-4a04-9d2d-3dc5d228e007",
+          "sku": null,
+          "codigo_barras_principal": "0001777760504",
+          "descricao": "PRODUTO QA 1777760504",
+          "descricao_pdv": null,
+          "preco_venda": "12.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": null,
+          "controla_estoque": false,
+          "ativo": true,
+          "destaque_pdv": false
+        },
+        {
+          "id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "sku": "REF-001",
+          "codigo_barras_principal": "7891234567890",
+          "descricao": "Refrigerante Cola 2L",
+          "descricao_pdv": "REFRIG COLA 2L",
+          "preco_venda": "8.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        },
+        {
+          "id": "997fe9fe-8bda-4c09-a6a0-d1295b042c5a",
+          "sku": "SNC-001",
+          "codigo_barras_principal": "7891111000003",
+          "descricao": "Salgadinho Tradicional 100g",
+          "descricao_pdv": "SALGADINHO 100g",
+          "preco_venda": "4.7500",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        }
+      ],
+      "total": 5,
+      "page": 1,
+      "per_page": 20
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PERFIL",
+    "name": "Gerente â†’ /gerencial/usuarios â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": [
+      {
+        "id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "nome": "Admin Zênite",
+        "email": "admin@zenite.dev",
+        "perfil": "gerente",
+        "codigo_operador": "900",
+        "ativo": true,
+        "ultimo_acesso": "2026-05-02T22:22:54.704691+00:00"
+      },
+      {
+        "id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+        "nome": "Operador PDV",
+        "email": "operador@zenite.dev",
+        "perfil": "operador_caixa",
+        "codigo_operador": "001",
+        "ativo": true,
+        "ultimo_acesso": "2026-05-02T22:22:57.743402+00:00"
+      },
+      {
+        "id": "16cd302c-3a7e-4f1b-9efe-d7f33e30ce32",
+        "nome": "Operador QA 1777760300",
+        "email": "opqa1777760300@zenite.dev",
+        "perfil": "operador_caixa",
+        "codigo_operador": "QA0300",
+        "ativo": true,
+        "ultimo_acesso": null
+      },
+      {
+        "id": "d3988269-7f82-4866-ae0e-f42617bed32c",
+        "nome": "Operador QA 1777760505",
+        "email": "opqa1777760505@zenite.dev",
+        "perfil": "operador_caixa",
+        "codigo_operador": "QA0505",
+        "ativo": false,
+        "ultimo_acesso": null
+      }
+    ],
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PERFIL",
+    "name": "Gerente â†’ /gerencial/sessoes â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": [
+      {
+        "id": "4edc3cd5-7758-4367-97c3-b7496c97214e",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "aberta",
+        "data_abertura": "2026-05-02T22:21:38.422061+00:00",
+        "data_fechamento": null,
+        "total_liquido": "0",
+        "quantidade_vendas": 0
+      },
+      {
+        "id": "d152bac5-8628-4e6a-a534-6c88eebf32b9",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T22:18:15.932999+00:00",
+        "data_fechamento": "2026-05-02T22:21:38.124434+00:00",
+        "total_liquido": "0",
+        "quantidade_vendas": 0
+      },
+      {
+        "id": "7236322e-4cf9-4591-a391-b52168ef3842",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T22:14:50.311964+00:00",
+        "data_fechamento": "2026-05-02T22:18:15.626928+00:00",
+        "total_liquido": "0",
+        "quantidade_vendas": 0
+      },
+      {
+        "id": "241f979f-15e3-4fd9-b764-060bf4b2045f",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+        "operador_nome": "Operador PDV",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T19:24:30.700595+00:00",
+        "data_fechamento": "2026-05-02T22:14:50.006542+00:00",
+        "total_liquido": "17.9800",
+        "quantidade_vendas": 2
+      }
+    ],
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PERFIL",
+    "name": "Operador â†’ POST /gerencial/produtos bloqueado â†’ 403",
+    "status": 403,
+    "expected": [
+      403,
+      401
+    ],
+    "body": {
+      "detail": "Acesso negado. Perfil requerido: gerente",
+      "code": "AuthorizationError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "GET sessao-ativa â†’ 200 ou 404",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "body": {
+      "id": "4edc3cd5-7758-4367-97c3-b7496c97214e",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+      "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+      "status": "aberta",
+      "data_abertura": "2026-05-02T22:21:38.422061Z",
+      "saldo_abertura": "100.0000",
+      "data_fechamento": null,
+      "operador_fechamento_id": null,
+      "saldo_informado_fechamento": null,
+      "saldo_sistema_fechamento": null,
+      "diferenca_fechamento": null,
+      "total_vendas_bruto": "0.0000",
+      "total_descontos": "0.0000",
+      "total_liquido": "0.0000",
+      "total_dinheiro": "0.0000",
+      "total_pix": "0.0000",
+      "total_cartao_debito": "0.0000",
+      "total_cartao_credito": "0.0000",
+      "total_outros": "0.0000",
+      "quantidade_vendas": 0,
+      "ticket_medio": null,
+      "observacao_fechamento": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Abrir caixa com sessÃ£o aberta â†’ 409",
+    "status": 409,
+    "expected": [
+      409
+    ],
+    "body": {
+      "detail": "Caixa já possui uma sessão aberta.",
+      "code": "ConflictError"
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Fechar sessÃ£o existente â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "4edc3cd5-7758-4367-97c3-b7496c97214e",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+      "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+      "status": "fechada",
+      "data_abertura": "2026-05-02T22:21:38.422061Z",
+      "saldo_abertura": "100.0000",
+      "data_fechamento": "2026-05-02T22:23:01.800457Z",
+      "operador_fechamento_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+      "saldo_informado_fechamento": "0.0000",
+      "saldo_sistema_fechamento": "118.9900",
+      "diferenca_fechamento": "-118.9900",
+      "total_vendas_bruto": "17.9800",
+      "total_descontos": "0.0000",
+      "total_liquido": "17.9800",
+      "total_dinheiro": "18.9900",
+      "total_pix": "8.9900",
+      "total_cartao_debito": "0.0000",
+      "total_cartao_credito": "0.0000",
+      "total_outros": "0.0000",
+      "quantidade_vendas": 2,
+      "ticket_medio": "8.9900",
+      "observacao_fechamento": "QA test close"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Fechar sessÃ£o: campo total_vendas_bruto presente",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "val=17.9800"
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Fechar sessÃ£o: campo total_dinheiro presente",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "val=18.9900"
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Fechar sessÃ£o: campo total_pix presente",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "val=8.9900"
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Fechar sessÃ£o: campo quantidade_vendas presente",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "val=2"
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Abrir nova sessÃ£o â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+      "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+      "status": "aberta",
+      "data_abertura": "2026-05-02T22:23:02.237566Z",
+      "saldo_abertura": "100.0000",
+      "data_fechamento": null,
+      "operador_fechamento_id": null,
+      "saldo_informado_fechamento": null,
+      "saldo_sistema_fechamento": null,
+      "diferenca_fechamento": null,
+      "total_vendas_bruto": "0.0000",
+      "total_descontos": "0.0000",
+      "total_liquido": "0.0000",
+      "total_dinheiro": "0.0000",
+      "total_pix": "0.0000",
+      "total_cartao_debito": "0.0000",
+      "total_cartao_credito": "0.0000",
+      "total_outros": "0.0000",
+      "quantidade_vendas": 0,
+      "ticket_medio": null,
+      "observacao_fechamento": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "GET sessao-ativa apÃ³s abertura â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+      "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+      "status": "aberta",
+      "data_abertura": "2026-05-02T22:23:02.237566Z",
+      "saldo_abertura": "100.0000",
+      "data_fechamento": null,
+      "operador_fechamento_id": null,
+      "saldo_informado_fechamento": null,
+      "saldo_sistema_fechamento": null,
+      "diferenca_fechamento": null,
+      "total_vendas_bruto": "0.0000",
+      "total_descontos": "0.0000",
+      "total_liquido": "0.0000",
+      "total_dinheiro": "0.0000",
+      "total_pix": "0.0000",
+      "total_cartao_debito": "0.0000",
+      "total_cartao_credito": "0.0000",
+      "total_outros": "0.0000",
+      "quantidade_vendas": 0,
+      "ticket_medio": null,
+      "observacao_fechamento": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "SessÃ£o status=aberta",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÃ‰DIO",
+    "note": "status=aberta"
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "GET sessao-ativa sem token â†’ 401/403 (requer auth)",
+    "status": 401,
+    "expected": [
+      401,
+      403
+    ],
+    "body": {
+      "detail": "Token de autenticação não fornecido",
+      "code": "AuthenticationError"
+    },
+    "severity": "BAIXO",
+    "note": "sessao-ativa usa get_empresa_id que exige auth"
+  },
+  {
+    "ok": true,
+    "tag": "CAIXA",
+    "name": "Fechar sessÃ£o sem token â†’ 401/403",
+    "status": 401,
+    "expected": [
+      401,
+      403
+    ],
+    "body": {
+      "detail": "Token de autenticação não fornecido",
+      "code": "AuthenticationError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "GET produto por EAN (autenticado) â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sku": "REF-001",
+      "codigo_barras_principal": "7891234567890",
+      "descricao": "Refrigerante Cola 2L",
+      "descricao_pdv": "REFRIG COLA 2L",
+      "marca": "Zênite",
+      "preco_venda": "8.9900",
+      "custo_medio": "4.5000",
+      "unidade_codigo": "UN",
+      "controla_estoque": true,
+      "pesavel": false,
+      "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+      "ncm": "22021000",
+      "cfop": "5102",
+      "csosn": "102",
+      "cst_icms": null,
+      "ativo": true,
+      "destaque_pdv": true,
+      "ean_pesquisado": "7891234567890",
+      "ean_fator_quantidade": "1.0"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "Produto campo id",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "id=7251fac0-7bff-41df-805b-6c737ff63c4b"
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "Produto campo descricao",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "descricao=Refrigerante Cola 2L"
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "Produto campo preco_venda",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "preco_venda=8.9900"
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "Produto campo codigo_barras_principal",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "codigo_barras_principal=7891234567890"
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "GET produto por EAN sem token â†’ 401 (por design)",
+    "status": 401,
+    "expected": [
+      401
+    ],
+    "body": {
+      "detail": "Token de autenticação não fornecido",
+      "code": "AuthenticationError"
+    },
+    "severity": "BAIXO",
+    "note": "produtos requerem auth por design (empresa_id vem do token)"
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "EAN inexistente â†’ 404",
+    "status": 404,
+    "expected": [
+      404
+    ],
+    "body": {
+      "detail": "Produto não encontrado para o EAN informado.",
+      "code": "NotFoundError"
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "GET produto por UUID â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sku": "REF-001",
+      "codigo_barras_principal": "7891234567890",
+      "descricao": "Refrigerante Cola 2L",
+      "descricao_pdv": "REFRIG COLA 2L",
+      "marca": "Zênite",
+      "preco_venda": "8.9900",
+      "custo_medio": "4.5000",
+      "unidade_codigo": "UN",
+      "controla_estoque": true,
+      "pesavel": false,
+      "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+      "ncm": "22021000",
+      "cfop": "5102",
+      "csosn": "102",
+      "cst_icms": null,
+      "ativo": true,
+      "destaque_pdv": true,
+      "ean_pesquisado": null,
+      "ean_fator_quantidade": "1.0"
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "PRODUTO",
+    "name": "UUID produto inexistente â†’ 404",
+    "status": 404,
+    "expected": [
+      404,
+      422
+    ],
+    "body": {
+      "detail": "Produto não encontrado.",
+      "code": "NotFoundError"
+    },
+    "severity": "BAIXO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Iniciar venda â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "0.0000",
+      "total_desconto": "0.0000",
+      "total_liquido": "0.0000",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "FISCAL",
+      "itens": [],
+      "pagamentos": [],
+      "documento_fiscal_id": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Adicionar item (qty=2) â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "17.9800",
+      "total_desconto": "0.0000",
+      "total_liquido": "17.9800",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "d166b8c9-ad17-418e-afd6-04a89e335aa7",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "2.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "17.9800",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [],
+      "documento_fiscal_id": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Item quantidade=2",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÃ‰DIO",
+    "note": "qty=2.000"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Remover item â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "0.0000",
+      "total_desconto": "0.0000",
+      "total_liquido": "0.0000",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "d166b8c9-ad17-418e-afd6-04a89e335aa7",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "2.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "17.9800",
+          "cancelado": true
+        }
+      ],
+      "pagamentos": [],
+      "documento_fiscal_id": null
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Itens vazios apÃ³s remover",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÃ‰DIO",
+    "note": "itens_ativos=[]"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Re-adicionar item (qty=1) â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "d166b8c9-ad17-418e-afd6-04a89e335aa7",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "2.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "17.9800",
+          "cancelado": true
+        },
+        {
+          "id": "31cbc6e8-831a-4c03-bee5-d831e76619f3",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [],
+      "documento_fiscal_id": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Pagamento valor insuficiente parcial â†’ 201 (parcial permitido)",
+    "status": 201,
+    "expected": [
+      201,
+      422,
+      400
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "d166b8c9-ad17-418e-afd6-04a89e335aa7",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "2.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "17.9800",
+          "cancelado": true
+        },
+        {
+          "id": "31cbc6e8-831a-4c03-bee5-d831e76619f3",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [
+        {
+          "id": "8ff3581a-5bdf-4eef-b830-873154e60cc3",
+          "forma_pagamento": "01",
+          "valor": "0.0100",
+          "troco": "0.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        }
+      ],
+      "documento_fiscal_id": null
+    },
+    "severity": "MÃ‰DIO",
+    "note": "sistema aceita pagamento parcial?"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Pagamento com troco → 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "d166b8c9-ad17-418e-afd6-04a89e335aa7",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "2.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "17.9800",
+          "cancelado": true
+        },
+        {
+          "id": "31cbc6e8-831a-4c03-bee5-d831e76619f3",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [
+        {
+          "id": "8ff3581a-5bdf-4eef-b830-873154e60cc3",
+          "forma_pagamento": "01",
+          "valor": "0.0100",
+          "troco": "0.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        },
+        {
+          "id": "ec2051c8-2e51-4517-9c0e-8ce54b0a7160",
+          "forma_pagamento": "01",
+          "valor": "18.9800",
+          "troco": "10.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        }
+      ],
+      "documento_fiscal_id": null
+    },
+    "severity": "MÉDIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Troco calculado > 0",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÉDIO",
+    "note": "troco=10.0"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Finalizar venda GERENCIAL â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "257f7833-409a-4ad7-9b54-2f7366441923",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 1,
+      "status": "concluida",
+      "data_venda": "2026-05-02T22:23:04.885299Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "d88aa477-8331-45de-acbf-f9372404a849",
+      "tipo_emissao": "GERENCIAL",
+      "itens": [
+        {
+          "id": "d166b8c9-ad17-418e-afd6-04a89e335aa7",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "2.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "17.9800",
+          "cancelado": true
+        },
+        {
+          "id": "31cbc6e8-831a-4c03-bee5-d831e76619f3",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [
+        {
+          "id": "8ff3581a-5bdf-4eef-b830-873154e60cc3",
+          "forma_pagamento": "01",
+          "valor": "0.0100",
+          "troco": "0.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        },
+        {
+          "id": "ec2051c8-2e51-4517-9c0e-8ce54b0a7160",
+          "forma_pagamento": "01",
+          "valor": "18.9800",
+          "troco": "10.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        }
+      ],
+      "documento_fiscal_id": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Status=concluida",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "CRÃTICO",
+    "note": "status=concluida"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "GERENCIAL: documento_fiscal_id=null",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÃ‰DIO",
+    "note": "doc_id=None"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Iniciar venda FISCAL â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "36473721-aed9-4467-9696-cb71855ce4b6",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 2,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:07.463403Z",
+      "total_bruto": "0.0000",
+      "total_desconto": "0.0000",
+      "total_liquido": "0.0000",
+      "chave_idempotencia": "87e92d2c-7db5-40ff-b05c-ddbc5bc8c70a",
+      "tipo_emissao": "FISCAL",
+      "itens": [],
+      "pagamentos": [],
+      "documento_fiscal_id": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Venda FISCAL: adicionar item â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "36473721-aed9-4467-9696-cb71855ce4b6",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 2,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:07.463403Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "87e92d2c-7db5-40ff-b05c-ddbc5bc8c70a",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "501340a9-7a9d-4cf9-bcd5-557c0fe8f083",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [],
+      "documento_fiscal_id": null
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Venda FISCAL: pagamento PIX â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "36473721-aed9-4467-9696-cb71855ce4b6",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 2,
+      "status": "em_aberto",
+      "data_venda": "2026-05-02T22:23:07.463403Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "87e92d2c-7db5-40ff-b05c-ddbc5bc8c70a",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "501340a9-7a9d-4cf9-bcd5-557c0fe8f083",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [
+        {
+          "id": "16f73660-9362-4b74-a689-e4499e379943",
+          "forma_pagamento": "17",
+          "valor": "8.9900",
+          "troco": "0.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        }
+      ],
+      "documento_fiscal_id": null
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Finalizar venda FISCAL â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "36473721-aed9-4467-9696-cb71855ce4b6",
+      "empresa_id": "ccec5ae6-385e-4f26-8bd9-830b8ce5c3ab",
+      "sessao_caixa_id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+      "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+      "numero_venda_local": 2,
+      "status": "concluida",
+      "data_venda": "2026-05-02T22:23:07.463403Z",
+      "total_bruto": "8.9900",
+      "total_desconto": "0.0000",
+      "total_liquido": "8.9900",
+      "chave_idempotencia": "87e92d2c-7db5-40ff-b05c-ddbc5bc8c70a",
+      "tipo_emissao": "FISCAL",
+      "itens": [
+        {
+          "id": "501340a9-7a9d-4cf9-bcd5-557c0fe8f083",
+          "produto_id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "descricao_produto": "Refrigerante Cola 2L",
+          "codigo_barras": "7891234567890",
+          "unidade": "UN",
+          "sequencia": 1,
+          "quantidade": "1.000",
+          "preco_unitario": "8.9900",
+          "desconto_unitario": "0.0000",
+          "total_item": "8.9900",
+          "cancelado": false
+        }
+      ],
+      "pagamentos": [
+        {
+          "id": "16f73660-9362-4b74-a689-e4499e379943",
+          "forma_pagamento": "17",
+          "valor": "8.9900",
+          "troco": "0.0000",
+          "nsu": null,
+          "bandeira_cartao": null
+        }
+      ],
+      "documento_fiscal_id": "479eaedb-c4e3-4da9-bc7c-00ab40bd4524"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "FISCAL: documento_fiscal_id preenchido",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "MÃ‰DIO",
+    "note": "doc_id=479eaedb-c4e3-4da9-bc7c-00ab40bd4524"
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Venda sessÃ£o inexistente â†’ 4xx",
+    "status": 404,
+    "expected": [
+      400,
+      404,
+      409,
+      422
+    ],
+    "body": {
+      "detail": "Sessão de caixa não encontrada.",
+      "code": "NotFoundError"
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "VENDA",
+    "name": "Iniciar venda sem token â†’ 401/403",
+    "status": 401,
+    "expected": [
+      401,
+      403
+    ],
+    "body": {
+      "detail": "Token de autenticação não fornecido",
+      "code": "AuthenticationError"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "ESTOQUE",
+    "name": "GET gerencial/produtos â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "items": [
+        {
+          "id": "e1e091e7-3978-4aca-a349-3dfba80ad245",
+          "sku": "AGU-001",
+          "codigo_barras_principal": "7899999000001",
+          "descricao": "Água Mineral 500ml",
+          "descricao_pdv": "AGUA MINERAL 500ml",
+          "preco_venda": "2.5000",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        },
+        {
+          "id": "edfb8122-762a-4e91-b472-2efa2220f4ac",
+          "sku": null,
+          "codigo_barras_principal": "0001777760298",
+          "descricao": "PRODUTO QA 1777760298",
+          "descricao_pdv": null,
+          "preco_venda": "12.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": null,
+          "controla_estoque": false,
+          "ativo": true,
+          "destaque_pdv": false
+        },
+        {
+          "id": "bbb16cc2-54a0-4a04-9d2d-3dc5d228e007",
+          "sku": null,
+          "codigo_barras_principal": "0001777760504",
+          "descricao": "PRODUTO QA 1777760504",
+          "descricao_pdv": null,
+          "preco_venda": "12.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": null,
+          "controla_estoque": false,
+          "ativo": true,
+          "destaque_pdv": false
+        },
+        {
+          "id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "sku": "REF-001",
+          "codigo_barras_principal": "7891234567890",
+          "descricao": "Refrigerante Cola 2L",
+          "descricao_pdv": "REFRIG COLA 2L",
+          "preco_venda": "8.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        },
+        {
+          "id": "997fe9fe-8bda-4c09-a6a0-d1295b042c5a",
+          "sku": "SNC-001",
+          "codigo_barras_principal": "7891111000003",
+          "descricao": "Salgadinho Tradicional 100g",
+          "descricao_pdv": "SALGADINHO 100g",
+          "preco_venda": "4.7500",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        }
+      ],
+      "total": 5,
+      "page": 1,
+      "per_page": 20
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "GET /gerencial/dashboard â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "data_referencia": "2026-05-02",
+      "total_vendas": "53.9400",
+      "qtd_vendas": 6,
+      "ticket_medio": "8.99",
+      "por_forma_pagamento": [
+        {
+          "forma": "01",
+          "label": "Dinheiro",
+          "total": "55.9600",
+          "qtd": 6
+        },
+        {
+          "forma": "17",
+          "label": "Pix",
+          "total": "17.9800",
+          "qtd": 2
+        }
+      ],
+      "sessoes_abertas": 1,
+      "total_semana": "53.9400",
+      "qtd_semana": 6,
+      "total_mes": "53.9400",
+      "qtd_mes": 6,
+      "por_operador": [
+        {
+          "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+          "nome": "Operador PDV",
+          "qtd": 6,
+          "total": 53.94
+        }
+      ],
+      "total_fiscal": "0",
+      "total_gerencial": "26.9700"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo data_referencia",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "data_referencia=2026-05-02"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo total_vendas",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "total_vendas=53.9400"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo qtd_vendas",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "qtd_vendas=6"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo ticket_medio",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "ticket_medio=8.99"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo sessoes_abertas",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "sessoes_abertas=1"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo total_semana",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "total_semana=53.9400"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Dashboard: campo total_mes",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "total_mes=53.9400"
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "GET /gerencial/produtos â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "items": [
+        {
+          "id": "e1e091e7-3978-4aca-a349-3dfba80ad245",
+          "sku": "AGU-001",
+          "codigo_barras_principal": "7899999000001",
+          "descricao": "Água Mineral 500ml",
+          "descricao_pdv": "AGUA MINERAL 500ml",
+          "preco_venda": "2.5000",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        },
+        {
+          "id": "edfb8122-762a-4e91-b472-2efa2220f4ac",
+          "sku": null,
+          "codigo_barras_principal": "0001777760298",
+          "descricao": "PRODUTO QA 1777760298",
+          "descricao_pdv": null,
+          "preco_venda": "12.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": null,
+          "controla_estoque": false,
+          "ativo": true,
+          "destaque_pdv": false
+        },
+        {
+          "id": "bbb16cc2-54a0-4a04-9d2d-3dc5d228e007",
+          "sku": null,
+          "codigo_barras_principal": "0001777760504",
+          "descricao": "PRODUTO QA 1777760504",
+          "descricao_pdv": null,
+          "preco_venda": "12.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": null,
+          "controla_estoque": false,
+          "ativo": true,
+          "destaque_pdv": false
+        },
+        {
+          "id": "7251fac0-7bff-41df-805b-6c737ff63c4b",
+          "sku": "REF-001",
+          "codigo_barras_principal": "7891234567890",
+          "descricao": "Refrigerante Cola 2L",
+          "descricao_pdv": "REFRIG COLA 2L",
+          "preco_venda": "8.9900",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        },
+        {
+          "id": "997fe9fe-8bda-4c09-a6a0-d1295b042c5a",
+          "sku": "SNC-001",
+          "codigo_barras_principal": "7891111000003",
+          "descricao": "Salgadinho Tradicional 100g",
+          "descricao_pdv": "SALGADINHO 100g",
+          "preco_venda": "4.7500",
+          "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+          "unidade_codigo": "UN",
+          "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+          "categoria_id": "49d7d779-70d5-4911-8f0b-d84efe067ff4",
+          "controla_estoque": true,
+          "ativo": true,
+          "destaque_pdv": true
+        }
+      ],
+      "total": 5,
+      "page": 1,
+      "per_page": 20
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "GET /gerencial/unidades â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": [
+      {
+        "id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+        "codigo": "UN",
+        "descricao": "Unidade"
+      }
+    ],
+    "severity": "BAIXO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "GET /gerencial/perfis-tributarios â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": [
+      {
+        "id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+        "nome": "SN Alimentos"
+      }
+    ],
+    "severity": "BAIXO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "GET /gerencial/usuarios â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": [
+      {
+        "id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "nome": "Admin Zênite",
+        "email": "admin@zenite.dev",
+        "perfil": "gerente",
+        "codigo_operador": "900",
+        "ativo": true,
+        "ultimo_acesso": "2026-05-02T22:22:54.704691+00:00"
+      },
+      {
+        "id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+        "nome": "Operador PDV",
+        "email": "operador@zenite.dev",
+        "perfil": "operador_caixa",
+        "codigo_operador": "001",
+        "ativo": true,
+        "ultimo_acesso": "2026-05-02T22:22:57.743402+00:00"
+      },
+      {
+        "id": "16cd302c-3a7e-4f1b-9efe-d7f33e30ce32",
+        "nome": "Operador QA 1777760300",
+        "email": "opqa1777760300@zenite.dev",
+        "perfil": "operador_caixa",
+        "codigo_operador": "QA0300",
+        "ativo": true,
+        "ultimo_acesso": null
+      },
+      {
+        "id": "d3988269-7f82-4866-ae0e-f42617bed32c",
+        "nome": "Operador QA 1777760505",
+        "email": "opqa1777760505@zenite.dev",
+        "perfil": "operador_caixa",
+        "codigo_operador": "QA0505",
+        "ativo": false,
+        "ultimo_acesso": null
+      }
+    ],
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "GET /gerencial/sessoes â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": [
+      {
+        "id": "cc4dca6a-18f1-4e82-8b84-6e55d580b8c8",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "aberta",
+        "data_abertura": "2026-05-02T22:23:02.237566+00:00",
+        "data_fechamento": null,
+        "total_liquido": "0",
+        "quantidade_vendas": 0
+      },
+      {
+        "id": "4edc3cd5-7758-4367-97c3-b7496c97214e",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T22:21:38.422061+00:00",
+        "data_fechamento": "2026-05-02T22:23:01.800457+00:00",
+        "total_liquido": "17.9800",
+        "quantidade_vendas": 2
+      },
+      {
+        "id": "d152bac5-8628-4e6a-a534-6c88eebf32b9",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T22:18:15.932999+00:00",
+        "data_fechamento": "2026-05-02T22:21:38.124434+00:00",
+        "total_liquido": "0",
+        "quantidade_vendas": 0
+      },
+      {
+        "id": "7236322e-4cf9-4591-a391-b52168ef3842",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "f7484e2b-b1a6-4427-af5f-06d9c89d3cbe",
+        "operador_nome": "Admin Zênite",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T22:14:50.311964+00:00",
+        "data_fechamento": "2026-05-02T22:18:15.626928+00:00",
+        "total_liquido": "0",
+        "quantidade_vendas": 0
+      },
+      {
+        "id": "241f979f-15e3-4fd9-b764-060bf4b2045f",
+        "caixa_id": "6d7b005d-0a40-4267-aac8-8c51635f9918",
+        "caixa_descricao": "Caixa 01 - Principal",
+        "caixa_numero": 1,
+        "operador_id": "b1874dd6-9dae-462e-9694-2bcf1b9ae1ef",
+        "operador_nome": "Operador PDV",
+        "status": "fechada",
+        "data_abertura": "2026-05-02T19:24:30.700595+00:00",
+        "data_fechamento": "2026-05-02T22:14:50.006542+00:00",
+        "total_liquido": "17.9800",
+        "quantidade_vendas": 2
+      }
+    ],
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Criar produto gerencial â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "655dca3b-1156-4c4d-9666-a0987a068d94",
+      "sku": null,
+      "codigo_barras_principal": "0001777760588",
+      "descricao": "PRODUTO QA 1777760588",
+      "descricao_pdv": null,
+      "preco_venda": "9.99",
+      "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+      "unidade_codigo": "UN",
+      "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+      "categoria_id": null,
+      "controla_estoque": false,
+      "ativo": true,
+      "destaque_pdv": false
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "PATCH produto â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "655dca3b-1156-4c4d-9666-a0987a068d94",
+      "sku": null,
+      "codigo_barras_principal": "0001777760588",
+      "descricao": "PRODUTO QA 1777760588",
+      "descricao_pdv": null,
+      "preco_venda": "12.99",
+      "unidade_id": "408dc446-bb4f-436b-828c-4899e3b93ca5",
+      "unidade_codigo": "UN",
+      "perfil_tributario_id": "df266847-b0a8-4e84-bbfa-27a808fea676",
+      "categoria_id": null,
+      "controla_estoque": false,
+      "ativo": true,
+      "destaque_pdv": false
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "Criar usuÃ¡rio operador â†’ 201",
+    "status": 201,
+    "expected": [
+      201
+    ],
+    "body": {
+      "id": "aa72a888-1fa4-408f-bfe3-672dcaf8d0cc",
+      "nome": "Operador QA 1777760589",
+      "email": "opqa1777760589@zenite.dev",
+      "perfil": "PerfilUsuario.OPERADOR_CAIXA",
+      "codigo_operador": "QA0589",
+      "ativo": true,
+      "ultimo_acesso": null
+    },
+    "severity": "MÃ‰DIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "GERENCIAL",
+    "name": "PATCH status usuário (desativar) → 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "id": "aa72a888-1fa4-408f-bfe3-672dcaf8d0cc",
+      "nome": "Operador QA 1777760589",
+      "email": "opqa1777760589@zenite.dev",
+      "perfil": "operador_caixa",
+      "codigo_operador": "QA0589",
+      "ativo": false,
+      "ultimo_acesso": null
+    },
+    "severity": "MÉDIO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "INFRA",
+    "name": "GET /health â†’ 200",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "status": "ok",
+      "app": "Zênite PDV",
+      "env": "staging"
+    },
+    "severity": "CRÃTICO",
+    "note": ""
+  },
+  {
+    "ok": true,
+    "tag": "INFRA",
+    "name": "health: campo 'status'",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {},
+    "severity": "BAIXO",
+    "note": "status=ok"
+  },
+  {
+    "ok": true,
+    "tag": "INFRA",
+    "name": "health: redis ausente (por design)",
+    "status": 200,
+    "expected": [
+      200
+    ],
+    "body": {
+      "status": "ok",
+      "app": "Zênite PDV",
+      "env": "staging"
+    },
+    "severity": "BAIXO",
+    "note": "health nÃ£o checa Redis/DB â€” gap de observabilidade"
+  }
+]
