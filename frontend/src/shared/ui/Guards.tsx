@@ -11,7 +11,7 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
 export function RequireCaixa({ children }: { children: ReactNode }) {
   const sessaoCaixa = usePDVStore((s) => s.sessaoCaixa)
-  if (!sessaoCaixa) return <Navigate to="/caixa" replace />
+  if (!sessaoCaixa || sessaoCaixa.status !== 'aberta') return <Navigate to="/caixa" replace />
   return <>{children}</>
 }
 

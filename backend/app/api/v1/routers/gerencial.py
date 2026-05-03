@@ -204,6 +204,28 @@ class SessaoListDTO(BaseModel):
     data_fechamento: Optional[str] = None
     total_liquido: Decimal
     quantidade_vendas: int
+    # Fechamento
+    diferenca_fechamento: Optional[Decimal] = None
+    saldo_informado_fechamento: Optional[Decimal] = None
+    saldo_sistema_fechamento: Optional[Decimal] = None
+    total_dinheiro: Decimal = Decimal("0")
+    total_pix: Decimal = Decimal("0")
+    total_cartao_debito: Decimal = Decimal("0")
+    total_cartao_credito: Decimal = Decimal("0")
+    total_outros: Decimal = Decimal("0")
+    ticket_medio: Optional[Decimal] = None
+
+
+class RelatorioDiarioDTO(BaseModel):
+    data_referencia: str
+    total_vendas: Decimal
+    qtd_vendas: int
+    ticket_medio: Decimal
+    por_forma_pagamento: List[PagamentoPorFormaDTO]
+    sessoes_abertas: int
+    sessoes_fechadas: int
+    diferenca_total: Decimal
+    sessoes: List[SessaoListDTO]
 
 
 class CaixaDTO(BaseModel):
@@ -781,6 +803,30 @@ async def patch_usuario_status(
 # SESSÕES DE CAIXA
 # ---------------------------------------------------------------------------
 
+def _sessao_to_dto(s: SessaoCaixa) -> SessaoListDTO:
+    return SessaoListDTO(
+        id=s.id,
+        caixa_id=s.caixa_id,
+        caixa_descricao=s.caixa.descricao if s.caixa else None,
+        caixa_numero=s.caixa.numero if s.caixa else 0,
+        operador_id=s.operador_id,
+        operador_nome=s.operador.nome if s.operador else "",
+        status=str(s.status),
+        data_abertura=s.data_abertura.isoformat(),
+        data_fechamento=s.data_fechamento.isoformat() if s.data_fechamento else None,
+        total_liquido=Decimal(str(s.total_liquido or 0)),
+        quantidade_vendas=s.quantidade_vendas or 0,
+        diferenca_fechamento=Decimal(str(s.diferenca_fechamento)) if s.diferenca_fechamento is not None else None,
+        saldo_informado_fechamento=Decimal(str(s.saldo_informado_fechamento)) if s.saldo_informado_fechamento is not None else None,
+        saldo_sistema_fechamento=Decimal(str(s.saldo_sistema_fechamento)) if s.saldo_sistema_fechamento is not None else None,
+        total_dinheiro=Decimal(str(s.total_dinheiro or 0)),
+        total_pix=Decimal(str(s.total_pix or 0)),
+        total_cartao_debito=Decimal(str(s.total_cartao_debito or 0)),
+        total_cartao_credito=Decimal(str(s.total_cartao_credito or 0)),
+        total_outros=Decimal(str(s.total_outros or 0)),
+        ticket_medio=Decimal(str(s.ticket_medio)) if s.ticket_medio is not None else None,
+    )
+
 @router.get("/sessoes", response_model=List[SessaoListDTO])
 async def list_sessoes(
     limit: int = Query(30, ge=1, le=200),
@@ -801,21 +847,7 @@ async def list_sessoes(
     )
     sessoes = r.unique().scalars().all()
 
-    return [
-        SessaoListDTO(
-            id=s.id,
-            caixa_id=s.caixa_id,
-            caixa_descricao=s.caixa.descricao if s.caixa else None,
-            caixa_numero=s.caixa.numero if s.caixa else 0,
-            operador_id=s.operador_id,
-            operador_nome=s.operador.nome if s.operador else "",
-            status=str(s.status),
-            data_abertura=s.data_abertura.isoformat(),
-            data_fechamento=s.data_fechamento.isoformat() if s.data_fechamento else None,
-            total_liquido=Decimal(str(s.total_liquido or 0)),
-            quantidade_vendas=s.quantidade_vendas or 0,
-        )
-        for s in sessoes
+    return [_sessao_to_dto(s) for s in sessoes
     ]
 
 
@@ -1633,3 +1665,101 @@ async def list_movimentacoes(
         page=page,
         per_page=per_page,
     )
+
+
+# ---------------------------------------------------------------------------
+# RELATÓRIO DIÁRIO
+# ---------------------------------------------------------------------------
+
+@router.get("/relatorio-diario", response_model=RelatorioDiarioDTO)
+async def relatorio_diario(
+    data: Optional[str] = Query(None, description="Data YYYY-MM-DD, padrão hoje"),
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> RelatorioDiarioDTO:
+    empresa_id = gerente.empresa_id
+
+    if data:
+        try:
+            ref_date = date.fromisoformat(data)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Data inválida. Use YYYY-MM-DD.")
+    else:
+        ref_date = date.today()
+
+    # Totais das vendas do dia
+    venda_r = await session.execute(
+        select(
+            func.count(Venda.id).label("qtd"),
+            func.coalesce(func.sum(Venda.total_liquido), 0).label("total"),
+        ).where(
+            Venda.empresa_id == empresa_id,
+            Venda.status == StatusVenda.CONCLUIDA,
+            cast(Venda.data_venda, Date) == ref_date,
+        )
+    )
+    v = venda_r.one()
+    qtd = int(v.qtd)
+    total = Decimal(str(v.total))
+    ticket = (total / qtd) if qtd else Decimal("0")
+
+    # Por forma de pagamento
+    pag_r = await session.execute(
+        select(
+            PagamentoVenda.forma_pagamento.label("forma"),
+            func.count(PagamentoVenda.id).label("qtd"),
+            func.coalesce(func.sum(PagamentoVenda.valor), 0).label("total"),
+        )
+        .join(Venda, PagamentoVenda.venda_id == Venda.id)
+        .where(
+            Venda.empresa_id == empresa_id,
+            Venda.status == StatusVenda.CONCLUIDA,
+            cast(Venda.data_venda, Date) == ref_date,
+        )
+        .group_by(PagamentoVenda.forma_pagamento)
+    )
+    por_forma = [
+        PagamentoPorFormaDTO(
+            forma=str(row.forma),
+            label=_FORMA_LABEL.get(str(row.forma), str(row.forma)),
+            total=Decimal(str(row.total)),
+            qtd=int(row.qtd),
+        )
+        for row in pag_r.all()
+    ]
+
+    # Sessões abertas neste dia
+    sess_r = await session.execute(
+        select(SessaoCaixa)
+        .options(
+            joinedload(SessaoCaixa.caixa),
+            joinedload(SessaoCaixa.operador),
+        )
+        .where(
+            SessaoCaixa.empresa_id == empresa_id,
+            cast(SessaoCaixa.data_abertura, Date) == ref_date,
+        )
+        .order_by(SessaoCaixa.data_abertura.desc())
+    )
+    sessoes = sess_r.unique().scalars().all()
+
+    sessoes_abertas = sum(1 for s in sessoes if str(s.status) == StatusSessaoCaixa.ABERTA)
+    sessoes_fechadas = sum(1 for s in sessoes if str(s.status) == StatusSessaoCaixa.FECHADA)
+    diferenca_total = sum(
+        Decimal(str(s.diferenca_fechamento or 0))
+        for s in sessoes
+        if s.diferenca_fechamento is not None
+    )
+
+    return RelatorioDiarioDTO(
+        data_referencia=ref_date.isoformat(),
+        total_vendas=total,
+        qtd_vendas=qtd,
+        ticket_medio=ticket.quantize(Decimal("0.01")),
+        por_forma_pagamento=por_forma,
+        sessoes_abertas=sessoes_abertas,
+        sessoes_fechadas=sessoes_fechadas,
+        diferenca_total=diferenca_total,
+        sessoes=[_sessao_to_dto(s) for s in sessoes],
+    )
+

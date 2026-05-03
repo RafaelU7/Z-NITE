@@ -366,6 +366,28 @@ export interface SessaoListDTO {
   data_fechamento: string | null
   total_liquido: string
   quantidade_vendas: number
+  // Fechamento
+  diferenca_fechamento: string | null
+  saldo_informado_fechamento: string | null
+  saldo_sistema_fechamento: string | null
+  total_dinheiro: string
+  total_pix: string
+  total_cartao_debito: string
+  total_cartao_credito: string
+  total_outros: string
+  ticket_medio: string | null
+}
+
+export interface RelatorioDiarioDTO {
+  data_referencia: string
+  total_vendas: string
+  qtd_vendas: number
+  ticket_medio: string
+  por_forma_pagamento: DashboardPagamentoPorForma[]
+  sessoes_abertas: number
+  sessoes_fechadas: number
+  diferenca_total: string
+  sessoes: SessaoListDTO[]
 }
 
 export interface CaixaDTO {

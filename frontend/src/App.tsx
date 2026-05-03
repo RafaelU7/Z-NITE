@@ -13,6 +13,7 @@ import { CaixasPage } from '@/features/gerencial/pages/CaixasPage'
 import { SessoesPage } from '@/features/gerencial/pages/SessoesPage'
 import { CadastroRapidoPage } from '@/features/gerencial/pages/CadastroRapidoPage'
 import { EstoquePage } from '@/features/gerencial/pages/EstoquePage'
+import { RelatorioDiarioPage } from '@/features/gerencial/pages/RelatorioDiarioPage'
 import { RequireAuth, RequireCaixa, RequireGerente } from '@/shared/ui/Guards'
 import { getSetupStatus } from '@/services/api/setup'
 import { Loader2 } from 'lucide-react'
@@ -92,6 +93,7 @@ function AppRoutes() {
         <Route path="usuarios" element={<UsuariosPage />} />
         <Route path="caixas" element={<CaixasPage />} />
         <Route path="sessoes" element={<SessoesPage />} />
+        <Route path="relatorio-diario" element={<RelatorioDiarioPage />} />
       </Route>
 
       {/* Redirect raiz → login */}

@@ -13,6 +13,7 @@ import type {
   UsuarioListDTO,
   UsuarioCreateRequest,
   SessaoListDTO,
+  RelatorioDiarioDTO,
   EANLookupResult,
   CadastroRapidoRequest,
   CadastroRapidoResponse,
@@ -175,3 +176,11 @@ export async function listMovimentacoes(params?: {
   const { data } = await api.get<PaginatedMovimentacoes>('/gerencial/movimentacoes', { params })
   return data
 }
+
+export async function getRelatorioDiario(data?: string): Promise<RelatorioDiarioDTO> {
+  const { data: resp } = await api.get<RelatorioDiarioDTO>('/gerencial/relatorio-diario', {
+    params: data ? { data } : undefined,
+  })
+  return resp
+}
+

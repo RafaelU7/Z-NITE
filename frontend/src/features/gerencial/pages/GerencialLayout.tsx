@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Package, Users, CreditCard, LogOut, Store, Zap, Warehouse } from 'lucide-react'
+import { LayoutDashboard, Package, Users, CreditCard, LogOut, Store, Zap, Warehouse, BarChart2 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { logout } from '@/services/api/auth'
 import clsx from 'clsx'
@@ -12,6 +12,7 @@ const NAV = [
   { to: '/gerencial/usuarios', label: 'Usuários', icon: <Users size={16} /> },
   { to: '/gerencial/caixas', label: 'Caixas', icon: <CreditCard size={16} /> },
   { to: '/gerencial/sessoes', label: 'Sessões', icon: <Store size={16} /> },
+  { to: '/gerencial/relatorio-diario', label: 'Rel. Diário', icon: <BarChart2 size={16} /> },
 ]
 
 export function GerencialLayout() {
