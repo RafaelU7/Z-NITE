@@ -1278,3 +1278,358 @@ async def ajuste_estoque(
         saldo_atual=novo_saldo,
         tipo_movimentacao=tipo.value,
     )
+
+
+# ---------------------------------------------------------------------------
+# MÓDULO DE ESTOQUE — listagem, entrada e inventário
+# ---------------------------------------------------------------------------
+
+
+class EstoqueProdutoDTO(BaseModel):
+    produto_id: UUID
+    descricao: str
+    codigo_barras: Optional[str] = None
+    unidade: Optional[str] = None
+    preco_venda: Decimal
+    saldo_atual: float
+    ativo: bool
+
+
+class PaginatedEstoque(BaseModel):
+    items: List[EstoqueProdutoDTO]
+    total: int
+    page: int
+    per_page: int
+
+
+class EntradaEstoqueRequest(BaseModel):
+    quantidade: Decimal = Field(..., gt=Decimal("0"))
+    observacao: Optional[str] = Field(None, max_length=300)
+
+
+class EntradaEstoqueResponse(BaseModel):
+    produto_id: UUID
+    saldo_anterior: float
+    saldo_atual: float
+
+
+class InventarioRequest(BaseModel):
+    """Ajuste de inventário: o usuário informa o saldo CONTADO atual."""
+    saldo_contado: Decimal = Field(..., ge=Decimal("0"))
+    observacao: Optional[str] = Field(None, max_length=300)
+
+
+class InventarioResponse(BaseModel):
+    produto_id: UUID
+    saldo_anterior: float
+    saldo_atual: float
+    diferenca: float
+    tipo_movimentacao: str
+
+
+class MovimentacaoDTO(BaseModel):
+    id: UUID
+    produto_id: UUID
+    produto_descricao: str
+    tipo: str
+    quantidade: float
+    saldo_anterior: float
+    saldo_posterior: float
+    motivo: Optional[str] = None
+    criado_em: str
+
+
+class PaginatedMovimentacoes(BaseModel):
+    items: List[MovimentacaoDTO]
+    total: int
+    page: int
+    per_page: int
+
+
+@router.get("/estoque", response_model=PaginatedEstoque)
+async def list_estoque(
+    q: Optional[str] = Query(None, max_length=100),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(20, ge=1, le=100),
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> PaginatedEstoque:
+    """Lista produtos com saldo do local principal."""
+    empresa_id = gerente.empresa_id
+    offset = (page - 1) * per_page
+
+    base_q = (
+        select(
+            Produto.id,
+            Produto.descricao,
+            Produto.codigo_barras_principal,
+            Produto.preco_venda,
+            Produto.ativo,
+            UnidadeMedida.codigo.label("unidade_codigo"),
+            func.coalesce(Estoque.saldo_atual, 0).label("saldo_atual"),
+        )
+        .outerjoin(
+            Estoque,
+            (Estoque.produto_id == Produto.id)
+            & (Estoque.empresa_id == Produto.empresa_id)
+            & (Estoque.principal.is_(True)),
+        )
+        .outerjoin(UnidadeMedida, UnidadeMedida.id == Produto.unidade_id)
+        .where(Produto.empresa_id == empresa_id)
+    )
+
+    if q:
+        pattern = f"%{q}%"
+        base_q = base_q.where(
+            Produto.descricao.ilike(pattern)
+            | Produto.codigo_barras_principal.ilike(pattern)
+        )
+
+    count_r = await session.execute(
+        select(func.count()).select_from(base_q.subquery())
+    )
+    total = int(count_r.scalar() or 0)
+
+    rows_r = await session.execute(
+        base_q.order_by(Produto.descricao).offset(offset).limit(per_page)
+    )
+    rows = rows_r.all()
+
+    return PaginatedEstoque(
+        items=[
+            EstoqueProdutoDTO(
+                produto_id=r.id,
+                descricao=r.descricao,
+                codigo_barras=r.codigo_barras_principal,
+                unidade=r.unidade_codigo,
+                preco_venda=Decimal(str(r.preco_venda)),
+                saldo_atual=float(r.saldo_atual),
+                ativo=r.ativo,
+            )
+            for r in rows
+        ],
+        total=total,
+        page=page,
+        per_page=per_page,
+    )
+
+
+@router.post(
+    "/produtos/{produto_id}/entrada-estoque",
+    response_model=EntradaEstoqueResponse,
+)
+async def entrada_estoque(
+    produto_id: UUID,
+    req: EntradaEstoqueRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> EntradaEstoqueResponse:
+    """Entrada de estoque (compra / recebimento). Quantidade deve ser > 0."""
+    empresa_id = gerente.empresa_id
+
+    p_r = await session.execute(
+        select(Produto).where(
+            Produto.id == produto_id, Produto.empresa_id == empresa_id
+        )
+    )
+    if not p_r.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Produto não encontrado.")
+
+    est_r = await session.execute(
+        select(Estoque)
+        .join(LocalEstoque, LocalEstoque.id == Estoque.local_estoque_id)
+        .where(
+            Estoque.produto_id == produto_id,
+            Estoque.empresa_id == empresa_id,
+            LocalEstoque.principal.is_(True),
+        )
+        .with_for_update()
+    )
+    estoque = est_r.scalar_one_or_none()
+    if not estoque:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Produto sem estoque no local principal.",
+        )
+
+    quantidade = float(req.quantidade)
+    saldo_anterior = float(estoque.saldo_atual)
+    novo_saldo = saldo_anterior + quantidade
+
+    estoque.saldo_atual = novo_saldo
+    estoque.versao += 1
+    estoque.ultima_entrada = datetime.now(timezone.utc)
+
+    mov = MovimentacaoEstoque(
+        empresa_id=empresa_id,
+        produto_id=produto_id,
+        local_estoque_id=estoque.local_estoque_id,
+        usuario_id=gerente.id,
+        tipo=TipoMovimentacaoEstoque.ENTRADA_COMPRA,
+        quantidade=quantidade,
+        saldo_anterior=saldo_anterior,
+        saldo_posterior=novo_saldo,
+        custo_unitario=None,
+        referencia_tipo="entrada_manual",
+        referencia_id=None,
+        motivo=req.observacao,
+    )
+    session.add(mov)
+    await session.flush()
+
+    return EntradaEstoqueResponse(
+        produto_id=produto_id,
+        saldo_anterior=saldo_anterior,
+        saldo_atual=novo_saldo,
+    )
+
+
+@router.post(
+    "/produtos/{produto_id}/inventario",
+    response_model=InventarioResponse,
+)
+async def inventario_estoque(
+    produto_id: UUID,
+    req: InventarioRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> InventarioResponse:
+    """
+    Ajuste de inventário: o gerente informa o saldo real contado.
+    O sistema calcula a diferença e registra movimentação como INVENTARIO.
+    """
+    empresa_id = gerente.empresa_id
+
+    p_r = await session.execute(
+        select(Produto).where(
+            Produto.id == produto_id, Produto.empresa_id == empresa_id
+        )
+    )
+    if not p_r.scalar_one_or_none():
+        raise HTTPException(status_code=404, detail="Produto não encontrado.")
+
+    est_r = await session.execute(
+        select(Estoque)
+        .join(LocalEstoque, LocalEstoque.id == Estoque.local_estoque_id)
+        .where(
+            Estoque.produto_id == produto_id,
+            Estoque.empresa_id == empresa_id,
+            LocalEstoque.principal.is_(True),
+        )
+        .with_for_update()
+    )
+    estoque = est_r.scalar_one_or_none()
+    if not estoque:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Produto sem estoque no local principal.",
+        )
+
+    saldo_contado = float(req.saldo_contado)
+    saldo_anterior = float(estoque.saldo_atual)
+    diferenca = saldo_contado - saldo_anterior
+
+    if diferenca == 0:
+        return InventarioResponse(
+            produto_id=produto_id,
+            saldo_anterior=saldo_anterior,
+            saldo_atual=saldo_anterior,
+            diferenca=0.0,
+            tipo_movimentacao=TipoMovimentacaoEstoque.INVENTARIO.value,
+        )
+
+    tipo = (
+        TipoMovimentacaoEstoque.INVENTARIO
+    )
+
+    estoque.saldo_atual = saldo_contado
+    estoque.versao += 1
+
+    mov = MovimentacaoEstoque(
+        empresa_id=empresa_id,
+        produto_id=produto_id,
+        local_estoque_id=estoque.local_estoque_id,
+        usuario_id=gerente.id,
+        tipo=tipo,
+        quantidade=abs(diferenca),
+        saldo_anterior=saldo_anterior,
+        saldo_posterior=saldo_contado,
+        custo_unitario=None,
+        referencia_tipo="inventario_manual",
+        referencia_id=None,
+        motivo=req.observacao,
+    )
+    session.add(mov)
+    await session.flush()
+
+    return InventarioResponse(
+        produto_id=produto_id,
+        saldo_anterior=saldo_anterior,
+        saldo_atual=saldo_contado,
+        diferenca=diferenca,
+        tipo_movimentacao=tipo.value,
+    )
+
+
+@router.get("/movimentacoes", response_model=PaginatedMovimentacoes)
+async def list_movimentacoes(
+    produto_id: Optional[UUID] = Query(None),
+    page: int = Query(1, ge=1),
+    per_page: int = Query(30, ge=1, le=100),
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> PaginatedMovimentacoes:
+    """Histórico das últimas movimentações de estoque."""
+    empresa_id = gerente.empresa_id
+    offset = (page - 1) * per_page
+
+    base_q = (
+        select(
+            MovimentacaoEstoque.id,
+            MovimentacaoEstoque.produto_id,
+            Produto.descricao.label("produto_descricao"),
+            MovimentacaoEstoque.tipo,
+            MovimentacaoEstoque.quantidade,
+            MovimentacaoEstoque.saldo_anterior,
+            MovimentacaoEstoque.saldo_posterior,
+            MovimentacaoEstoque.motivo,
+            MovimentacaoEstoque.criado_em,
+        )
+        .join(Produto, Produto.id == MovimentacaoEstoque.produto_id)
+        .where(MovimentacaoEstoque.empresa_id == empresa_id)
+    )
+
+    if produto_id:
+        base_q = base_q.where(MovimentacaoEstoque.produto_id == produto_id)
+
+    count_r = await session.execute(
+        select(func.count()).select_from(base_q.subquery())
+    )
+    total = int(count_r.scalar() or 0)
+
+    rows_r = await session.execute(
+        base_q.order_by(MovimentacaoEstoque.criado_em.desc())
+        .offset(offset)
+        .limit(per_page)
+    )
+    rows = rows_r.all()
+
+    return PaginatedMovimentacoes(
+        items=[
+            MovimentacaoDTO(
+                id=r.id,
+                produto_id=r.produto_id,
+                produto_descricao=r.produto_descricao,
+                tipo=str(r.tipo),
+                quantidade=float(r.quantidade),
+                saldo_anterior=float(r.saldo_anterior),
+                saldo_posterior=float(r.saldo_posterior),
+                motivo=r.motivo,
+                criado_em=r.criado_em.isoformat() if r.criado_em else "",
+            )
+            for r in rows
+        ],
+        total=total,
+        page=page,
+        per_page=per_page,
+    )

@@ -70,3 +70,5 @@ pg-e2e-data/
 # Playwright runner local
 playwright-runner/
 Thumbs.db
+.vercel
+.env*.local

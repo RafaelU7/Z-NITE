@@ -18,6 +18,12 @@ import type {
   CadastroRapidoResponse,
   AjusteEstoqueRequest,
   AjusteEstoqueResponse,
+  PaginatedEstoque,
+  EntradaEstoqueRequest,
+  EntradaEstoqueResponse,
+  InventarioRequest,
+  InventarioResponse,
+  PaginatedMovimentacoes,
 } from '@/shared/types/api'
 
 export async function getDashboard(): Promise<DashboardDTO> {
@@ -125,5 +131,47 @@ export async function ajusteEstoque(
     `/gerencial/produtos/${produtoId}/ajuste-estoque`,
     req,
   )
+  return data
+}
+
+// --- Módulo de Estoque ---
+
+export async function listEstoque(params?: {
+  q?: string
+  page?: number
+  per_page?: number
+}): Promise<PaginatedEstoque> {
+  const { data } = await api.get<PaginatedEstoque>('/gerencial/estoque', { params })
+  return data
+}
+
+export async function entradaEstoque(
+  produtoId: string,
+  req: EntradaEstoqueRequest,
+): Promise<EntradaEstoqueResponse> {
+  const { data } = await api.post<EntradaEstoqueResponse>(
+    `/gerencial/produtos/${produtoId}/entrada-estoque`,
+    req,
+  )
+  return data
+}
+
+export async function inventarioEstoque(
+  produtoId: string,
+  req: InventarioRequest,
+): Promise<InventarioResponse> {
+  const { data } = await api.post<InventarioResponse>(
+    `/gerencial/produtos/${produtoId}/inventario`,
+    req,
+  )
+  return data
+}
+
+export async function listMovimentacoes(params?: {
+  produto_id?: string
+  page?: number
+  per_page?: number
+}): Promise<PaginatedMovimentacoes> {
+  const { data } = await api.get<PaginatedMovimentacoes>('/gerencial/movimentacoes', { params })
   return data
 }

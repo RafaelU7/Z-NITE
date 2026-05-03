@@ -381,3 +381,65 @@ export interface CaixaCreateRequest {
   descricao?: string
   numero_serie?: string
 }
+
+// --- Módulo de Estoque ---
+
+export interface EstoqueProdutoDTO {
+  produto_id: string
+  descricao: string
+  codigo_barras: string | null
+  unidade: string | null
+  preco_venda: string
+  saldo_atual: number
+  ativo: boolean
+}
+
+export interface PaginatedEstoque {
+  items: EstoqueProdutoDTO[]
+  total: number
+  page: number
+  per_page: number
+}
+
+export interface EntradaEstoqueRequest {
+  quantidade: number
+  observacao?: string
+}
+
+export interface EntradaEstoqueResponse {
+  produto_id: string
+  saldo_anterior: number
+  saldo_atual: number
+}
+
+export interface InventarioRequest {
+  saldo_contado: number
+  observacao?: string
+}
+
+export interface InventarioResponse {
+  produto_id: string
+  saldo_anterior: number
+  saldo_atual: number
+  diferenca: number
+  tipo_movimentacao: string
+}
+
+export interface MovimentacaoDTO {
+  id: string
+  produto_id: string
+  produto_descricao: string
+  tipo: string
+  quantidade: number
+  saldo_anterior: number
+  saldo_posterior: number
+  motivo: string | null
+  criado_em: string
+}
+
+export interface PaginatedMovimentacoes {
+  items: MovimentacaoDTO[]
+  total: number
+  page: number
+  per_page: number
+}
