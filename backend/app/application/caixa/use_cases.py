@@ -163,6 +163,19 @@ class GetSessaoAtivaUseCase:
         if data_abertura.date() < date.today():
             await _auto_fechar_sessao(sessao, self._repo)
             raise NotFoundError("Nenhuma sessão aberta para este caixa.")
+        # Sobrepõe totais ao vivo (calculados a partir das vendas) para exibição correta no modal
+        totais = await self._repo.calcular_totais_sessao(sessao.id)
+        sessao.quantidade_vendas = totais["quantidade_vendas"]
+        sessao.total_vendas_bruto = totais["total_vendas_bruto"]
+        sessao.total_descontos = totais["total_descontos"]
+        sessao.total_liquido = totais["total_liquido"]
+        sessao.total_dinheiro = totais["total_dinheiro"]
+        sessao.total_pix = totais["total_pix"]
+        sessao.total_cartao_debito = totais["total_cartao_debito"]
+        sessao.total_cartao_credito = totais["total_cartao_credito"]
+        sessao.total_outros = totais["total_outros"]
+        if totais["quantidade_vendas"] > 0:
+            sessao.ticket_medio = totais["total_liquido"] / totais["quantidade_vendas"]
         return _to_dto(sessao)
 
 
