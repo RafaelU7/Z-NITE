@@ -19,6 +19,44 @@ from app.infrastructure.database.repositories.caixa_repository import CaixaRepos
 from .dto import AbrirSessaoRequest, FecharSessaoRequest, SessaoCaixaDTO
 
 
+async def _auto_fechar_sessao(sessao: SessaoCaixa, repo: "CaixaRepository") -> None:
+    """Fecha automaticamente sessão de dia anterior calculando todos os totais."""
+    try:
+        totais = await repo.calcular_totais_sessao(sessao.id)
+    except Exception:
+        totais = {
+            "quantidade_vendas": 0, "total_vendas_bruto": 0, "total_descontos": 0,
+            "total_liquido": 0, "total_dinheiro": 0, "total_pix": 0,
+            "total_cartao_debito": 0, "total_cartao_credito": 0, "total_outros": 0,
+        }
+
+    saldo_sistema = (
+        float(sessao.saldo_abertura)
+        + totais["total_dinheiro"]
+        + float(sessao.total_suprimentos or 0)
+        - float(sessao.total_sangrias or 0)
+    )
+
+    sessao.status = StatusSessaoCaixa.FECHADA
+    sessao.data_fechamento = datetime.now(timezone.utc)
+    sessao.observacao_fechamento = "Fechamento automático por virada de dia."
+    sessao.saldo_informado_fechamento = None  # não houve contagem manual
+    sessao.saldo_sistema_fechamento = saldo_sistema
+    sessao.diferenca_fechamento = None  # sem contagem → sem diferença calculada
+    sessao.total_vendas_bruto = totais["total_vendas_bruto"]
+    sessao.total_descontos = totais["total_descontos"]
+    sessao.total_liquido = totais["total_liquido"]
+    sessao.total_dinheiro = totais["total_dinheiro"]
+    sessao.total_pix = totais["total_pix"]
+    sessao.total_cartao_debito = totais["total_cartao_debito"]
+    sessao.total_cartao_credito = totais["total_cartao_credito"]
+    sessao.total_outros = totais["total_outros"]
+    sessao.quantidade_vendas = totais["quantidade_vendas"]
+    if totais["quantidade_vendas"] > 0:
+        sessao.ticket_medio = totais["total_liquido"] / totais["quantidade_vendas"]
+    await repo.save(sessao)
+
+
 def _to_dto(sessao: SessaoCaixa) -> SessaoCaixaDTO:
     def _dec(value) -> Decimal:
         return (
@@ -81,11 +119,8 @@ class AbrirSessaoUseCase:
             if data_abertura.tzinfo is None:
                 data_abertura = data_abertura.replace(tzinfo=timezone.utc)
             if data_abertura.date() < date.today():
-                # Sessão de dia anterior — fecha automaticamente
-                sessao_existente.status = StatusSessaoCaixa.FECHADA
-                sessao_existente.data_fechamento = datetime.now(timezone.utc)
-                sessao_existente.observacao_fechamento = "Sessão fechada automaticamente — início de novo dia."
-                await self._repo.save(sessao_existente)
+                # Sessão de dia anterior — fecha automaticamente com cálculo de totais
+                await _auto_fechar_sessao(sessao_existente, self._repo)
             else:
                 raise ConflictError("Caixa já possui uma sessão aberta.")
 
@@ -121,16 +156,13 @@ class GetSessaoAtivaUseCase:
         sessao = await self._repo.get_sessao_ativa(caixa_id, empresa_id)
         if not sessao:
             raise NotFoundError("Nenhuma sessão aberta para este caixa.")
-        # Fecha automaticamente sess\u00f5es de dias anteriores
+        # Fecha automaticamente sessões de dias anteriores com cálculo de totais
         data_abertura = sessao.data_abertura
         if data_abertura.tzinfo is None:
             data_abertura = data_abertura.replace(tzinfo=timezone.utc)
         if data_abertura.date() < date.today():
-            sessao.status = StatusSessaoCaixa.FECHADA
-            sessao.data_fechamento = datetime.now(timezone.utc)
-            sessao.observacao_fechamento = "Sess\u00e3o fechada automaticamente \u2014 in\u00edcio de novo dia."
-            await self._repo.save(sessao)
-            raise NotFoundError("Nenhuma sess\u00e3o aberta para este caixa.")
+            await _auto_fechar_sessao(sessao, self._repo)
+            raise NotFoundError("Nenhuma sessão aberta para este caixa.")
         return _to_dto(sessao)
 
 

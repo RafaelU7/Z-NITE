@@ -9,9 +9,21 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
+function isHoje(dataIso: string): boolean {
+  const d = new Date(dataIso)
+  const hoje = new Date()
+  return (
+    d.getFullYear() === hoje.getFullYear() &&
+    d.getMonth() === hoje.getMonth() &&
+    d.getDate() === hoje.getDate()
+  )
+}
+
 export function RequireCaixa({ children }: { children: ReactNode }) {
   const sessaoCaixa = usePDVStore((s) => s.sessaoCaixa)
   if (!sessaoCaixa || sessaoCaixa.status !== 'aberta') return <Navigate to="/caixa" replace />
+  // Bloqueia PDV se a sessão for de dia anterior (será auto-encerrada ao abrir /caixa)
+  if (!isHoje(sessaoCaixa.data_abertura)) return <Navigate to="/caixa" replace />
   return <>{children}</>
 }
 

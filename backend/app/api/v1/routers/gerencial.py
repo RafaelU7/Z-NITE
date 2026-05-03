@@ -25,7 +25,7 @@ import httpx
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import cast, Date, func, select
+from sqlalchemy import cast, Date, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -1728,7 +1728,7 @@ async def relatorio_diario(
         for row in pag_r.all()
     ]
 
-    # Sessões abertas neste dia
+    # Sessões do dia (abertas OU fechadas nesta data)
     sess_r = await session.execute(
         select(SessaoCaixa)
         .options(
@@ -1737,7 +1737,10 @@ async def relatorio_diario(
         )
         .where(
             SessaoCaixa.empresa_id == empresa_id,
-            cast(SessaoCaixa.data_abertura, Date) == ref_date,
+            or_(
+                cast(SessaoCaixa.data_abertura, Date) == ref_date,
+                cast(SessaoCaixa.data_fechamento, Date) == ref_date,
+            ),
         )
         .order_by(SessaoCaixa.data_abertura.desc())
     )

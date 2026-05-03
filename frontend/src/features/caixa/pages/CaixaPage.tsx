@@ -222,7 +222,7 @@ export function CaixaPage() {
   const { sessaoCaixa, setSessaoCaixa } = usePDVStore()
   const navigate = useNavigate()
   const [sessaoAberta, setSessaoAberta] = useState<SessaoCaixaDTO | null>(sessaoCaixa)
-  const [loadingSessao, setLoadingSessao] = useState(TEM_CAIXA_ID_CONFIGURADO && !sessaoCaixa)
+  const [loadingSessao, setLoadingSessao] = useState(!!(sessaoCaixa?.caixa_id || CAIXA_ID_DEFAULT))
   const [erroSessao, setErroSessao] = useState('')
   const [modalFecharAberto, setModalFecharAberto] = useState(false)
   const [sessaoFechada, setSessaoFechada] = useState<SessaoCaixaDTO | null>(null)
@@ -231,21 +231,24 @@ export function CaixaPage() {
     let cancelled = false
 
     async function loadSessaoAtiva() {
-      if (!TEM_CAIXA_ID_CONFIGURADO || sessaoCaixa) {
+      // Sempre re-busca ao montar: obtém dados frescos e detecta sessão de dia anterior
+      const caixaId = sessaoCaixa?.caixa_id || CAIXA_ID_DEFAULT
+      if (!caixaId) {
         setLoadingSessao(false)
         return
       }
 
       try {
-        const sessao = await getSessaoAtiva(CAIXA_ID_DEFAULT)
+        const sessao = await getSessaoAtiva(caixaId)
         if (cancelled) return
         setSessaoAberta(sessao)
         setSessaoCaixa(sessao)
       } catch (err) {
         if (cancelled) return
-        if (err instanceof Error && err.message.includes('Nenhuma sessão aberta')) {
-          setErroSessao('')
-        } else {
+        // Limpa sessão obsoleta do store (auto-encerrada ou não encontrada)
+        setSessaoAberta(null)
+        setSessaoCaixa(null)
+        if (!(err instanceof Error && err.message.includes('Nenhuma sessão aberta'))) {
           setErroSessao(err instanceof Error ? err.message : 'Erro ao carregar sessão do caixa.')
         }
       } finally {
@@ -255,7 +258,7 @@ export function CaixaPage() {
 
     loadSessaoAtiva()
     return () => { cancelled = true }
-  }, [sessaoCaixa, setSessaoCaixa])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleAberto(sessao: SessaoCaixaDTO) {
     setSessaoAberta(sessao)
