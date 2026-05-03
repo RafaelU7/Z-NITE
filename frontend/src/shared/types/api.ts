@@ -354,6 +354,16 @@ export interface UsuarioCreateRequest {
   pin?: string
 }
 
+export interface UsuarioUpdateRequest {
+  nome: string
+  perfil: string
+  codigo_operador?: string
+}
+
+export interface UsuarioPinRequest {
+  pin: string
+}
+
 export interface SessaoListDTO {
   id: string
   caixa_id: string

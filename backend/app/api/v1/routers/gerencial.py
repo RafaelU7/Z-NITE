@@ -192,6 +192,16 @@ class UsuarioCreateRequest(BaseModel):
     pin: Optional[str] = Field(None, min_length=4, max_length=6)
 
 
+class UsuarioUpdateRequest(BaseModel):
+    nome: str = Field(..., min_length=2, max_length=150)
+    perfil: PerfilUsuario
+    codigo_operador: Optional[str] = Field(None, max_length=20)
+
+
+class UsuarioPinRequest(BaseModel):
+    pin: str = Field(..., min_length=4, max_length=6, pattern=r"^\d{4,6}$")
+
+
 class SessaoListDTO(BaseModel):
     id: UUID
     caixa_id: UUID
@@ -785,7 +795,118 @@ async def patch_usuario_status(
             detail="Você não pode desativar seu próprio usuário.",
         )
 
+    # Impede desativar o último gerente/admin ativo da empresa
+    if not ativo and _nivel(PerfilUsuario(usuario.perfil)) >= _nivel(PerfilUsuario.GERENTE):
+        ativos_r = await session.execute(
+            select(func.count(Usuario.id)).where(
+                Usuario.empresa_id == empresa_id,
+                Usuario.ativo.is_(True),
+                Usuario.id != usuario_id,
+                Usuario.perfil.in_([
+                    PerfilUsuario.GERENTE,
+                    PerfilUsuario.ADMIN,
+                    PerfilUsuario.SUPER_ADMIN,
+                ]),
+            )
+        )
+        if int(ativos_r.scalar() or 0) == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Não é possível desativar o único gerente ativo da empresa.",
+            )
+
     usuario.ativo = ativo
+    await session.flush()
+
+    return UsuarioListDTO(
+        id=usuario.id,
+        nome=usuario.nome,
+        email=usuario.email,
+        perfil=str(usuario.perfil),
+        codigo_operador=usuario.codigo_operador,
+        ativo=usuario.ativo,
+        ultimo_acesso=usuario.ultimo_acesso.isoformat() if usuario.ultimo_acesso else None,
+    )
+
+
+@router.patch("/usuarios/{usuario_id}", response_model=UsuarioListDTO)
+async def update_usuario(
+    usuario_id: UUID,
+    req: UsuarioUpdateRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> UsuarioListDTO:
+    empresa_id = gerente.empresa_id
+
+    r = await session.execute(
+        select(Usuario).where(
+            Usuario.id == usuario_id,
+            Usuario.empresa_id == empresa_id,
+        )
+    )
+    usuario = r.scalar_one_or_none()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+    # Não pode alterar perfil para >= ao do gerente logado
+    nivel_gerente = _nivel(PerfilUsuario(gerente.perfil))
+    if _nivel(req.perfil) >= nivel_gerente:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Você não pode definir perfil igual ou superior ao seu.",
+        )
+
+    # Unicidade do código de operador (ignora o próprio usuário)
+    if req.codigo_operador:
+        dup = await session.execute(
+            select(Usuario).where(
+                Usuario.empresa_id == empresa_id,
+                Usuario.codigo_operador == req.codigo_operador,
+                Usuario.id != usuario_id,
+            )
+        )
+        if dup.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Código de operador já utilizado.",
+            )
+
+    usuario.nome = req.nome
+    usuario.perfil = req.perfil
+    usuario.codigo_operador = req.codigo_operador or None
+    await session.flush()
+
+    return UsuarioListDTO(
+        id=usuario.id,
+        nome=usuario.nome,
+        email=usuario.email,
+        perfil=str(usuario.perfil),
+        codigo_operador=usuario.codigo_operador,
+        ativo=usuario.ativo,
+        ultimo_acesso=usuario.ultimo_acesso.isoformat() if usuario.ultimo_acesso else None,
+    )
+
+
+@router.patch("/usuarios/{usuario_id}/pin", response_model=UsuarioListDTO)
+async def update_usuario_pin(
+    usuario_id: UUID,
+    req: UsuarioPinRequest,
+    gerente: Usuario = Depends(require_perfil(_MIN_PERFIL)),
+    session: AsyncSession = Depends(get_async_session),
+) -> UsuarioListDTO:
+    empresa_id = gerente.empresa_id
+
+    r = await session.execute(
+        select(Usuario).where(
+            Usuario.id == usuario_id,
+            Usuario.empresa_id == empresa_id,
+        )
+    )
+    usuario = r.scalar_one_or_none()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado.")
+
+    usuario.pin_hash = hash_pin(req.pin)
     await session.flush()
 
     return UsuarioListDTO(

@@ -12,6 +12,8 @@ import type {
   PerfilTributarioSimpleDTO,
   UsuarioListDTO,
   UsuarioCreateRequest,
+  UsuarioUpdateRequest,
+  UsuarioPinRequest,
   SessaoListDTO,
   RelatorioDiarioDTO,
   EANLookupResult,
@@ -83,6 +85,16 @@ export async function patchUsuarioStatus(id: string, ativo: boolean): Promise<Us
   const { data } = await api.patch<UsuarioListDTO>(`/gerencial/usuarios/${id}/status`, null, {
     params: { ativo },
   })
+  return data
+}
+
+export async function updateUsuario(id: string, req: UsuarioUpdateRequest): Promise<UsuarioListDTO> {
+  const { data } = await api.patch<UsuarioListDTO>(`/gerencial/usuarios/${id}`, req)
+  return data
+}
+
+export async function updateUsuarioPin(id: string, req: UsuarioPinRequest): Promise<UsuarioListDTO> {
+  const { data } = await api.patch<UsuarioListDTO>(`/gerencial/usuarios/${id}/pin`, req)
   return data
 }
 
