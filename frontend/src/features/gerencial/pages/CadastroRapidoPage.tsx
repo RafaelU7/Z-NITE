@@ -11,6 +11,32 @@ import type {
 import { Button } from '@/shared/ui/Button'
 import { formatCurrency } from '@/shared/utils/format'
 
+// ---------- helpers de input decimal ----------
+
+/** Normalisa entrada decimal: substitui vírgula por ponto, remove chars inválidos, um único ponto. */
+function filterDecimal(raw: string, allowNegative = false): string {
+  let v = raw.replace(',', '.')
+  if (allowNegative) {
+    const neg = v.startsWith('-')
+    v = v.replace(/-/g, '').replace(/[^0-9.]/g, '')
+    if (neg) v = '-' + v
+  } else {
+    v = v.replace(/[^0-9.]/g, '')
+  }
+  // garante só um ponto decimal
+  const pts = v.split('.')
+  if (pts.length > 2) v = pts[0] + '.' + pts.slice(1).join('')
+  return v
+}
+
+/** Converte string (com vírgula ou ponto) para number; retorna 0 se inválido. */
+function parseDecimal(s: string): number {
+  const n = parseFloat((s || '').replace(',', '.'))
+  return isNaN(n) ? 0 : n
+}
+
+// ----------------------------------------------
+
 type Feedback =
   | { type: 'success'; msg: string }
   | { type: 'warning'; msg: string }
@@ -36,7 +62,7 @@ const FORM_VAZIO: FormState = {
   marca: '',
   preco_venda: '',
   preco_custo: '',
-  estoque_inicial: '0',
+  estoque_inicial: '',
   unidade_id: '',
   perfil_tributario_id: '',
 }
@@ -115,7 +141,7 @@ export function CadastroRapidoPage() {
           marca: '',
           preco_venda: result.produto?.preco_venda.toString() ?? '',
           preco_custo: '',
-          estoque_inicial: '0',
+          estoque_inicial: '',
           unidade_id: result.produto?.unidade_id ?? '',
           perfil_tributario_id: result.produto?.perfil_tributario_id ?? '',
         })
@@ -157,11 +183,11 @@ export function CadastroRapidoPage() {
   function validar(): boolean {
     const novosErros: typeof erros = {}
     if (!form.descricao.trim()) novosErros.descricao = 'Nome obrigatório'
-    if (!form.preco_venda || parseFloat(form.preco_venda) <= 0)
-      novosErros.preco_venda = 'Preço de venda obrigatório e maior que zero'
-    if (form.preco_custo && parseFloat(form.preco_custo) < 0)
+    if (!form.preco_venda.trim() || parseDecimal(form.preco_venda) <= 0)
+      novosErros.preco_venda = 'Informe o preço de venda'
+    if (form.preco_custo.trim() && parseDecimal(form.preco_custo) < 0)
       novosErros.preco_custo = 'Preço de custo não pode ser negativo'
-    if (parseFloat(form.estoque_inicial || '0') < 0)
+    if (modo !== 'produto_existente' && parseDecimal(form.estoque_inicial) < 0)
       novosErros.estoque_inicial = 'Estoque não pode ser negativo'
     setErros(novosErros)
     return Object.keys(novosErros).length === 0
@@ -179,9 +205,9 @@ export function CadastroRapidoPage() {
         descricao: form.descricao.trim(),
         descricao_pdv: form.descricao_pdv.trim() || undefined,
         marca: form.marca.trim() || undefined,
-        preco_venda: parseFloat(form.preco_venda),
-        preco_custo: form.preco_custo ? parseFloat(form.preco_custo) : undefined,
-        estoque_inicial: parseFloat(form.estoque_inicial || '0'),
+        preco_venda: parseDecimal(form.preco_venda),
+        preco_custo: form.preco_custo.trim() ? parseDecimal(form.preco_custo) : undefined,
+        estoque_inicial: parseDecimal(form.estoque_inicial),
         unidade_id: form.unidade_id || undefined,
         perfil_tributario_id: form.perfil_tributario_id || undefined,
       }
@@ -210,8 +236,8 @@ export function CadastroRapidoPage() {
     setSalvando(true)
     setFeedback(null)
     try {
-      const novoPreco = parseFloat(form.preco_venda)
-      const ajuste = parseFloat(form.estoque_inicial || '0')
+      const novoPreco = parseDecimal(form.preco_venda)
+      const ajuste = parseDecimal(form.estoque_inicial)
 
       await patchProduto(produtoExistente.id, { preco_venda: novoPreco })
 
@@ -372,11 +398,11 @@ export function CadastroRapidoPage() {
               </label>
               <input
                 ref={precoRef}
-                type="number"
-                step="0.01"
-                min="0.01"
+                type="text"
+                inputMode="decimal"
                 value={form.preco_venda}
-                onChange={(e) => field('preco_venda', e.target.value)}
+                onChange={(e) => field('preco_venda', filterDecimal(e.target.value))}
+                onFocus={(e) => e.currentTarget.select()}
                 onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
                 disabled={salvando}
                 placeholder="0,00"
@@ -391,11 +417,11 @@ export function CadastroRapidoPage() {
                 Preço de custo (R$)
               </label>
               <input
-                type="number"
-                step="0.01"
-                min="0"
+                type="text"
+                inputMode="decimal"
                 value={form.preco_custo}
-                onChange={(e) => field('preco_custo', e.target.value)}
+                onChange={(e) => field('preco_custo', filterDecimal(e.target.value))}
+                onFocus={(e) => e.currentTarget.select()}
                 onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
                 disabled={salvando}
                 placeholder="0,00"
@@ -415,14 +441,16 @@ export function CadastroRapidoPage() {
                 : 'Estoque inicial'}
             </label>
             <input
-              type="number"
-              step="1"
-              min={modo === 'produto_existente' ? undefined : '0'}
+              type="text"
+              inputMode="decimal"
               value={form.estoque_inicial}
-              onChange={(e) => field('estoque_inicial', e.target.value)}
+              onChange={(e) =>
+                field('estoque_inicial', filterDecimal(e.target.value, modo === 'produto_existente'))
+              }
+              onFocus={(e) => e.currentTarget.select()}
               onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
               disabled={salvando}
-              placeholder="0"
+              placeholder={modo === 'produto_existente' ? '+10 ou -5' : '0'}
               className="w-full rounded-lg border border-border bg-bg-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none disabled:opacity-50"
             />
             {erros.estoque_inicial && (
