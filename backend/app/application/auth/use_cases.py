@@ -53,6 +53,9 @@ class LoginUseCase:
         if user is None or not verify_password(request.senha, user.senha_hash):
             raise AuthenticationError("Credenciais inválidas")
 
+        if not user.ativo:
+            raise AuthenticationError("Credenciais inválidas")
+
         await self._repo.update_ultimo_acesso(user.id)
 
         access_token, _ = create_access_token(user)
@@ -78,6 +81,9 @@ class PinLoginUseCase:
 
         if user is None or user.pin_hash is None or not verify_pin(request.pin, user.pin_hash):
             raise AuthenticationError("Código de operador ou PIN inválido")
+
+        if not user.ativo:
+            raise AuthenticationError("Usuário inativo")
 
         await self._repo.update_ultimo_acesso(user.id)
 
