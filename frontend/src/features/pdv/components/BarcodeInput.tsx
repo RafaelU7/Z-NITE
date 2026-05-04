@@ -44,14 +44,14 @@ export function BarcodeInput({
             : disabled
               ? 'border-pdv-border/30 bg-pdv-surface/40 opacity-40'
               : value
-                ? 'border-pdv-fiscal/70 bg-[#0A1E26] shadow-[0_0_0_3px_rgba(50,200,91,0.12),0_4px_20px_rgba(50,200,91,0.06)]'
-                : 'border-pdv-border/80 bg-[#0A1E26] focus-within:border-pdv-fiscal/70 focus-within:shadow-[0_0_0_3px_rgba(50,200,91,0.12),0_4px_20px_rgba(50,200,91,0.06)]',
+                ? 'border-pdv-fiscal/80 bg-[#081820] shadow-[0_0_0_3px_rgba(50,200,91,0.18),0_0_32px_rgba(50,200,91,0.10)]'
+                : 'border-pdv-border/80 bg-[#081820] focus-within:border-pdv-fiscal/80 focus-within:shadow-[0_0_0_3px_rgba(50,200,91,0.18),0_0_32px_rgba(50,200,91,0.10)]',
         )}
       >
         {loading ? (
           <Loader2 size={22} className="shrink-0 animate-spin text-pdv-fiscal" />
         ) : (
-          <Search size={22} className="shrink-0 text-pdv-fiscal" />
+          <Search size={24} className="shrink-0 text-pdv-fiscal" />
         )}
 
         <input

@@ -125,7 +125,7 @@ export function PDVPage() {
   const itemSelecionado = vendaAtual?.itens.find((i) => i.id === itemSelecionadoId) ?? null
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden" style={{ background: 'radial-gradient(ellipse at 35% 48%, #0d2c38 0%, #0a1e26 65%)' }}>
+    <div className="flex h-screen flex-col overflow-hidden" style={{ background: 'radial-gradient(ellipse at 38% 45%, #0f3444 0%, #0a2030 45%, #07151d 100%)' }}>
       {/* Barra de status */}
       <StatusBarPDV sessao={sessaoCaixa} venda={vendaAtual ?? null} modoEmissao={modoEmissaoSelecionado} />
 
@@ -167,7 +167,7 @@ export function PDVPage() {
             <button
               onClick={() => void novaVenda()}
               disabled={loadingAcao && !vendaAtual}
-              className="flex items-center gap-2 rounded-xl bg-pdv-fiscal hover:bg-pdv-fiscal-dk px-4 py-2 text-sm font-bold text-white transition-colors disabled:opacity-50 shadow-md shadow-pdv-fiscal/20"
+              className="flex items-center gap-2 rounded-xl bg-gradient-to-b from-pdv-fiscal to-pdv-fiscal-dk hover:from-pdv-fiscal-dk hover:to-pdv-fiscal-dk px-4 py-2 text-sm font-bold text-white transition-all disabled:opacity-50 shadow-lg shadow-pdv-fiscal/25"
             >
               <Plus size={13} />
               Nova Venda
@@ -225,9 +225,9 @@ export function PDVPage() {
         </div>
 
         {/* ── COLUNA DIREITA: Resumo + Pagamento ── */}
-        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-pdv-border/60 xl:w-96" style={{ background: 'linear-gradient(180deg, #0c2430 0%, #0e2836 100%)' }}>
+        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-pdv-border/80 xl:w-96" style={{ background: 'linear-gradient(180deg, #0b2231 0%, #0d2538 60%, #091c29 100%)' }}>
           {/* Header da coluna direita */}
-          <div className="flex items-center gap-2 border-b border-pdv-border/60 px-4 py-3" style={{ background: 'rgba(10,20,28,0.5)' }}>
+          <div className="flex items-center gap-2 border-b border-pdv-border/70 px-4 py-3" style={{ background: 'rgba(8,16,22,0.70)' }}>
             <CreditCard size={15} className="text-pdv-muted" />
             <span className="text-sm font-semibold text-slate-200">Pagamento</span>
             <div className="flex-1" />
