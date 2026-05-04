@@ -64,16 +64,16 @@ const TIPO_LABEL: Record<string, string> = {
 }
 
 const TIPO_COR: Record<string, string> = {
-  entrada_compra: 'text-green-400',
-  saida_venda: 'text-red-400',
-  ajuste_positivo: 'text-green-400',
-  ajuste_negativo: 'text-red-400',
-  inventario: 'text-yellow-400',
-  entrada_devolucao_cliente: 'text-green-400',
-  saida_devolucao_fornecedor: 'text-red-400',
-  entrada_transferencia: 'text-blue-400',
-  saida_transferencia: 'text-blue-400',
-  perda: 'text-red-400',
+  entrada_compra: 'text-success-text',
+  saida_venda: 'text-danger-text',
+  ajuste_positivo: 'text-success-text',
+  ajuste_negativo: 'text-danger-text',
+  inventario: 'text-warning-text',
+  entrada_devolucao_cliente: 'text-success-text',
+  saida_devolucao_fornecedor: 'text-danger-text',
+  entrada_transferencia: 'text-info-text',
+  saida_transferencia: 'text-info-text',
+  perda: 'text-danger-text',
 }
 
 // ---------------------------------------------------------------------------
@@ -115,7 +115,7 @@ function ModalEntrada({ produto, onClose, onSaved }: ModalEntradaProps) {
       <div className="bg-bg-surface border border-border rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-text-primary font-semibold text-lg flex items-center gap-2">
-            <ArrowDownToLine size={18} className="text-green-400" />
+            <ArrowDownToLine size={18} className="text-success-text" />
             Entrada de estoque
           </h2>
           <button onClick={onClose} className="text-text-muted hover:text-text-primary transition-colors">
@@ -252,7 +252,7 @@ function ModalInventario({ produto, onClose, onSaved }: ModalInventarioProps) {
               className="w-full bg-bg-base border border-border rounded-lg px-3 py-2 text-text-primary text-sm focus:outline-none focus:ring-1 focus:ring-accent"
             />
             {diferenca !== null && (
-              <p className={`text-xs mt-1 ${diferenca > 0 ? 'text-green-400' : diferenca < 0 ? 'text-red-400' : 'text-text-muted'}`}>
+              <p className={`text-xs mt-1 ${diferenca > 0 ? 'text-success-text' : diferenca < 0 ? 'text-danger-text' : 'text-text-muted'}`}>
                 Diferença: {diferenca > 0 ? '+' : ''}{fmtNum(diferenca)} {produto.unidade}
               </p>
             )}
@@ -533,7 +533,7 @@ export function EstoquePage() {
                     {item.codigo_barras ?? '—'}
                   </td>
                   <td className="px-4 py-3 text-center text-text-secondary">{item.unidade ?? '—'}</td>
-                  <td className={`px-4 py-3 text-right font-semibold ${item.saldo_atual <= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                  <td className={`px-4 py-3 text-right font-semibold ${item.saldo_atual <= 0 ? 'text-danger-text' : 'text-success-text'}`}>
                     {fmtNum(item.saldo_atual)}
                   </td>
                   <td className="px-4 py-3 text-right text-text-secondary hidden md:table-cell">
@@ -549,7 +549,7 @@ export function EstoquePage() {
                       <button
                         onClick={() => setModalEntrada(item)}
                         title="Entrada de estoque"
-                        className="p-1.5 rounded-lg hover:bg-green-900/30 text-green-400 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-success/15 text-success-text transition-colors"
                       >
                         <ArrowDownToLine size={15} />
                       </button>

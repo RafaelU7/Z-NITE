@@ -14,7 +14,7 @@ html {
 }
 
 body {
-  background-color: #F4F7FB;
+  background-color: #F3F6FA;
   color: #0F172A;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow: hidden; /* PDV é full-screen */
@@ -24,7 +24,7 @@ body {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #F0F4F9 inset !important;
   -webkit-text-fill-color: #0F172A !important;
   caret-color: #0F172A;
 }
@@ -38,11 +38,11 @@ input:-webkit-autofill:focus {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D9E2EC;
+  background: #C8D4E2;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #B8C8D8;
+  background: #A8B8CC;
 }
 
 /* Seleção de texto */

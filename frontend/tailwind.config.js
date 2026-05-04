@@ -6,19 +6,19 @@ export default {
       colors: {
         // ── Backgrounds (light theme) ──
         bg: {
-          base: '#F4F7FB',       // página principal
-          surface: '#FFFFFF',    // cards / painéis
-          'surface-2': '#F8FAFC', // inputs / linhas alternadas
-          'surface-3': '#EEF2FF', // hover sutil
+          base: '#F3F6FA',       // página principal — cinza-azulado suave
+          surface: '#FFFFFF',    // cards / painéis / modais
+          'surface-2': '#F0F4F9', // inputs / seções secundárias
+          'surface-3': '#E4EBF4', // hover sutil / kbd chips
         },
         border: {
-          DEFAULT: '#D9E2EC',
-          strong: '#B8C8D8',
+          DEFAULT: '#D1DBE8',    // borda padrão — mais visível que antes
+          strong: '#A8B8CC',     // separadores fortes
         },
         text: {
           primary: '#0F172A',
           secondary: '#475569',
-          muted: '#94A3B8',
+          muted: '#64748B',      // upgrade: era #94A3B8 (baixo contraste)
         },
         // ── Marca ──
         accent: {

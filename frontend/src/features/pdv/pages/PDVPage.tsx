@@ -154,7 +154,7 @@ export function PDVPage() {
         {/* ── COLUNA ESQUERDA: Barcode + Itens ── */}
         <div className="flex flex-1 flex-col overflow-hidden">
           {/* Barcode input */}
-          <div className="border-b border-border bg-bg-surface p-4 pb-8">
+          <div className="border-b border-border bg-bg-surface p-4">
             <BarcodeInput
               onScan={lerBarcode}
               loading={loadingBarcode}
@@ -231,10 +231,10 @@ export function PDVPage() {
         </div>
 
         {/* ── COLUNA DIREITA: Resumo + Pagamento ── */}
-        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-border bg-bg-surface xl:w-96">
+        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-border bg-bg-surface-2 xl:w-96">
           {/* Header da coluna direita */}
-          <div className="flex items-center gap-2 border-b border-border px-4 py-3">
-            <CreditCard size={15} className="text-text-muted" />
+          <div className="flex items-center gap-2 border-b border-border bg-bg-surface px-4 py-3">
+            <CreditCard size={15} className="text-text-secondary" />
             <span className="text-sm font-semibold text-text-primary">Pagamento</span>
             <div className="flex-1" />
             <button

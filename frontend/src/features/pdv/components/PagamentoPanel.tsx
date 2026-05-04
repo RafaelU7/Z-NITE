@@ -111,10 +111,10 @@ export function PagamentoPanel({
       {/* Banner de modo ativo — impossível de ignorar */}
       <div
         className={clsx(
-          'flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 font-bold uppercase tracking-wider text-sm',
+          'flex items-center justify-center gap-2 rounded-xl border-2 px-3 py-2.5 font-bold uppercase tracking-wider text-sm',
           modoEmissaoSelecionado === 'FISCAL'
-            ? 'bg-info/20 border-info/50 text-info-text'
-            : 'bg-warning/20 border-warning/50 text-warning-text',
+            ? 'bg-info/15 border-info/50 text-info-text'
+            : 'bg-warning/15 border-warning/50 text-warning-text',
         )}
       >
         {modoEmissaoSelecionado === 'FISCAL' ? <Receipt size={16} /> : <FileText size={16} />}
@@ -210,7 +210,7 @@ export function PagamentoPanel({
               }}
               placeholder="0,00"
               autoFocus
-              className="flex-1 rounded-lg border border-border bg-bg-surface px-3 py-2.5 font-mono text-lg text-text-primary placeholder-text-muted outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/30"
+              className="flex-1 rounded-lg border-2 border-border bg-bg-surface px-3 py-2.5 font-mono text-lg text-text-primary placeholder-text-muted outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               inputMode="decimal"
             />
             <Button onClick={handleConfirmarPagamento} loading={loadingPagamento} size="md">
@@ -252,14 +252,14 @@ export function PagamentoPanel({
         {/* F4 — Venda Fiscal (NFC-e) */}
         <Button
           size="xl"
+          variant="fiscal"
           fullWidth
           onClick={onFinalizarFiscal}
           disabled={!podeFinalizar}
           loading={loadingFinalizar}
           kbd="F4"
           className={clsx(
-            modoEmissaoSelecionado === 'FISCAL' && 'ring-2 ring-info/50',
-            podeFinalizar && 'animate-pulse-once',
+            modoEmissaoSelecionado === 'FISCAL' && 'ring-2 ring-info/40 ring-offset-1',
           )}
         >
           {loadingFinalizar ? (
@@ -274,12 +274,12 @@ export function PagamentoPanel({
         <Button
           size="lg"
           fullWidth
-          variant="secondary"
+          variant="warning"
           onClick={onFinalizarGerencial}
           disabled={!podeFinalizar}
           loading={loadingFinalizar}
           kbd="F2"
-          className={clsx(modoEmissaoSelecionado === 'GERENCIAL' && 'ring-2 ring-warning/40')}
+          className={clsx(modoEmissaoSelecionado === 'GERENCIAL' && 'ring-2 ring-warning/40 ring-offset-1')}
         >
           {loadingFinalizar ? (
             <Loader2 size={16} className="animate-spin" />

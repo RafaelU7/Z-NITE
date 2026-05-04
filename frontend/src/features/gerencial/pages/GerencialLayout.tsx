@@ -30,7 +30,7 @@ export function GerencialLayout() {
   return (
     <div className="flex h-screen flex-col bg-bg-base">
       {/* ── Top bar ── */}
-      <header className="flex items-center justify-between border-b border-border bg-white px-4 py-2.5 shadow-sm shrink-0">
+      <header className="flex items-center justify-between border-b border-border bg-white px-4 py-2.5 shadow-sm shrink-0 z-10">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500/15 text-xs font-bold text-amber-700 ring-1 ring-amber-500/30">
             {getInitials(empresaNome)}
@@ -39,14 +39,14 @@ export function GerencialLayout() {
             <span className="font-bold text-sm text-text-primary">{empresaNome}</span>
             <div className="flex items-center gap-1.5">
               <span className="text-[10px] text-text-muted tracking-wide uppercase">Zênite PDV</span>
-              <span className="rounded bg-amber-100 border border-amber-300 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700">
+              <span className="rounded-md bg-amber-100 border border-amber-300 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700">
                 Retaguarda
               </span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-text-secondary">{user?.nome}</span>
+          <span className="text-xs text-text-secondary font-medium">{user?.nome}</span>
           <button
             onClick={handleLogout}
             className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-text-secondary border border-border hover:bg-bg-surface-2 transition-colors"

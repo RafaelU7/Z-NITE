@@ -16,7 +16,7 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
   const pago = totalPago > 0
 
   return (
-    <div className="flex flex-col gap-0.5 rounded-xl border border-border bg-bg-surface-2 p-4">
+    <div className="flex flex-col gap-0.5 rounded-xl border border-border bg-bg-surface p-4 shadow-sm">
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Modo da venda</p>
@@ -57,9 +57,9 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
         </span>
       </div>
 
-      <div className="mt-2 flex items-center justify-between rounded-lg border border-border/60 bg-bg-surface px-3 py-2">
-        <span className="text-xs font-medium uppercase tracking-wider text-text-muted">Valor restante</span>
-        <span className={clsx('font-mono text-base font-semibold', restante > 0 ? 'text-warning-text' : 'text-success-text')}>
+      <div className="mt-2 flex items-center justify-between rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5">
+        <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">Valor restante</span>
+        <span className={clsx('font-mono text-lg font-bold', restante > 0 ? 'text-warning-text' : 'text-success-text')}>
           {formatCurrency(restante)}
         </span>
       </div>

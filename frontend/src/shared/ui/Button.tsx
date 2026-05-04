@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import type { ButtonHTMLAttributes } from 'react'
 
-type Variant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'success'
+type Variant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'success' | 'fiscal' | 'warning'
 type Size = 'sm' | 'md' | 'lg' | 'xl'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -23,6 +23,12 @@ const variants: Record<Variant, string> = {
     'bg-transparent hover:bg-bg-surface-2 text-text-secondary hover:text-text-primary border border-transparent',
   success:
     'bg-success/10 hover:bg-success/20 text-success-text border border-success/30',
+  // Finalização de venda fiscal — azul sólido
+  fiscal:
+    'bg-info hover:bg-info-text text-white border border-info/50 shadow-lg shadow-info/25',
+  // Finalização de pedido gerencial — âmbar sólido
+  warning:
+    'bg-warning hover:bg-warning-text text-white border border-warning/50 shadow-lg shadow-warning/25',
 }
 
 const sizes: Record<Size, string> = {
