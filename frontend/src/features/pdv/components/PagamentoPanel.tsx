@@ -29,36 +29,36 @@ const FORMAS: FormaInfo[] = [
     key: '01',
     label: 'Dinheiro',
     icon: <Banknote size={16} />,
-    color: 'border-emerald-800/50 bg-emerald-500/8 hover:bg-emerald-500/15 text-emerald-400',
-    activeColor: 'border-emerald-500/60 bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/30',
+    color: 'border-[#1C4D2E]/80 bg-[#0F2E1A] hover:bg-[#162F1F] text-[#4CD137]',
+    activeColor: 'border-pdv-fiscal/60 bg-pdv-fiscal/15 text-pdv-fiscal ring-1 ring-pdv-fiscal/25',
   },
   {
     key: '17',
     label: 'Pix',
     icon: <QrCode size={16} />,
-    color: 'border-blue-800/50 bg-blue-500/8 hover:bg-blue-500/15 text-blue-400',
-    activeColor: 'border-blue-500/60 bg-blue-500/20 text-blue-300 ring-1 ring-blue-500/30',
+    color: 'border-[#1A3D6B]/80 bg-[#0D2240] hover:bg-[#112645] text-[#4A8FE0]',
+    activeColor: 'border-[#2C7BE5]/60 bg-[#2C7BE5]/15 text-[#5B9AF0] ring-1 ring-[#2C7BE5]/25',
   },
   {
     key: '04',
     label: 'Débito',
     icon: <CreditCard size={16} />,
-    color: 'border-violet-800/50 bg-violet-500/8 hover:bg-violet-500/15 text-violet-400',
-    activeColor: 'border-violet-500/60 bg-violet-500/20 text-violet-300 ring-1 ring-violet-500/30',
+    color: 'border-[#1A3050]/80 bg-[#0D1E35] hover:bg-[#111F38] text-[#6B9AC4]',
+    activeColor: 'border-[#274C77]/70 bg-[#274C77]/20 text-[#90B8D8] ring-1 ring-[#274C77]/40',
   },
   {
     key: '03',
     label: 'Crédito',
     icon: <CreditCard size={16} />,
-    color: 'border-amber-800/50 bg-amber-500/8 hover:bg-amber-500/15 text-amber-400',
-    activeColor: 'border-amber-500/60 bg-amber-500/20 text-amber-300 ring-1 ring-amber-500/30',
+    color: 'border-[#4D3D0E]/80 bg-[#2A2006] hover:bg-[#2F2508] text-[#D4A62A]',
+    activeColor: 'border-pdv-gerencial/60 bg-pdv-gerencial/15 text-pdv-gerencial ring-1 ring-pdv-gerencial/25',
   },
   {
     key: '99',
     label: 'Outros',
     icon: <MoreHorizontal size={16} />,
-    color: 'border-pdv-border bg-pdv-surface-2/50 hover:bg-pdv-surface-2 text-slate-500',
-    activeColor: 'border-slate-500/50 bg-slate-700 text-slate-300 ring-1 ring-slate-500/30',
+    color: 'border-pdv-border bg-pdv-surface-2/50 hover:bg-pdv-surface-2 text-pdv-muted',
+    activeColor: 'border-pdv-muted/50 bg-pdv-surface-2 text-pdv-text ring-1 ring-pdv-muted/25',
   },
 ]
 
@@ -114,6 +114,19 @@ export function PagamentoPanel({
   return (
     <div className="flex flex-col gap-3">
 
+      {/* ══ BANNER DE MODO ══ */}
+      <div
+        className={clsx(
+          'flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-bold uppercase tracking-widest text-sm',
+          isFiscal
+            ? 'bg-pdv-fiscal text-white shadow-lg shadow-pdv-fiscal/25'
+            : 'bg-pdv-gerencial text-white shadow-lg shadow-pdv-gerencial/25',
+        )}
+      >
+        {isFiscal ? <Receipt size={15} /> : <FileText size={15} />}
+        {isFiscal ? 'Modo Fiscal — NFC-e' : 'Modo Gerencial'}
+      </div>
+
       {/* ══ TIPO DE FINALIZAÇÃO ══ */}
       <div className="rounded-xl border border-pdv-border bg-pdv-surface/60 p-3">
         <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600">
@@ -126,8 +139,8 @@ export function PagamentoPanel({
             className={clsx(
               'rounded-lg border px-3 py-2.5 text-left transition-all',
               isFiscal
-                ? 'border-emerald-600/60 bg-emerald-500/15 text-emerald-300 shadow-sm shadow-emerald-500/10'
-                : 'border-pdv-border bg-pdv-bg/50 hover:bg-pdv-surface text-slate-500 hover:text-slate-400',
+                ? 'border-pdv-fiscal/60 bg-pdv-fiscal/15 text-pdv-fiscal shadow-sm shadow-pdv-fiscal/10'
+                : 'border-pdv-border bg-pdv-bg/50 hover:bg-pdv-surface text-pdv-muted hover:text-pdv-text',
             )}
           >
             <div className="flex items-center gap-2 text-sm font-bold">
@@ -142,8 +155,8 @@ export function PagamentoPanel({
             className={clsx(
               'rounded-lg border px-3 py-2.5 text-left transition-all',
               !isFiscal
-                ? 'border-amber-600/60 bg-amber-500/15 text-amber-300 shadow-sm shadow-amber-500/10'
-                : 'border-pdv-border bg-pdv-bg/50 hover:bg-pdv-surface text-slate-500 hover:text-slate-400',
+                ? 'border-pdv-gerencial/60 bg-pdv-gerencial/15 text-pdv-gerencial shadow-sm shadow-pdv-gerencial/10'
+                : 'border-pdv-border bg-pdv-bg/50 hover:bg-pdv-surface text-pdv-muted hover:text-pdv-text',
             )}
           >
             <div className="flex items-center gap-2 text-sm font-bold">
@@ -202,13 +215,13 @@ export function PagamentoPanel({
               }}
               placeholder="0,00"
               autoFocus
-              className="flex-1 rounded-lg border border-pdv-border-2 bg-pdv-bg px-3 py-2.5 font-mono text-xl font-bold text-slate-100 placeholder-slate-700 outline-none focus:border-emerald-600/60 focus:ring-1 focus:ring-emerald-600/30"
+              className="flex-1 rounded-lg border border-pdv-border-2 bg-pdv-bg px-3 py-2.5 font-mono text-xl font-bold text-slate-100 placeholder-slate-700 outline-none focus:border-pdv-fiscal/60 focus:ring-1 focus:ring-pdv-fiscal/30"
               inputMode="decimal"
             />
             <button
               onClick={handleConfirmarPagamento}
               disabled={loadingPagamento}
-              className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 font-semibold text-white transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg bg-pdv-fiscal hover:bg-pdv-fiscal-dk px-4 py-2 font-semibold text-white transition-colors disabled:opacity-50"
             >
               {loadingPagamento ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
               OK
@@ -232,7 +245,7 @@ export function PagamentoPanel({
                 className="flex items-center justify-between rounded-lg border border-pdv-border bg-pdv-surface px-3 py-2 text-sm"
               >
                 <span className="text-slate-500">{labelForma(p.forma_pagamento)}</span>
-                <span className="font-mono font-semibold text-emerald-400">
+                <span className="font-mono font-semibold text-pdv-fiscal">
                   + {formatCurrency(p.valor)}
                 </span>
               </li>
@@ -252,7 +265,7 @@ export function PagamentoPanel({
               className={clsx(
                 'flex w-full items-center justify-center gap-3 rounded-xl px-4 py-4 font-bold text-base transition-all duration-200',
                 podeFinalizar
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/40'
+                  ? 'bg-pdv-fiscal hover:bg-pdv-fiscal-dk text-white shadow-lg shadow-pdv-fiscal/30 hover:shadow-pdv-fiscal-dk/40'
                   : 'bg-pdv-surface border border-pdv-border text-slate-600 cursor-not-allowed',
               )}
             >

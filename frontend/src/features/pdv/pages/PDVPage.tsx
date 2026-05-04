@@ -138,7 +138,7 @@ export function PDVPage() {
           className={clsx(
             'fixed right-4 top-12 z-40 max-w-xs rounded-xl border px-4 py-3 text-sm font-medium shadow-xl',
             'animate-slide-in',
-            flash.type === 'success' && 'border-emerald-700/40 bg-emerald-500/10 text-emerald-300',
+            flash.type === 'success' && 'border-pdv-fiscal/40 bg-pdv-fiscal/10 text-pdv-fiscal',
             flash.type === 'error' && 'border-red-700/40 bg-red-500/10 text-red-300',
             flash.type === 'info' && 'border-blue-700/40 bg-blue-500/10 text-blue-300',
           )}
@@ -167,11 +167,11 @@ export function PDVPage() {
             <button
               onClick={() => void novaVenda()}
               disabled={loadingAcao && !vendaAtual}
-              className="flex items-center gap-1.5 rounded-lg border border-pdv-border bg-pdv-surface px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-pdv-surface-2 hover:text-slate-100 transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg bg-pdv-fiscal hover:bg-pdv-fiscal-dk px-3 py-1.5 text-xs font-semibold text-white transition-colors disabled:opacity-50 shadow-md shadow-pdv-fiscal/20"
             >
               <Plus size={13} />
               Nova Venda
-              <kbd className="rounded border border-pdv-border bg-pdv-bg px-1 font-mono text-[10px] text-slate-600">F6</kbd>
+              <kbd className="rounded border border-white/25 bg-black/20 px-1 font-mono text-[10px] text-white/80">F6</kbd>
             </button>
 
             {itemSelecionadoId && (

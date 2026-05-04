@@ -4,19 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── PDV dark-theme palette ──
+        // ── PDV dark-theme palette — teal-petróleo ──
         pdv: {
-          bg:          '#0D1B2A',   // fundo principal do PDV
-          surface:     '#112030',   // painéis / cards
-          'surface-2': '#162840',   // superfícies elevadas
-          border:      '#1E3352',   // borda padrão
-          'border-2':  '#243E62',   // borda mais visível
-          text:        '#E2E8F0',   // texto principal
-          muted:       '#64748B',   // texto secundário/muted
-          fiscal:      '#10B981',   // cor dominante modo FISCAL (emerald-500)
-          'fiscal-dk': '#059669',   // hover do fiscal (emerald-600)
-          gerencial:   '#F59E0B',   // cor dominante modo GERENCIAL (amber-500)
-          'gerencial-dk': '#D97706', // hover do gerencial
+          bg:            '#0A1E26',   // teal-petróleo — fundo principal
+          surface:       '#0D2530',   // painéis / cards
+          'surface-2':   '#112B38',   // superfícies elevadas
+          border:        '#193548',   // borda padrão
+          'border-2':    '#1D4260',   // borda mais visível
+          text:          '#F3F7FA',   // texto principal
+          muted:         '#8FA3B2',   // texto secundário/muted
+          fiscal:        '#32C85B',   // verde lime premium — modo FISCAL
+          'fiscal-dk':   '#28A44C',   // hover verde fiscal
+          teal:          '#19C7B5',   // teal accent
+          gerencial:     '#D4A62A',   // âmbar premium — modo GERENCIAL
+          'gerencial-dk': '#A97A14',  // hover âmbar gerencial
         },
         // ── Backgrounds (light theme — gerencial/admin) ──
         bg: {

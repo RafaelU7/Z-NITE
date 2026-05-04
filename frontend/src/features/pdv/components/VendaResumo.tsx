@@ -22,8 +22,8 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
       className={clsx(
         'flex flex-col gap-0.5 rounded-xl border p-4 transition-colors duration-300',
         isFiscal
-          ? 'border-emerald-800/50 bg-pdv-surface'
-          : 'border-amber-800/50 bg-pdv-surface',
+          ? 'border-pdv-fiscal/30 bg-pdv-surface'
+          : 'border-pdv-gerencial/30 bg-pdv-surface',
       )}
     >
       {/* ── Header do modo ── */}
@@ -38,8 +38,8 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
           className={clsx(
             'rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-wide shrink-0',
             isFiscal
-              ? 'border-emerald-700/50 bg-emerald-500/15 text-emerald-300'
-              : 'border-amber-700/50 bg-amber-500/15 text-amber-300',
+              ? 'border-pdv-fiscal/50 bg-pdv-fiscal/15 text-pdv-fiscal'
+              : 'border-pdv-gerencial/50 bg-pdv-gerencial/15 text-pdv-gerencial',
           )}
         >
           {isFiscal ? 'FISCAL' : 'GERENCIAL'}
@@ -71,14 +71,14 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
           'mt-2 flex items-center justify-between rounded-lg border px-3 py-2.5',
           restante > 0
             ? 'border-amber-700/40 bg-amber-500/10'
-            : 'border-emerald-700/40 bg-emerald-500/10',
+            : 'border-pdv-fiscal/30 bg-pdv-fiscal/10',
         )}
       >
         <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Valor restante</span>
         <span
           className={clsx(
             'font-mono text-xl font-black',
-            restante > 0 ? 'text-amber-400' : 'text-emerald-400',
+            restante > 0 ? 'text-amber-400' : 'text-pdv-fiscal',
           )}
         >
           {formatCurrency(restante)}
@@ -91,7 +91,7 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
           <ResumoRow
             label="Total pago"
             value={formatCurrency(totalPago)}
-            className="text-emerald-400"
+            className="text-pdv-fiscal"
           />
           {restante > 0 ? (
             <div className="flex items-center justify-between">
@@ -100,8 +100,8 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-emerald-400">Troco</span>
-              <span className="text-lg font-bold text-emerald-400">{formatCurrency(troco)}</span>
+              <span className="text-sm font-semibold text-pdv-fiscal">Troco</span>
+              <span className="text-lg font-bold text-pdv-fiscal">{formatCurrency(troco)}</span>
             </div>
           )}
         </>

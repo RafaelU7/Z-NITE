@@ -43,8 +43,8 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
       className={clsx(
         'flex items-center gap-3 border-b px-4 py-0 text-xs shrink-0 transition-colors duration-300',
         modoEmissao === 'FISCAL'
-          ? 'bg-slate-900 border-emerald-900/60'
-          : 'bg-slate-900 border-amber-900/60',
+          ? 'bg-[#081A22] border-pdv-fiscal/25'
+          : 'bg-[#081A22] border-pdv-gerencial/25',
       )}
     >
       {/* ── Branding / Empresa ── */}
@@ -62,8 +62,8 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
             className={clsx(
               'flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold uppercase tracking-widest shrink-0 text-[11px]',
               modoEmissao === 'FISCAL'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                : 'bg-amber-500/20 text-amber-300 border border-amber-500/30',
+                ? 'bg-pdv-fiscal/20 text-pdv-fiscal border border-pdv-fiscal/40'
+                : 'bg-pdv-gerencial/20 text-pdv-gerencial border border-pdv-gerencial/40',
             )}
           >
             {modoEmissao === 'FISCAL' ? <Receipt size={12} /> : <FileText size={12} />}
@@ -75,7 +75,7 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
 
       {/* ── Caixa ── */}
       <div className="flex items-center gap-1.5 shrink-0">
-        <div className={clsx('h-1.5 w-1.5 rounded-full', sessao ? 'bg-emerald-400' : 'bg-slate-600')} />
+        <div className={clsx('h-1.5 w-1.5 rounded-full', sessao ? 'bg-pdv-fiscal' : 'bg-slate-600')} />
         {sessao ? (
           <span className="text-slate-300">Caixa Aberto</span>
         ) : (
@@ -109,8 +109,8 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
               className={clsx(
                 'rounded px-1.5 py-0.5 font-mono font-semibold text-[11px]',
                 modoEmissao === 'FISCAL'
-                  ? 'bg-emerald-500/15 text-emerald-300'
-                  : 'bg-amber-500/15 text-amber-300',
+                  ? 'bg-pdv-fiscal/15 text-pdv-fiscal'
+                  : 'bg-pdv-gerencial/15 text-pdv-gerencial',
               )}
             >
               #{venda.numero_venda_local}
@@ -119,7 +119,7 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
               className={clsx(
                 'rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider',
                 venda.status === 'em_aberto'
-                  ? 'bg-emerald-500/15 text-emerald-400'
+                  ? 'bg-pdv-fiscal/15 text-pdv-fiscal'
                   : venda.status === 'concluida'
                     ? 'bg-blue-500/15 text-blue-300'
                     : 'bg-red-500/15 text-red-400',

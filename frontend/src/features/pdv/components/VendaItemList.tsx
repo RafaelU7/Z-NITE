@@ -64,7 +64,7 @@ export function VendaItemList({
                 'grid grid-cols-[2rem_1fr_5rem_5rem_6rem_2.5rem] cursor-pointer items-center gap-2 px-3 py-3',
                 'transition-colors duration-100',
                 isSelected
-                  ? 'bg-emerald-500/10 border-l-2 border-l-emerald-500'
+                  ? 'bg-pdv-fiscal/10 border-l-2 border-l-pdv-fiscal'
                   : 'hover:bg-pdv-surface/60',
               )}
             >

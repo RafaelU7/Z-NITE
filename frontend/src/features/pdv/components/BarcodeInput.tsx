@@ -51,7 +51,7 @@ export function BarcodeInput({
         {loading ? (
           <Loader2 size={22} className="shrink-0 animate-spin text-pdv-fiscal" />
         ) : (
-          <Search size={22} className="shrink-0 text-slate-500" />
+          <Search size={22} className="shrink-0 text-pdv-fiscal" />
         )}
 
         <input
@@ -78,7 +78,7 @@ export function BarcodeInput({
 
       {/* Último produto lido */}
       {lastProduct && !loading && (
-        <p className="absolute -bottom-5 left-4 text-xs text-emerald-400 animate-fade-in">
+          <p className="absolute -bottom-5 left-4 text-xs text-pdv-fiscal animate-fade-in">
           ✓ {lastProduct}
         </p>
       )}
