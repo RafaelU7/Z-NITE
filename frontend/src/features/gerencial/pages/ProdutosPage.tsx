@@ -288,7 +288,7 @@ function StatusBadge({ ativo }: { ativo: boolean }) {
   return (
     <span
       className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-        ativo ? 'bg-success/15 text-success-text' : 'bg-bg-surface-2 text-text-muted'
+        ativo ? 'bg-success/15 text-success-text' : 'bg-danger/15 text-danger-text'
       }`}
     >
       {ativo ? 'Ativo' : 'Inativo'}

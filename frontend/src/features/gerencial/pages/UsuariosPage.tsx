@@ -228,7 +228,7 @@ export function UsuariosPage() {
                     className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                       u.ativo
                         ? 'bg-success/15 text-success-text'
-                        : 'bg-bg-surface-2 text-text-muted'
+                        : 'bg-danger/15 text-danger-text'
                     }`}
                   >
                     {u.ativo ? 'Ativo' : 'Inativo'}

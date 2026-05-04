@@ -540,7 +540,7 @@ export function EstoquePage() {
                     {fmtMoeda(item.preco_venda)}
                   </td>
                   <td className="px-4 py-3 text-center hidden sm:table-cell">
-                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${item.ativo ? 'bg-green-900/40 text-green-400' : 'bg-zinc-700 text-text-muted'}`}>
+                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${item.ativo ? 'bg-success/15 text-success-text' : 'bg-danger/15 text-danger-text'}`}>
                       {item.ativo ? 'Ativo' : 'Inativo'}
                     </span>
                   </td>
