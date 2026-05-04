@@ -201,7 +201,7 @@ export function SetupWizard({ onConcluido, preview = false }: Props) {
                 onClick={() => setEtapa('gerente')}
                 disabled={!podeAvancarMercado}
               >
-                Próximo â€” Dados do gerente <ChevronRight size={16} />
+                Próximo — Dados do gerente <ChevronRight size={16} />
               </Button>
             </div>
           )}
@@ -210,7 +210,7 @@ export function SetupWizard({ onConcluido, preview = false }: Props) {
           {etapa === 'gerente' && (
             <div className="flex flex-col gap-5">
               <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-xs text-text-muted">
-                O gerente terá acesso Ã  <span className="font-semibold text-text-primary">Retaguarda</span> (produtos, estoque, relatórios).
+                O gerente terá acesso à <span className="font-semibold text-text-primary">Retaguarda</span> (produtos, estoque, relatórios).
                 Você poderá adicionar operadores de caixa depois.
               </div>
 
