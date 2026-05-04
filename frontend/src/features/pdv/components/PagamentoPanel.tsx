@@ -128,8 +128,8 @@ export function PagamentoPanel({
       </div>
 
       {/* ══ TIPO DE FINALIZAÇÃO ══ */}
-      <div className="rounded-xl border border-pdv-border bg-pdv-surface/60 p-3">
-        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600">
+      <div className="rounded-xl border border-pdv-border bg-pdv-surface/60 p-3 shadow-sm shadow-black/20">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
           Tipo de Finalização
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -170,7 +170,7 @@ export function PagamentoPanel({
 
       {/* ══ FORMA DE PAGAMENTO ══ */}
       <div>
-        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-600">
+        <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
           Forma de Pagamento
         </p>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
@@ -179,7 +179,7 @@ export function PagamentoPanel({
               key={f.key}
               onClick={() => handleSelecionarForma(f.key)}
               className={clsx(
-                'flex items-center gap-2 rounded-lg border px-2.5 py-2 text-sm font-medium transition-all',
+                'flex items-center gap-2 rounded-lg border px-2.5 py-2.5 text-sm font-medium transition-all',
                 'focus:outline-none',
                 formaSelecionada === f.key ? f.activeColor : f.color,
               )}
@@ -235,7 +235,7 @@ export function PagamentoPanel({
       {/* ══ PAGAMENTOS REGISTRADOS ══ */}
       {venda.pagamentos.length > 0 && (
         <div>
-          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-600">
+          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-400">
             Pagamentos
           </p>
           <ul className="flex flex-col gap-1">

@@ -125,7 +125,7 @@ export function PDVPage() {
   const itemSelecionado = vendaAtual?.itens.find((i) => i.id === itemSelecionadoId) ?? null
 
   return (
-    <div className="flex h-screen flex-col bg-pdv-bg overflow-hidden">
+    <div className="flex h-screen flex-col overflow-hidden" style={{ background: 'radial-gradient(ellipse at 35% 48%, #0d2c38 0%, #0a1e26 65%)' }}>
       {/* Barra de status */}
       <StatusBarPDV sessao={sessaoCaixa} venda={vendaAtual ?? null} modoEmissao={modoEmissaoSelecionado} />
 
@@ -152,7 +152,7 @@ export function PDVPage() {
         {/* ── COLUNA ESQUERDA: Barcode + Itens ── */}
         <div className="flex flex-1 flex-col overflow-hidden">
           {/* Barcode input */}
-          <div className="border-b border-pdv-border bg-pdv-surface px-4 pt-4 pb-5">
+          <div className="border-b border-pdv-border bg-pdv-surface px-4 pt-4 pb-5" style={{ background: 'rgba(9,25,32,0.8)' }}>
             <BarcodeInput
               onScan={lerBarcode}
               loading={loadingBarcode}
@@ -167,11 +167,11 @@ export function PDVPage() {
             <button
               onClick={() => void novaVenda()}
               disabled={loadingAcao && !vendaAtual}
-              className="flex items-center gap-1.5 rounded-lg bg-pdv-fiscal hover:bg-pdv-fiscal-dk px-3 py-1.5 text-xs font-semibold text-white transition-colors disabled:opacity-50 shadow-md shadow-pdv-fiscal/20"
+              className="flex items-center gap-2 rounded-xl bg-pdv-fiscal hover:bg-pdv-fiscal-dk px-4 py-2 text-sm font-bold text-white transition-colors disabled:opacity-50 shadow-md shadow-pdv-fiscal/20"
             >
               <Plus size={13} />
               Nova Venda
-              <kbd className="rounded border border-white/25 bg-black/20 px-1 font-mono text-[10px] text-white/80">F6</kbd>
+              <kbd className="rounded border border-white/30 bg-black/25 px-1.5 py-0.5 font-mono text-[10px] text-white/75">F6</kbd>
             </button>
 
             {itemSelecionadoId && (
@@ -209,9 +209,9 @@ export function PDVPage() {
                 }}
               />
             ) : (
-              <div className="flex flex-1 flex-col items-center justify-center gap-3 py-16 text-slate-700">
-                <ShoppingBag size={48} className="opacity-20" />
-                <p className="text-sm text-slate-600">Nenhuma venda em andamento</p>
+              <div className="flex flex-1 flex-col items-center justify-center gap-3 py-16 text-slate-600">
+                <ShoppingBag size={48} className="opacity-30" />
+                <p className="text-sm text-slate-500">Nenhuma venda em andamento</p>
                 <p className="text-xs text-slate-700 opacity-70">
                   Leia um produto ou pressione{' '}
                   <kbd className="rounded border border-pdv-border bg-pdv-surface px-1.5 py-0.5 font-mono text-xs text-slate-500">
@@ -225,10 +225,10 @@ export function PDVPage() {
         </div>
 
         {/* ── COLUNA DIREITA: Resumo + Pagamento ── */}
-        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-pdv-border bg-pdv-surface xl:w-96">
+        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-pdv-border/60 xl:w-96" style={{ background: 'linear-gradient(180deg, #0c2430 0%, #0e2836 100%)' }}>
           {/* Header da coluna direita */}
-          <div className="flex items-center gap-2 border-b border-pdv-border bg-pdv-surface px-4 py-3">
-            <CreditCard size={15} className="text-slate-500" />
+          <div className="flex items-center gap-2 border-b border-pdv-border/60 px-4 py-3" style={{ background: 'rgba(10,20,28,0.5)' }}>
+            <CreditCard size={15} className="text-pdv-muted" />
             <span className="text-sm font-semibold text-slate-200">Pagamento</span>
             <div className="flex-1" />
             <button
@@ -318,10 +318,10 @@ function ShortcutsBar({ minimal = false }: { minimal?: boolean }) {
     <div className="flex items-center gap-4 border-t border-pdv-border bg-pdv-bg px-4 py-1.5">
       {shortcuts.map((s) => (
         <div key={s.kbd} className="flex items-center gap-1.5 text-xs">
-          <kbd className="rounded border border-pdv-border bg-pdv-surface px-1.5 py-0.5 font-mono text-slate-500">
+          <kbd className="rounded border border-pdv-border/80 bg-pdv-surface/80 px-1.5 py-0.5 font-mono text-slate-400">
             {s.kbd}
           </kbd>
-          <span className="text-slate-600">{s.label}</span>
+          <span className="text-slate-500">{s.label}</span>
         </div>
       ))}
     </div>

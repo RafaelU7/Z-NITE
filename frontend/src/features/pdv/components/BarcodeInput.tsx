@@ -38,14 +38,14 @@ export function BarcodeInput({
     <div className="relative">
       <div
         className={clsx(
-          'flex items-center gap-3 rounded-xl border-2 px-4 py-3.5 transition-all duration-150',
+          'flex items-center gap-3 rounded-xl border-2 px-4 py-4 transition-all duration-150',
           loading
             ? 'border-pdv-fiscal/40 bg-pdv-surface/80'
             : disabled
               ? 'border-pdv-border/30 bg-pdv-surface/40 opacity-40'
               : value
-                ? 'border-pdv-fiscal/60 bg-pdv-surface shadow-lg shadow-pdv-fiscal/10'
-                : 'border-pdv-border bg-pdv-surface focus-within:border-pdv-fiscal/60 focus-within:shadow-lg focus-within:shadow-pdv-fiscal/10',
+                ? 'border-pdv-fiscal/70 bg-[#0A1E26] shadow-[0_0_0_3px_rgba(50,200,91,0.12),0_4px_20px_rgba(50,200,91,0.06)]'
+                : 'border-pdv-border/80 bg-[#0A1E26] focus-within:border-pdv-fiscal/70 focus-within:shadow-[0_0_0_3px_rgba(50,200,91,0.12),0_4px_20px_rgba(50,200,91,0.06)]',
         )}
       >
         {loading ? (
@@ -61,7 +61,7 @@ export function BarcodeInput({
           onKeyDown={handleKeyDown}
           disabled={disabled || loading}
           placeholder="Leia o código de barras ou digite o código..."
-          className="flex-1 bg-transparent text-lg font-medium text-slate-100 placeholder-slate-600 outline-none"
+          className="flex-1 bg-transparent text-lg font-medium text-slate-100 placeholder-slate-500 outline-none"
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}

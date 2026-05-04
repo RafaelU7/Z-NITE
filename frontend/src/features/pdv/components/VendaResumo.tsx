@@ -22,14 +22,14 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
       className={clsx(
         'flex flex-col gap-0.5 rounded-xl border p-4 transition-colors duration-300',
         isFiscal
-          ? 'border-pdv-fiscal/30 bg-pdv-surface'
-          : 'border-pdv-gerencial/30 bg-pdv-surface',
+          ? 'border-pdv-fiscal/40 bg-pdv-surface shadow-md shadow-black/25'
+          : 'border-pdv-gerencial/40 bg-pdv-surface shadow-md shadow-black/25',
       )}
     >
       {/* ── Header do modo ── */}
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Modo da Venda</p>
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-400">Modo da Venda</p>
           <p className="text-xs text-slate-600">
             {isFiscal ? 'Vai emitir NFC-e ao concluir.' : 'Pedido gerencial sem valor fiscal.'}
           </p>
@@ -59,7 +59,7 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
       <div className="my-2 border-t border-pdv-border/60" />
 
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-slate-400">Total</span>
+        <span className="text-sm font-semibold text-slate-300">Total</span>
         <span className="text-xl font-bold text-slate-100">
           {formatCurrency(venda.total_liquido)}
         </span>
@@ -74,7 +74,7 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
             : 'border-pdv-fiscal/30 bg-pdv-fiscal/10',
         )}
       >
-        <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Valor restante</span>
+        <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Valor restante</span>
         <span
           className={clsx(
             'font-mono text-xl font-black',
