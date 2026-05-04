@@ -15,26 +15,34 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
   const troco = Math.max(0, totalPago - totalLiquido)
   const pago = totalPago > 0
 
+  const isFiscal = modoEmissaoSelecionado === 'FISCAL'
+
   return (
-    <div className="flex flex-col gap-0.5 rounded-xl border border-border bg-bg-surface p-4 shadow-sm">
+    <div
+      className={clsx(
+        'flex flex-col gap-0.5 rounded-xl border p-4 transition-colors duration-300',
+        isFiscal
+          ? 'border-emerald-800/50 bg-pdv-surface'
+          : 'border-amber-800/50 bg-pdv-surface',
+      )}
+    >
+      {/* ── Header do modo ── */}
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-text-muted">Modo da venda</p>
-          <p className="text-xs text-text-muted">
-            {modoEmissaoSelecionado === 'FISCAL'
-              ? 'Vai emitir NFC-e ao concluir.'
-              : 'Pedido gerencial sem valor fiscal.'}
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">Modo da Venda</p>
+          <p className="text-xs text-slate-600">
+            {isFiscal ? 'Vai emitir NFC-e ao concluir.' : 'Pedido gerencial sem valor fiscal.'}
           </p>
         </div>
         <span
           className={clsx(
-            'rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-wide',
-            modoEmissaoSelecionado === 'FISCAL'
-              ? 'border-info/40 bg-info/10 text-info-text'
-              : 'border-warning/40 bg-warning/10 text-warning-text',
+            'rounded-full border px-2.5 py-1 text-[11px] font-bold tracking-wide shrink-0',
+            isFiscal
+              ? 'border-emerald-700/50 bg-emerald-500/15 text-emerald-300'
+              : 'border-amber-700/50 bg-amber-500/15 text-amber-300',
           )}
         >
-          {modoEmissaoSelecionado === 'FISCAL' ? 'FISCAL' : 'GERENCIAL'}
+          {isFiscal ? 'FISCAL' : 'GERENCIAL'}
         </span>
       </div>
 
@@ -44,47 +52,56 @@ export function VendaResumo({ venda, totalPago, modoEmissaoSelecionado }: VendaR
         <ResumoRow
           label="Desconto"
           value={`− ${formatCurrency(venda.total_desconto)}`}
-          className="text-warning-text"
+          className="text-amber-400"
         />
       )}
 
-      <div className="my-2 border-t border-border" />
+      <div className="my-2 border-t border-pdv-border/60" />
 
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-text-secondary">Total</span>
-        <span className="text-xl font-bold text-text-primary">
+        <span className="text-sm font-semibold text-slate-400">Total</span>
+        <span className="text-xl font-bold text-slate-100">
           {formatCurrency(venda.total_liquido)}
         </span>
       </div>
 
-      <div className="mt-2 flex items-center justify-between rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5">
-        <span className="text-xs font-semibold uppercase tracking-wider text-text-muted">Valor restante</span>
-        <span className={clsx('font-mono text-lg font-bold', restante > 0 ? 'text-warning-text' : 'text-success-text')}>
+      {/* Valor restante — destaque forte */}
+      <div
+        className={clsx(
+          'mt-2 flex items-center justify-between rounded-lg border px-3 py-2.5',
+          restante > 0
+            ? 'border-amber-700/40 bg-amber-500/10'
+            : 'border-emerald-700/40 bg-emerald-500/10',
+        )}
+      >
+        <span className="text-xs font-bold uppercase tracking-widest text-slate-500">Valor restante</span>
+        <span
+          className={clsx(
+            'font-mono text-xl font-black',
+            restante > 0 ? 'text-amber-400' : 'text-emerald-400',
+          )}
+        >
           {formatCurrency(restante)}
         </span>
       </div>
 
       {pago && (
         <>
-          <div className="my-2 border-t border-border" />
+          <div className="my-2 border-t border-pdv-border/60" />
           <ResumoRow
             label="Total pago"
             value={formatCurrency(totalPago)}
-            className="text-success-text"
+            className="text-emerald-400"
           />
           {restante > 0 ? (
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-danger-text">Falta</span>
-              <span className={clsx('text-lg font-bold text-danger-text')}>
-                {formatCurrency(restante)}
-              </span>
+              <span className="text-sm font-semibold text-red-400">Falta</span>
+              <span className="text-lg font-bold text-red-400">{formatCurrency(restante)}</span>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-success-text">Troco</span>
-              <span className="text-lg font-bold text-success-text">
-                {formatCurrency(troco)}
-              </span>
+              <span className="text-sm font-semibold text-emerald-400">Troco</span>
+              <span className="text-lg font-bold text-emerald-400">{formatCurrency(troco)}</span>
             </div>
           )}
         </>
@@ -104,8 +121,8 @@ function ResumoRow({
 }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-sm text-text-secondary">{label}</span>
-      <span className={clsx('font-mono text-sm font-medium text-text-primary', className)}>
+      <span className="text-sm text-slate-500">{label}</span>
+      <span className={clsx('font-mono text-sm font-medium text-slate-300', className)}>
         {value}
       </span>
     </div>

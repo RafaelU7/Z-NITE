@@ -38,21 +38,20 @@ export function BarcodeInput({
     <div className="relative">
       <div
         className={clsx(
-          'flex items-center gap-3 rounded-xl border-2 bg-bg-surface-2 px-4 py-3',
-          'transition-all duration-150',
+          'flex items-center gap-3 rounded-xl border-2 px-4 py-3.5 transition-all duration-150',
           loading
-            ? 'border-accent/30 bg-accent/5'
+            ? 'border-pdv-fiscal/40 bg-pdv-surface/80'
             : disabled
-              ? 'border-border/30 opacity-40'
+              ? 'border-pdv-border/30 bg-pdv-surface/40 opacity-40'
               : value
-                ? 'border-accent/70 shadow-lg shadow-accent/10'
-                : 'border-border focus-within:border-accent/70 focus-within:shadow-lg focus-within:shadow-accent/10',
+                ? 'border-pdv-fiscal/60 bg-pdv-surface shadow-lg shadow-pdv-fiscal/10'
+                : 'border-pdv-border bg-pdv-surface focus-within:border-pdv-fiscal/60 focus-within:shadow-lg focus-within:shadow-pdv-fiscal/10',
         )}
       >
         {loading ? (
-          <Loader2 size={20} className="shrink-0 animate-spin text-accent" />
+          <Loader2 size={22} className="shrink-0 animate-spin text-pdv-fiscal" />
         ) : (
-          <Search size={20} className="shrink-0 text-text-muted" />
+          <Search size={22} className="shrink-0 text-slate-500" />
         )}
 
         <input
@@ -62,7 +61,7 @@ export function BarcodeInput({
           onKeyDown={handleKeyDown}
           disabled={disabled || loading}
           placeholder="Leia o código de barras ou digite o código..."
-          className="flex-1 bg-transparent text-lg font-medium text-text-primary placeholder-text-muted/60 outline-none"
+          className="flex-1 bg-transparent text-lg font-medium text-slate-100 placeholder-slate-600 outline-none"
           autoComplete="off"
           autoCorrect="off"
           spellCheck={false}
@@ -71,7 +70,7 @@ export function BarcodeInput({
         />
 
         {value && (
-          <kbd className="shrink-0 rounded border border-border bg-bg-surface-3 px-2 py-1 font-mono text-xs text-text-muted">
+          <kbd className="shrink-0 rounded border border-slate-600 bg-slate-700 px-2 py-1 font-mono text-xs text-slate-400">
             Enter
           </kbd>
         )}
@@ -79,7 +78,7 @@ export function BarcodeInput({
 
       {/* Último produto lido */}
       {lastProduct && !loading && (
-        <p className="absolute -bottom-5 left-4 text-xs text-success-text animate-fade-in">
+        <p className="absolute -bottom-5 left-4 text-xs text-emerald-400 animate-fade-in">
           ✓ {lastProduct}
         </p>
       )}

@@ -4,7 +4,21 @@ export default {
   theme: {
     extend: {
       colors: {
-        // ── Backgrounds (light theme) ──
+        // ── PDV dark-theme palette ──
+        pdv: {
+          bg:          '#0D1B2A',   // fundo principal do PDV
+          surface:     '#112030',   // painéis / cards
+          'surface-2': '#162840',   // superfícies elevadas
+          border:      '#1E3352',   // borda padrão
+          'border-2':  '#243E62',   // borda mais visível
+          text:        '#E2E8F0',   // texto principal
+          muted:       '#64748B',   // texto secundário/muted
+          fiscal:      '#10B981',   // cor dominante modo FISCAL (emerald-500)
+          'fiscal-dk': '#059669',   // hover do fiscal (emerald-600)
+          gerencial:   '#F59E0B',   // cor dominante modo GERENCIAL (amber-500)
+          'gerencial-dk': '#D97706', // hover do gerencial
+        },
+        // ── Backgrounds (light theme — gerencial/admin) ──
         bg: {
           base: '#F3F6FA',       // página principal — cinza-azulado suave
           surface: '#FFFFFF',    // cards / painéis / modais

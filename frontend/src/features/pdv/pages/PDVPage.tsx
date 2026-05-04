@@ -16,8 +16,6 @@ import { PagamentoPanel } from '../components/PagamentoPanel'
 import { ModalRemocaoItem } from '../components/ModalRemocaoItem'
 import { OfflineBanner } from '../components/OfflineBanner'
 import { SyncStatusIndicator } from '../components/SyncStatusIndicator'
-import { Button } from '@/shared/ui/Button'
-
 export function PDVPage() {
   const navigate = useNavigate()
   const {
@@ -127,7 +125,7 @@ export function PDVPage() {
   const itemSelecionado = vendaAtual?.itens.find((i) => i.id === itemSelecionadoId) ?? null
 
   return (
-    <div className="flex h-screen flex-col bg-bg-base overflow-hidden">
+    <div className="flex h-screen flex-col bg-pdv-bg overflow-hidden">
       {/* Barra de status */}
       <StatusBarPDV sessao={sessaoCaixa} venda={vendaAtual ?? null} modoEmissao={modoEmissaoSelecionado} />
 
@@ -140,9 +138,9 @@ export function PDVPage() {
           className={clsx(
             'fixed right-4 top-12 z-40 max-w-xs rounded-xl border px-4 py-3 text-sm font-medium shadow-xl',
             'animate-slide-in',
-            flash.type === 'success' && 'border-success/40 bg-success/15 text-success-text',
-            flash.type === 'error' && 'border-danger/40 bg-danger/15 text-danger-text',
-            flash.type === 'info' && 'border-info/40 bg-info/15 text-info-text',
+            flash.type === 'success' && 'border-emerald-700/40 bg-emerald-500/10 text-emerald-300',
+            flash.type === 'error' && 'border-red-700/40 bg-red-500/10 text-red-300',
+            flash.type === 'info' && 'border-blue-700/40 bg-blue-500/10 text-blue-300',
           )}
         >
           {flash.message}
@@ -154,7 +152,7 @@ export function PDVPage() {
         {/* ── COLUNA ESQUERDA: Barcode + Itens ── */}
         <div className="flex flex-1 flex-col overflow-hidden">
           {/* Barcode input */}
-          <div className="border-b border-border bg-bg-surface p-4">
+          <div className="border-b border-pdv-border bg-pdv-surface px-4 pt-4 pb-5">
             <BarcodeInput
               onScan={lerBarcode}
               loading={loadingBarcode}
@@ -165,29 +163,25 @@ export function PDVPage() {
           </div>
 
           {/* Toolbar */}
-          <div className="flex items-center gap-2 border-b border-border bg-bg-surface px-4 py-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => {
-                void novaVenda()
-              }}
-              loading={loadingAcao && !vendaAtual}
-              kbd="F6"
+          <div className="flex items-center gap-2 border-b border-pdv-border bg-pdv-surface/60 px-4 py-2">
+            <button
+              onClick={() => void novaVenda()}
+              disabled={loadingAcao && !vendaAtual}
+              className="flex items-center gap-1.5 rounded-lg border border-pdv-border bg-pdv-surface px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-pdv-surface-2 hover:text-slate-100 transition-colors disabled:opacity-50"
             >
-              <Plus size={14} />
+              <Plus size={13} />
               Nova Venda
-            </Button>
+              <kbd className="rounded border border-pdv-border bg-pdv-bg px-1 font-mono text-[10px] text-slate-600">F6</kbd>
+            </button>
 
             {itemSelecionadoId && (
-              <Button
-                variant="danger"
-                size="sm"
+              <button
                 onClick={() => setModalRemocaoAberto(true)}
-                kbd="F8"
+                className="flex items-center gap-1.5 rounded-lg border border-red-700/40 bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 hover:bg-red-500/20 transition-colors"
               >
                 Remover Item
-              </Button>
+                <kbd className="rounded border border-red-800/40 bg-pdv-bg px-1 font-mono text-[10px] text-red-700">F8</kbd>
+              </button>
             )}
 
             <div className="flex-1" />
@@ -196,7 +190,7 @@ export function PDVPage() {
             <SyncStatusIndicator />
 
             {vendaAtual && (
-              <span className="text-xs text-text-muted">
+              <span className="text-xs text-slate-600">
                 {itensAtivos.length} {itensAtivos.length === 1 ? 'item' : 'itens'}
               </span>
             )}
@@ -215,12 +209,12 @@ export function PDVPage() {
                 }}
               />
             ) : (
-              <div className="flex flex-1 flex-col items-center justify-center gap-3 py-16 text-text-muted">
+              <div className="flex flex-1 flex-col items-center justify-center gap-3 py-16 text-slate-700">
                 <ShoppingBag size={48} className="opacity-20" />
-                <p className="text-sm">Nenhuma venda em andamento</p>
-                <p className="text-xs opacity-60">
+                <p className="text-sm text-slate-600">Nenhuma venda em andamento</p>
+                <p className="text-xs text-slate-700 opacity-70">
                   Leia um produto ou pressione{' '}
-                  <kbd className="rounded border border-border bg-bg-surface-2 px-1.5 py-0.5 font-mono text-xs">
+                  <kbd className="rounded border border-pdv-border bg-pdv-surface px-1.5 py-0.5 font-mono text-xs text-slate-500">
                     F6
                   </kbd>{' '}
                   para iniciar
@@ -231,15 +225,15 @@ export function PDVPage() {
         </div>
 
         {/* ── COLUNA DIREITA: Resumo + Pagamento ── */}
-        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-border bg-bg-surface-2 xl:w-96">
+        <div className="flex w-80 shrink-0 flex-col gap-0 border-l border-pdv-border bg-pdv-surface xl:w-96">
           {/* Header da coluna direita */}
-          <div className="flex items-center gap-2 border-b border-border bg-bg-surface px-4 py-3">
-            <CreditCard size={15} className="text-text-secondary" />
-            <span className="text-sm font-semibold text-text-primary">Pagamento</span>
+          <div className="flex items-center gap-2 border-b border-pdv-border bg-pdv-surface px-4 py-3">
+            <CreditCard size={15} className="text-slate-500" />
+            <span className="text-sm font-semibold text-slate-200">Pagamento</span>
             <div className="flex-1" />
             <button
               onClick={() => setPainelPagamentoAberto(!painelPagamentoAberto)}
-              className="text-xs text-text-muted hover:text-accent transition-colors"
+              className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
             >
               {painelPagamentoAberto ? 'Ocultar' : 'Mostrar'}
             </button>
@@ -254,7 +248,7 @@ export function PDVPage() {
                 modoEmissaoSelecionado={modoEmissaoSelecionado}
               />
             ) : (
-              <div className="rounded-xl border border-border/50 bg-bg-surface-2 p-4 text-center text-sm text-text-muted">
+              <div className="rounded-xl border border-pdv-border bg-pdv-surface/50 p-4 text-center text-sm text-slate-600">
                 Sem venda ativa
               </div>
             )}
@@ -275,10 +269,10 @@ export function PDVPage() {
             )}
 
             {/* Botão logout / fechar caixa */}
-            <div className="mt-auto pt-2 border-t border-border/50">
+            <div className="mt-auto pt-2 border-t border-pdv-border/40">
               <button
                 onClick={() => { clearSession(); navigate('/login') }}
-                className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs text-text-muted hover:bg-bg-surface-2 hover:text-text-secondary transition-colors"
+                className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs text-slate-600 hover:bg-pdv-surface-2 hover:text-slate-400 transition-colors"
               >
                 <LogOut size={12} />
                 Sair do sistema
@@ -321,13 +315,13 @@ function ShortcutsBar({ minimal = false }: { minimal?: boolean }) {
       ]
 
   return (
-    <div className="flex items-center gap-4 border-t border-border bg-bg-surface px-4 py-1.5">
+    <div className="flex items-center gap-4 border-t border-pdv-border bg-pdv-bg px-4 py-1.5">
       {shortcuts.map((s) => (
-        <div key={s.kbd} className="flex items-center gap-1.5 text-xs text-text-muted">
-          <kbd className="rounded border border-border bg-bg-surface-2 px-1.5 py-0.5 font-mono">
+        <div key={s.kbd} className="flex items-center gap-1.5 text-xs">
+          <kbd className="rounded border border-pdv-border bg-pdv-surface px-1.5 py-0.5 font-mono text-slate-500">
             {s.kbd}
           </kbd>
-          <span>{s.label}</span>
+          <span className="text-slate-600">{s.label}</span>
         </div>
       ))}
     </div>
