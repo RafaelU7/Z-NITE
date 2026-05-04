@@ -41,7 +41,7 @@ export function SyncStatusIndicator() {
           onClick={() => void sincronizarManual()}
           className={clsx(
             'flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs transition-colors',
-            'border-amber-500/40 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20',
+            'border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100',
           )}
         >
           <RefreshCw size={12} />

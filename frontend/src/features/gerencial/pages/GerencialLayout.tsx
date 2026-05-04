@@ -29,22 +29,27 @@ export function GerencialLayout() {
 
   return (
     <div className="flex h-screen flex-col bg-bg-base">
-      {/* Top bar */}
-      <header className="flex items-center justify-between border-b border-border bg-bg-surface px-4 py-3">
+      {/* ── Top bar ── */}
+      <header className="flex items-center justify-between border-b border-border bg-white px-4 py-2.5 shadow-sm shrink-0">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500/15 text-xs font-bold text-amber-700 ring-1 ring-amber-500/30">
             {getInitials(empresaNome)}
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-semibold text-sm text-text-primary">{empresaNome}</span>
-            <span className="text-[10px] text-text-muted tracking-wide uppercase">Zênite PDV — Retaguarda</span>
+            <span className="font-bold text-sm text-text-primary">{empresaNome}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-text-muted tracking-wide uppercase">Zênite PDV</span>
+              <span className="rounded bg-amber-100 border border-amber-300 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-amber-700">
+                Retaguarda
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-text-muted">{user?.nome}</span>
+          <span className="text-xs text-text-secondary">{user?.nome}</span>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs text-text-secondary hover:bg-bg-surface-2 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs text-text-secondary border border-border hover:bg-bg-surface-2 transition-colors"
           >
             <LogOut size={14} />
             Sair
@@ -53,8 +58,8 @@ export function GerencialLayout() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <nav className="flex w-48 flex-col gap-1 border-r border-border bg-bg-surface p-3">
+        {/* ── Sidebar ── */}
+        <nav className="flex w-48 shrink-0 flex-col gap-0.5 border-r border-white/10 bg-slate-900 p-3 overflow-y-auto">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
@@ -64,8 +69,8 @@ export function GerencialLayout() {
                 clsx(
                   'flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-colors',
                   isActive
-                    ? 'bg-accent/15 text-accent font-medium'
-                    : 'text-text-secondary hover:bg-bg-surface-2 hover:text-text-primary',
+                    ? 'bg-amber-500/20 text-amber-300 font-medium'
+                    : 'text-slate-400 hover:bg-white/10 hover:text-slate-100',
                 )
               }
             >
@@ -75,8 +80,8 @@ export function GerencialLayout() {
           ))}
         </nav>
 
-        {/* Content */}
-        <main className="flex-1 overflow-auto p-6">
+        {/* ── Content ── */}
+        <main className="flex-1 overflow-auto p-6 bg-bg-base">
           <Outlet />
         </main>
       </div>

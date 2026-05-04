@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Monitor, User, Clock, Wifi, WifiOff, Receipt, FileText } from 'lucide-react'
+import { Monitor, User, Clock, Wifi, WifiOff, Receipt, FileText, Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
+import { usePDVStore } from '@/store/pdvStore'
 import { useNavigate } from 'react-router-dom'
 import { useEmpresaNome } from '@/hooks/useEmpresaNome'
 import type { SessaoCaixaDTO, TipoEmissao, VendaDTO } from '@/shared/types/api'
@@ -15,6 +16,7 @@ interface StatusBarPDVProps {
 
 export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) {
   const { user } = useAuthStore()
+  const { syncEmAndamento } = usePDVStore()
   const navigate = useNavigate()
   const empresaNome = useEmpresaNome()
   const [hora, setHora] = useState(currentTime())
@@ -37,24 +39,24 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
   }, [])
 
   return (
-    <div className="flex items-center gap-4 border-b border-border bg-bg-surface px-4 py-2 text-xs">
-      {/* Branding */}
+    <div className="flex items-center gap-3 border-b border-white/10 bg-slate-900 px-4 py-2 text-xs shrink-0">
+      {/* ── Branding / Empresa ── */}
       <div className="flex flex-col leading-tight min-w-0">
-        <span className="font-bold tracking-tight text-text-primary text-sm">{empresaNome}</span>
-        <span className="text-[10px] text-text-muted uppercase tracking-wide">Zênite PDV</span>
+        <span className="font-bold tracking-tight text-white text-sm truncate max-w-[180px]">{empresaNome}</span>
+        <span className="text-[10px] text-slate-400 uppercase tracking-widest">Zênite PDV</span>
       </div>
 
-      <div className="h-3 w-px bg-border" />
+      <div className="h-4 w-px bg-white/15 shrink-0" />
 
-      {/* Modo fiscal/gerencial */}
+      {/* ── Badge de modo fiscal/gerencial ── */}
       {modoEmissao && (
         <>
           <div
             className={clsx(
-              'flex items-center gap-1.5 rounded-md px-2 py-1 font-bold uppercase tracking-wider',
+              'flex items-center gap-1.5 rounded-md px-2.5 py-1 font-bold uppercase tracking-wider shrink-0',
               modoEmissao === 'FISCAL'
-                ? 'bg-info/20 text-info-text border border-info/40'
-                : 'bg-warning/20 text-warning-text border border-warning/40',
+                ? 'bg-blue-500/25 text-blue-300 border border-blue-400/40'
+                : 'bg-amber-500/25 text-amber-300 border border-amber-400/40',
             )}
           >
             {modoEmissao === 'FISCAL' ? <Receipt size={11} /> : <FileText size={11} />}
@@ -62,55 +64,53 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
               {modoEmissao === 'FISCAL' ? 'Fiscal NFC-e' : 'Gerencial'}
             </span>
           </div>
-          <div className="h-3 w-px bg-border" />
+          <div className="h-4 w-px bg-white/15 shrink-0" />
         </>
       )}
 
-      {/* Caixa */}
-      <div className="flex items-center gap-1.5 text-text-secondary">
-        <Monitor size={12} className={sessao ? 'text-success' : 'text-text-muted'} />
-        <span>
-          {sessao ? (
-            <span className="text-success-text">Caixa Aberto</span>
-          ) : (
-            <span
-              className="cursor-pointer hover:text-text-primary"
-              onClick={() => navigate('/caixa')}
-            >
-              Abrir Caixa
-            </span>
-          )}
-        </span>
+      {/* ── Caixa ── */}
+      <div className="flex items-center gap-1.5 text-slate-300 shrink-0">
+        <Monitor size={12} className={sessao ? 'text-green-400' : 'text-slate-500'} />
+        {sessao ? (
+          <span className="text-green-400">Caixa Aberto</span>
+        ) : (
+          <span
+            className="cursor-pointer hover:text-white transition-colors"
+            onClick={() => navigate('/caixa')}
+          >
+            Abrir Caixa
+          </span>
+        )}
       </div>
 
-      {/* Operador */}
-      <div className="flex items-center gap-1.5 text-text-secondary">
+      {/* ── Operador ── */}
+      <div className="flex items-center gap-1.5 text-slate-300 shrink-0">
         <User size={12} />
-        <span>{user?.nome ?? '—'}</span>
+        <span className="truncate max-w-[100px]">{user?.nome ?? '—'}</span>
         {user?.codigo_operador && (
-          <span className="rounded bg-bg-surface-2 px-1 font-mono text-text-muted">
+          <span className="rounded bg-white/10 px-1 font-mono text-slate-400">
             #{user.codigo_operador}
           </span>
         )}
       </div>
 
-      {/* Venda atual */}
+      {/* ── Venda atual ── */}
       {venda && (
         <>
-          <div className="h-3 w-px bg-border" />
-          <div className="flex items-center gap-1.5">
-            <span className="text-text-muted">Venda</span>
-            <span className="rounded bg-accent/15 px-1.5 font-mono font-semibold text-accent">
+          <div className="h-4 w-px bg-white/15 shrink-0" />
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-slate-400">Venda</span>
+            <span className="rounded bg-indigo-500/20 px-1.5 font-mono font-semibold text-indigo-300">
               #{venda.numero_venda_local}
             </span>
             <span
               className={clsx(
                 'rounded-full px-2 py-0.5 text-[10px] font-medium uppercase',
                 venda.status === 'em_aberto'
-                  ? 'bg-success/20 text-success-text'
+                  ? 'bg-green-500/20 text-green-400'
                   : venda.status === 'concluida'
-                    ? 'bg-info/20 text-info-text'
-                    : 'bg-danger/20 text-danger-text',
+                    ? 'bg-blue-500/20 text-blue-400'
+                    : 'bg-red-500/20 text-red-400',
               )}
             >
               {venda.status}
@@ -119,19 +119,31 @@ export function StatusBarPDV({ sessao, venda, modoEmissao }: StatusBarPDVProps) 
         </>
       )}
 
-      {/* Spacer */}
+      {/* ── Spacer ── */}
       <div className="flex-1" />
 
-      {/* Online indicator */}
-      <div className={clsx('flex items-center gap-1', online ? 'text-success-text' : 'text-danger-text')}>
-        {online ? <Wifi size={12} /> : <WifiOff size={12} />}
-        <span>{online ? 'Online' : 'Offline'}</span>
-      </div>
+      {/* ── Indicador de conectividade (3 estados) ── */}
+      {syncEmAndamento ? (
+        <div className="flex items-center gap-1.5 shrink-0 text-blue-300">
+          <Loader2 size={12} className="animate-spin" />
+          <span>Sincronizando</span>
+        </div>
+      ) : online ? (
+        <div className="flex items-center gap-1.5 shrink-0 text-green-400">
+          <Wifi size={12} />
+          <span>Online</span>
+        </div>
+      ) : (
+        <div className="flex items-center gap-1.5 shrink-0 text-red-400">
+          <WifiOff size={12} />
+          <span>Offline</span>
+        </div>
+      )}
 
-      <div className="h-3 w-px bg-border" />
+      <div className="h-4 w-px bg-white/15 shrink-0" />
 
-      {/* Relógio */}
-      <div className="flex items-center gap-1 font-mono text-text-muted">
+      {/* ── Relógio ── */}
+      <div className="flex items-center gap-1 font-mono text-slate-400 shrink-0">
         <Clock size={12} />
         {hora}
       </div>

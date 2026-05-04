@@ -4,45 +4,49 @@ export default {
   theme: {
     extend: {
       colors: {
+        // ── Backgrounds (light theme) ──
         bg: {
-          base: '#0d0f1a',
-          surface: '#131625',
-          'surface-2': '#1c1f35',
-          'surface-3': '#252841',
+          base: '#F4F7FB',       // página principal
+          surface: '#FFFFFF',    // cards / painéis
+          'surface-2': '#F8FAFC', // inputs / linhas alternadas
+          'surface-3': '#EEF2FF', // hover sutil
         },
         border: {
-          DEFAULT: '#2d3158',
-          strong: '#404580',
+          DEFAULT: '#D9E2EC',
+          strong: '#B8C8D8',
         },
         text: {
-          primary: '#f0f2ff',
-          secondary: '#8b8faf',
-          muted: '#4a4f72',
+          primary: '#0F172A',
+          secondary: '#475569',
+          muted: '#94A3B8',
         },
+        // ── Marca ──
         accent: {
-          DEFAULT: '#6366f1',
-          hover: '#818cf8',
-          subtle: '#6366f115',
+          DEFAULT: '#6366F1',
+          hover: '#4F46E5',
+          subtle: '#EEF2FF',
         },
+        // ── Semânticas (ajustadas para legibilidade em fundo claro) ──
         success: {
-          DEFAULT: '#10b981',
-          subtle: '#10b98115',
-          text: '#34d399',
+          DEFAULT: '#22C55E',
+          subtle: '#F0FDF4',
+          text: '#16A34A',
         },
         warning: {
-          DEFAULT: '#f59e0b',
-          subtle: '#f59e0b15',
-          text: '#fbbf24',
+          DEFAULT: '#F59E0B',
+          subtle: '#FFFBEB',
+          text: '#D97706',
         },
         danger: {
-          DEFAULT: '#ef4444',
-          subtle: '#ef444415',
-          text: '#f87171',
+          DEFAULT: '#EF4444',
+          subtle: '#FEF2F2',
+          text: '#DC2626',
         },
+        // info = azul fiscal
         info: {
-          DEFAULT: '#3b82f6',
-          subtle: '#3b82f615',
-          text: '#60a5fa',
+          DEFAULT: '#2563EB',
+          subtle: '#EFF6FF',
+          text: '#1D4ED8',
         },
       },
       fontFamily: {
@@ -58,14 +62,15 @@ export default {
         'flash-error': 'flashError 0.4s ease-out',
         'slide-in': 'slideIn 0.2s ease-out',
         'fade-in': 'fadeIn 0.15s ease-out',
+        'pulse-once': 'pulseOnce 1.5s ease-in-out',
       },
       keyframes: {
         flashSuccess: {
-          '0%': { backgroundColor: '#10b98130' },
+          '0%': { backgroundColor: '#22C55E30' },
           '100%': { backgroundColor: 'transparent' },
         },
         flashError: {
-          '0%, 50%': { backgroundColor: '#ef444425' },
+          '0%, 50%': { backgroundColor: '#EF444425' },
           '100%': { backgroundColor: 'transparent' },
         },
         slideIn: {
@@ -75,6 +80,10 @@ export default {
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
+        },
+        pulseOnce: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.65' },
         },
       },
     },
