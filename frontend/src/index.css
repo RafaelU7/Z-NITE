@@ -18,6 +18,7 @@ body {
   color: #F3F7FA;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow: hidden; /* PDV é full-screen */
+  accent-color: #19C7B5; /* Checkbox/radio/range — teal system-wide */
 }
 
 /* Inputs: remove autocomplete background no Chrome */
