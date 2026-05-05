@@ -59,11 +59,13 @@ function ModalFecharCaixa({ sessao, onClose, onFechado }: ModalFecharProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-bg-surface p-6 shadow-2xl">
-        <div className="mb-5 flex items-center justify-between">
+    <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+    >
+      <div className="w-full max-w-md rounded-2xl border border-pdv-border bg-pdv-surface p-6 shadow-2xl shadow-black/60">
+          <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <LockKeyhole size={18} className="text-warning-text" />
+            <LockKeyhole size={18} className="text-warning" />
             <h2 className="font-semibold text-text-primary">Fechar Caixa</h2>
           </div>
           <button onClick={onClose} className="text-text-muted hover:text-text-primary">
@@ -97,7 +99,7 @@ function ModalFecharCaixa({ sessao, onClose, onFechado }: ModalFecharProps) {
               placeholder="0,00"
               value={valorContado}
               onChange={(e) => setValorContado(e.target.value)}
-              className="w-full rounded-lg border border-border bg-bg-base px-3 py-2.5 text-sm text-text-primary placeholder-text-muted focus:border-accent focus:outline-none"
+              className="w-full rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm text-text-primary placeholder-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
             />
           </div>
           <div>
@@ -109,7 +111,7 @@ function ModalFecharCaixa({ sessao, onClose, onFechado }: ModalFecharProps) {
               placeholder="Ex: sem diferença, conferido..."
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
-              className="w-full resize-none rounded-lg border border-border bg-bg-base px-3 py-2.5 text-sm text-text-primary placeholder-text-muted focus:border-accent focus:outline-none"
+              className="w-full resize-none rounded-lg border border-border bg-bg-surface-2 px-3 py-2.5 text-sm text-text-primary placeholder-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40"
             />
           </div>
 
@@ -286,15 +288,22 @@ export function CaixaPage() {
   const sessaoIsAberta = sessaoAberta?.status === 'aberta'
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg-base p-4">
-      {/* Background grid */}
+    <div
+      className="flex min-h-screen items-center justify-center p-4"
+      style={{ background: 'radial-gradient(ellipse at 40% 45%, #0f3444 0%, #0a2030 50%, #07151d 100%)' }}
+    >
+      {/* Teal grid overlay */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{
-          backgroundImage: `linear-gradient(rgba(99,102,241,1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(25,199,181,1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(25,199,181,1) 1px, transparent 1px)`,
           backgroundSize: '40px 40px',
         }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 600px 400px at 50% 50%, rgba(25,199,181,0.04) 0%, transparent 70%)' }}
       />
 
       <div className="relative w-full max-w-md">
@@ -317,7 +326,7 @@ export function CaixaPage() {
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-border bg-bg-surface p-8 shadow-2xl">
+        <div className="rounded-2xl border border-pdv-border bg-pdv-surface p-8 shadow-2xl shadow-black/50">
           <div className="mb-6 flex items-center gap-3">
             <div className={clsx(
               'flex h-11 w-11 items-center justify-center rounded-xl ring-1',

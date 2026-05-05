@@ -157,7 +157,7 @@ function ModalEntrada({ produto, onClose, onSaved }: ModalEntradaProps) {
           </div>
         </div>
 
-        {erro && <p className="mt-3 text-red-400 text-xs">{erro}</p>}
+        {erro && <p className="mt-3 text-danger-text text-xs">{erro}</p>}
 
         <div className="flex gap-3 mt-5">
           <button
@@ -169,7 +169,7 @@ function ModalEntrada({ produto, onClose, onSaved }: ModalEntradaProps) {
           <button
             onClick={handleSalvar}
             disabled={loading}
-            className="flex-1 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm font-medium transition-colors disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-success hover:bg-success/85 text-white text-sm font-medium transition-colors disabled:opacity-50"
           >
             {loading ? 'Salvando…' : 'Confirmar entrada'}
           </button>
@@ -224,7 +224,7 @@ function ModalInventario({ produto, onClose, onSaved }: ModalInventarioProps) {
       <div className="bg-bg-surface border border-border rounded-xl shadow-2xl w-full max-w-md mx-4 p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-text-primary font-semibold text-lg flex items-center gap-2">
-            <ClipboardList size={18} className="text-yellow-400" />
+            <ClipboardList size={18} className="text-warning-text" />
             Ajuste de inventário
           </h2>
           <button onClick={onClose} className="text-text-muted hover:text-text-primary transition-colors">
@@ -270,7 +270,7 @@ function ModalInventario({ produto, onClose, onSaved }: ModalInventarioProps) {
           </div>
         </div>
 
-        {erro && <p className="mt-3 text-red-400 text-xs">{erro}</p>}
+        {erro && <p className="mt-3 text-danger-text text-xs">{erro}</p>}
 
         <div className="flex gap-3 mt-5">
           <button
@@ -282,7 +282,7 @@ function ModalInventario({ produto, onClose, onSaved }: ModalInventarioProps) {
           <button
             onClick={handleSalvar}
             disabled={loading}
-            className="flex-1 py-2 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-white text-sm font-medium transition-colors disabled:opacity-50"
+            className="flex-1 py-2 rounded-lg bg-warning hover:bg-warning/80 text-white text-sm font-medium transition-colors disabled:opacity-50"
           >
             {loading ? 'Salvando…' : 'Confirmar ajuste'}
           </button>
@@ -556,7 +556,7 @@ export function EstoquePage() {
                       <button
                         onClick={() => setModalInventario(item)}
                         title="Ajuste de inventário"
-                        className="p-1.5 rounded-lg hover:bg-yellow-900/30 text-yellow-400 transition-colors"
+                        className="p-1.5 rounded-lg hover:bg-warning/15 text-warning-text transition-colors"
                       >
                         <ClipboardList size={15} />
                       </button>

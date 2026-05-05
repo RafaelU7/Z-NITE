@@ -19,49 +19,49 @@ export default {
           gerencial:     '#D4A62A',   // âmbar premium — modo GERENCIAL
           'gerencial-dk': '#A97A14',  // hover âmbar gerencial
         },
-        // ── Backgrounds (light theme — gerencial/admin) ──
+        // ── Backgrounds (dark theme — sistema inteiro) ──
         bg: {
-          base: '#F3F6FA',       // página principal — cinza-azulado suave
-          surface: '#FFFFFF',    // cards / painéis / modais
-          'surface-2': '#F0F4F9', // inputs / seções secundárias
-          'surface-3': '#E4EBF4', // hover sutil / kbd chips
+          base:        '#07151d',   // fundo mais profundo das páginas
+          surface:     '#0D2530',   // cards / painéis / modais
+          'surface-2': '#112B38',   // inputs / seções secundárias / linhas de tabela
+          'surface-3': '#193548',   // hover sutil / kbd chips / borda mais elevada
         },
         border: {
-          DEFAULT: '#D1DBE8',    // borda padrão — mais visível que antes
-          strong: '#A8B8CC',     // separadores fortes
+          DEFAULT: '#193548',   // borda padrão teal-petróleo
+          strong:  '#1D4260',   // separadores mais marcados
         },
         text: {
-          primary: '#0F172A',
-          secondary: '#475569',
-          muted: '#64748B',      // upgrade: era #94A3B8 (baixo contraste)
+          primary:   '#F3F7FA',   // off-white — texto principal
+          secondary: '#A8C0CC',   // cinza-teal claro — texto secundário
+          muted:     '#6B8899',   // cinza-teal escuro — labels/hints
         },
-        // ── Marca ──
+        // ── Marca — TEAL (substitui indigo) ──
         accent: {
-          DEFAULT: '#6366F1',
-          hover: '#4F46E5',
-          subtle: '#EEF2FF',
+          DEFAULT: '#19C7B5',   // teal — ação principal
+          hover:   '#14A89A',   // hover teal
+          subtle:  '#0a1f26',   // fundo teal muito escuro
         },
-        // ── Semânticas (ajustadas para legibilidade em fundo claro) ──
+        // ── Semânticas dark-native ──
         success: {
-          DEFAULT: '#22C55E',
-          subtle: '#F0FDF4',
-          text: '#16A34A',
+          DEFAULT: '#32C85B',   // verde fiscal premium
+          subtle:  '#071a10',   // fundo verde muito escuro
+          text:    '#4DD470',   // verde legível em fundo escuro
         },
         warning: {
-          DEFAULT: '#F59E0B',
-          subtle: '#FFFBEB',
-          text: '#D97706',
+          DEFAULT: '#D4A62A',   // âmbar gerencial premium
+          subtle:  '#1a1305',   // fundo âmbar muito escuro
+          text:    '#F0C842',   // âmbar legível em fundo escuro
         },
         danger: {
-          DEFAULT: '#EF4444',
-          subtle: '#FEF2F2',
-          text: '#DC2626',
+          DEFAULT: '#EF5350',   // vermelho para erros/risco
+          subtle:  '#1c0606',   // fundo vermelho muito escuro
+          text:    '#F87171',   // vermelho legível em fundo escuro
         },
-        // info = azul fiscal
+        // info = azul operacional
         info: {
-          DEFAULT: '#2563EB',
-          subtle: '#EFF6FF',
-          text: '#1D4ED8',
+          DEFAULT: '#2C7BE5',   // azul médio
+          subtle:  '#061528',   // fundo azul muito escuro
+          text:    '#60A5FA',   // azul legível em fundo escuro
         },
       },
       fontFamily: {

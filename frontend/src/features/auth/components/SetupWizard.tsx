@@ -89,15 +89,22 @@ export function SetupWizard({ onConcluido, preview = false }: Props) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-bg-base p-4">
-      {/* Grid sutil de fundo */}
+    <div
+      className="flex min-h-screen items-center justify-center p-4"
+      style={{ background: 'radial-gradient(ellipse at 40% 45%, #0f3444 0%, #0a2030 50%, #07151d 100%)' }}
+    >
+      {/* Teal grid overlay */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: `linear-gradient(rgba(99,102,241,1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(rgba(25,199,181,1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(25,199,181,1) 1px, transparent 1px)`,
           backgroundSize: '40px 40px',
         }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse 600px 400px at 50% 50%, rgba(25,199,181,0.04) 0%, transparent 70%)' }}
       />
 
       <div className="relative w-full max-w-md">
@@ -142,7 +149,7 @@ export function SetupWizard({ onConcluido, preview = false }: Props) {
         )}
 
         {/* Card principal */}
-        <div className="rounded-2xl border border-border bg-bg-surface p-8 shadow-2xl">
+        <div className="rounded-2xl border border-pdv-border bg-pdv-surface p-8 shadow-2xl shadow-black/50">
 
           {/* â”€â”€ ETAPA: MERCADO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {etapa === 'mercado' && (

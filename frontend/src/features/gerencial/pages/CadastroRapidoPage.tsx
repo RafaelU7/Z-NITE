@@ -314,10 +314,10 @@ export function CadastroRapidoPage() {
         <div
           className={`mb-4 flex items-start gap-2 rounded-lg border px-3 py-2.5 text-sm ${
             feedback.type === 'success'
-              ? 'border-green-500/30 bg-green-500/10 text-green-400'
+              ? 'border-success/30 bg-success/10 text-success-text'
               : feedback.type === 'warning'
-                ? 'border-yellow-500/30 bg-yellow-500/10 text-yellow-400'
-                : 'border-red-500/30 bg-red-500/10 text-red-400'
+                ? 'border-warning/30 bg-warning/10 text-warning-text'
+                : 'border-danger/30 bg-danger/10 text-danger-text'
           }`}
         >
           {feedback.type === 'success' ? (
@@ -355,7 +355,7 @@ export function CadastroRapidoPage() {
               placeholder="Ex: Refrigerante Cola 2L"
               className="w-full rounded-lg border border-border bg-bg-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none disabled:opacity-50"
             />
-            {erros.descricao && <p className="mt-1 text-xs text-red-400">{erros.descricao}</p>}
+            {erros.descricao && <p className="mt-1 text-xs text-danger-text">{erros.descricao}</p>}
           </div>
 
           {/* Nome PDV */}
@@ -409,7 +409,7 @@ export function CadastroRapidoPage() {
                 className="w-full rounded-lg border border-border bg-bg-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none disabled:opacity-50"
               />
               {erros.preco_venda && (
-                <p className="mt-1 text-xs text-red-400">{erros.preco_venda}</p>
+                <p className="mt-1 text-xs text-danger-text">{erros.preco_venda}</p>
               )}
             </div>
             <div>
@@ -428,7 +428,7 @@ export function CadastroRapidoPage() {
                 className="w-full rounded-lg border border-border bg-bg-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none disabled:opacity-50"
               />
               {erros.preco_custo && (
-                <p className="mt-1 text-xs text-red-400">{erros.preco_custo}</p>
+                <p className="mt-1 text-xs text-danger-text">{erros.preco_custo}</p>
               )}
             </div>
           </div>
@@ -454,7 +454,7 @@ export function CadastroRapidoPage() {
               className="w-full rounded-lg border border-border bg-bg-base px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none disabled:opacity-50"
             />
             {erros.estoque_inicial && (
-              <p className="mt-1 text-xs text-red-400">{erros.estoque_inicial}</p>
+              <p className="mt-1 text-xs text-danger-text">{erros.estoque_inicial}</p>
             )}
             {modo === 'produto_existente' && (
               <p className="mt-1 text-xs text-text-muted">

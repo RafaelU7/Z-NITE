@@ -14,8 +14,8 @@ html {
 }
 
 body {
-  background-color: #F3F6FA;
-  color: #0F172A;
+  background-color: #07151d;
+  color: #F3F7FA;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow: hidden; /* PDV é full-screen */
 }
@@ -24,9 +24,9 @@ body {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #F0F4F9 inset !important;
-  -webkit-text-fill-color: #0F172A !important;
-  caret-color: #0F172A;
+  -webkit-box-shadow: 0 0 0 1000px #112B38 inset !important;
+  -webkit-text-fill-color: #F3F7FA !important;
+  caret-color: #F3F7FA;
 }
 
 /* Scrollbar personalizada */
@@ -38,17 +38,17 @@ input:-webkit-autofill:focus {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C8D4E2;
+  background: #1D4260;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #A8B8CC;
+  background: #2a5a80;
 }
 
 /* Seleção de texto */
 ::selection {
-  background-color: rgba(99, 102, 241, 0.2);
-  color: #0F172A;
+  background-color: rgba(25, 199, 181, 0.25);
+  color: #F3F7FA;
 }
 
 /* ── Utilitários ── */
