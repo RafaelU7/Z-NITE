@@ -9,16 +9,30 @@ import { getMe } from '@/services/api/auth'
 import { getEmpresa } from '@/services/api/gerencial'
 import { setClientEmpresaId, setClientToken } from '@/services/api/client'
 
-// ID da empresa — em produção viria de config/env ou seleção inicial
-const EMPRESA_ID = import.meta.env.VITE_EMPRESA_ID ?? ''
+// Resolução da empresa_id: VITE_EMPRESA_ID (override) → localStorage (setup) → ''
+function resolveEmpresaId(): string {
+  return (
+    import.meta.env.VITE_EMPRESA_ID ||
+    localStorage.getItem('zenite.empresa_id') ||
+    ''
+  )
+}
 
 export function PinLoginForm() {
   const navigate = useNavigate()
   const [codigo, setCodigo] = useState('')
   const [pin, setPin] = useState('')
-  const [empresaId, setEmpresaId] = useState(EMPRESA_ID)
+  const [empresaId, setEmpresaId] = useState(resolveEmpresaId)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Se o localStorage for populado depois do mount (raro, mas defensivo)
+  useEffect(() => {
+    if (!empresaId) {
+      const discovered = localStorage.getItem('zenite.empresa_id')
+      if (discovered) setEmpresaId(discovered)
+    }
+  }, [])
 
   const codigoRef = useRef<HTMLInputElement>(null)
   const pinRef = useRef<HTMLInputElement>(null)
@@ -78,8 +92,8 @@ export function PinLoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-      {/* Campo empresa — colapsado quando vem do env */}
-      {!EMPRESA_ID && (
+      {/* Campo empresa — só aparece se a empresa_id não foi descoberta automaticamente */}
+      {!empresaId && (
         <Input
           label="ID da Empresa"
           placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"

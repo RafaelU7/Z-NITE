@@ -44,7 +44,16 @@ function AppRoutes() {
 
   useEffect(() => {
     getSetupStatus()
-      .then((s) => setNecessitaSetup(s.setup_required))
+      .then((s) => {
+        setNecessitaSetup(s.setup_required)
+        // Persiste empresa_id descoberta para o PinLoginForm (sem depender de env var)
+        if (!s.setup_required && s.empresa_id) {
+          localStorage.setItem('zenite.empresa_id', s.empresa_id)
+        }
+        if (!s.setup_required && s.empresa_nome) {
+          localStorage.setItem('zenite.empresa_nome', s.empresa_nome)
+        }
+      })
       .catch(() => {/* se falhar, assume que não precisa de setup */})
       .finally(() => setSetupVerificado(true))
   }, [])
@@ -60,7 +69,11 @@ function AppRoutes() {
   if (necessitaSetup) {
     return (
       <SetupWizard
-        onConcluido={() => {
+        onConcluido={(empresaId) => {
+          // Persiste empresa_id para que PinLoginForm a use sem env var
+          if (empresaId && empresaId !== 'preview-mode') {
+            localStorage.setItem('zenite.empresa_id', empresaId)
+          }
           setNecessitaSetup(false)
         }}
       />

@@ -77,6 +77,8 @@ export function SetupWizard({ onConcluido, preview = false }: Props) {
         },
       }
       const res = await setupEmpresa(payload)
+      // Persiste nome da empresa para exibição no PDV antes do login
+      localStorage.setItem('zenite.empresa_nome', payload.empresa.nome_fantasia)
       setEtapa('sucesso')
       setTimeout(() => onConcluido(res.empresa_id), 2500)
     } catch (e: unknown) {

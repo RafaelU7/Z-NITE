@@ -2,10 +2,10 @@ import { useAuthStore } from '@/store/authStore'
 
 const FALLBACK = import.meta.env.VITE_EMPRESA_NOME ?? 'Zênite PDV'
 
-/** Retorna o nome da empresa na ordem: backend → VITE_EMPRESA_NOME → 'Zênite PDV' */
+/** Retorna o nome da empresa na ordem: authStore (pós-login) → localStorage (setup) → VITE_EMPRESA_NOME → 'Zênite PDV' */
 export function useEmpresaNome(): string {
   const empresaNome = useAuthStore((s) => s.empresaNome)
-  return empresaNome ?? FALLBACK
+  return empresaNome ?? localStorage.getItem('zenite.empresa_nome') ?? FALLBACK
 }
 
 export function getInitials(name: string): string {

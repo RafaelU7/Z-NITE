@@ -43,6 +43,8 @@ router = APIRouter(prefix="/setup", tags=["Setup Inicial"])
 
 class SetupStatusDTO(BaseModel):
     setup_required: bool
+    empresa_id: Optional[str] = None
+    empresa_nome: Optional[str] = None
 
 
 class SetupEmpresaInput(BaseModel):
@@ -101,9 +103,18 @@ class SetupEmpresaResponse(BaseModel):
 async def get_setup_status(
     session: AsyncSession = Depends(get_async_session),
 ) -> SetupStatusDTO:
-    result = await session.execute(select(func.count()).select_from(Empresa))
-    count = result.scalar() or 0
-    return SetupStatusDTO(setup_required=count == 0)
+    result = await session.execute(
+        select(Empresa.id, Empresa.nome_fantasia, Empresa.razao_social).limit(1)
+    )
+    row = result.first()
+    if row is None:
+        return SetupStatusDTO(setup_required=True)
+    nome = row.nome_fantasia or row.razao_social
+    return SetupStatusDTO(
+        setup_required=False,
+        empresa_id=str(row.id),
+        empresa_nome=nome,
+    )
 
 
 @router.post(

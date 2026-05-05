@@ -6,6 +6,8 @@ const _apiBase = import.meta.env.VITE_API_BASE_URL
 
 export interface SetupStatusDTO {
   setup_required: boolean
+  empresa_id?: string
+  empresa_nome?: string
 }
 
 export interface SetupEmpresaRequest {
